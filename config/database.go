@@ -56,9 +56,13 @@ func GetDatabaseConn(params *Database) (*sql.DB, error) {
 
 	if db == nil {
 		err = initDatabase(params)
+		if err != nil {
+			log.Println("[ERROR] While get database connection, init database:", err.Error())
+			return nil, err
+		}
 	}
 
-	return db, err
+	return db, nil
 }
 
 func CloseDatabaseConnection(db *sql.DB) error {
