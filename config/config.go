@@ -3,8 +3,8 @@ package config
 import (
 	"log"
 	"os"
-	"strconv"
 
+	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/validatorutils"
 	"github.com/joho/godotenv"
 )
 
@@ -13,35 +13,17 @@ type Config struct {
 	JWTConfig
 	Server
 	Cloudinary
+	RedisConfig
+	Mailgun
 }
 
 var config *Config
 
-func initConfig() {
+func initConfig() error {
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("[INFO] The .env file doesn't exist")
 		log.Println("[INFO] Program will load environment variable value")
-	}
-
-	portStr := os.Getenv("APP_PORT")
-	if portStr == "" {
-		log.Fatal("[ERROR] Error while init web server, app port cant be empty")
-	}
-
-	port, err := strconv.Atoi(portStr)
-	if err != nil {
-		log.Fatal("[ERROR] Error while init web server, app port must be a number")
-	}
-
-	dbPortStr := os.Getenv("DB_PORT")
-	if portStr == "" {
-		log.Fatal("[ERROR] Error while init database, database port cant be empty")
-	}
-
-	dbPort, err := strconv.Atoi(dbPortStr)
-	if err != nil {
-		log.Fatal("[ERROR] Error while init database, database port must be a number")
 	}
 
 	config = &Config{
@@ -49,7 +31,7 @@ func initConfig() {
 			Username:                     os.Getenv("DB_USERNAME"),
 			Password:                     os.Getenv("DB_PASSWORD"),
 			Hostname:                     os.Getenv("DB_HOSTNAME"),
-			Port:                         dbPort,
+			Port:                         os.Getenv("DB_PORT"),
 			DatabaseName:                 os.Getenv("DB_NAME"),
 			RelationalDatabaseDriverName: os.Getenv("DB_DRIVER_NAME"),
 		},
@@ -57,55 +39,45 @@ func initConfig() {
 			JWTSecretKey: os.Getenv("JWT_SECRET_KEY"),
 		},
 		Server: Server{
-			Port: port,
+			Port: os.Getenv("APP_PORT"),
 		},
 		Cloudinary: Cloudinary{
 			APIKey:    os.Getenv("API_KEY"),
 			APISecret: os.Getenv("API_SECRET"),
 			CloudName: os.Getenv("CLOUD_NAME"),
 		},
+		RedisConfig: RedisConfig{
+			Address:  os.Getenv("REDIS_ADDRESS"),
+			Username: os.Getenv("REDIS_USERNAME"),
+			Password: os.Getenv("REDIS_PASSWORD"),
+		},
+		Mailgun: Mailgun{
+			PrivateApiKey: os.Getenv("MAILGUN_API_KEY"),
+			PublicApiKey:  os.Getenv("MAILGUN_PUBLIC_API_KEY"),
+			Domain:        os.Getenv("MAILGUN_DOMAIN"),
+			SenderEmail:   os.Getenv("MAILGUN_SENDER_EMAIL"),
+		},
 	}
 
-	if config.Database.Username == "" {
-		log.Fatal("[ERROR] Error while init database, database name cant be empty")
+	validator, err := validatorutils.New()
+	if err != nil {
+		return err
 	}
 
-	if config.Database.Password == "" {
-		log.Fatal("[ERROR] Error while init database, database password cant be empty")
+	err = validator.Validate.Struct(config)
+	if err != nil {
+		return err
 	}
 
-	if config.Database.Hostname == "" {
-		log.Fatal("[ERROR] Error while init database, database hostname cant be empty")
-	}
-
-	if config.Database.DatabaseName == "" {
-		log.Fatal("[ERROR] Error while init database, database name cant be empty")
-	}
-
-	if config.Cloudinary.APISecret == "" {
-		log.Fatal("[ERROR] Error while init cloudinary, api secret cant be empty")
-	}
-
-	if config.Cloudinary.APIKey == "" {
-		log.Fatal("[ERROR] Error while init cloudinary, api key cant be empty")
-	}
-
-	if config.Cloudinary.CloudName == "" {
-		log.Fatal("[ERROR] Error while init cloudinary, cloud name cant be empty")
-	}
-
-	if config.JWTConfig.JWTSecretKey == "" {
-		log.Fatal("[ERROR] Error while init jwt config, jwt secret key cant be empty")
-	}
-
-	if config.JWTConfig.JWTSecretKey == "" {
-		log.Fatal("[ERROR] Error while init jwt config, jwt secret key cant be empty")
-	}
+	return nil
 }
 
-func GetConfig() *Config {
+func GetConfig() (*Config, error) {
 	if config == nil {
-		initConfig()
+		err := initConfig()
+		if err != nil {
+			return nil, err
+		}
 	}
-	return config
+	return config, nil
 }

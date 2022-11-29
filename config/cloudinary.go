@@ -8,9 +8,9 @@ import (
 )
 
 type Cloudinary struct {
-	APIKey    string
-	APISecret string
-	CloudName string
+	APIKey    string `validate:"required"`
+	APISecret string `validate:"required"`
+	CloudName string `validate:"required"`
 }
 
 var cld *cloudinary.Cloudinary
