@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 
 	"github.com/labstack/echo/v4"
@@ -13,15 +14,21 @@ import (
 
 type Server struct {
 	E    *echo.Echo
-	Port int
+	Port string `validate:"required"`
 }
 
 func StartServer(param Server) error {
+	port, err := strconv.Atoi(param.Port)
+	if err != nil {
+		log.Println("[ERROR] Error while convert port to number:", err.Error())
+		return err
+	}
+
 	errChan := make(chan error, 1)
 	defer param.E.Shutdown(context.Background())
 
 	go func() {
-		if err := param.E.Start(fmt.Sprintf(":%d", param.Port)); err != nil {
+		if err := param.E.Start(fmt.Sprintf(":%d", port)); err != nil {
 			errChan <- err
 		}
 	}()

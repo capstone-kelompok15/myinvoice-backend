@@ -1,5 +1,5 @@
 package config
 
 type JWTConfig struct {
-	JWTSecretKey string
+	JWTSecretKey string `validate:"required"`
 }

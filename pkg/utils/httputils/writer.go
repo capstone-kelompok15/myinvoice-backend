@@ -2,7 +2,7 @@ package httputils
 
 import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
-	"github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
+	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 
 	"github.com/labstack/echo/v4"
 )
@@ -28,7 +28,7 @@ func WriteResponse(c echo.Context, data SuccessResponseParams) error {
 }
 
 func WriteErrorResponse(c echo.Context, params ErrorResponseParams) error {
-	e := errors.GetErr(params.Err)
+	e := customerrors.GetErr(params.Err)
 	return c.JSON(e.HTTPErrorCode, dto.BaseResponse{
 		Error: &dto.ErrorBaseResponse{
 			Message: e.Message,

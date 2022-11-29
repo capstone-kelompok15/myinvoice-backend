@@ -9,12 +9,12 @@ import (
 )
 
 type RedisConfig struct {
-	Address  string
-	Username string
-	Password string
+	Address  string `validate:"required"`
+	Username string `validate:"required"`
+	Password string `validate:"required"`
 }
 
-var DefaultTTL = time.Duration(24 * time.Hour)
+var DefaultTTL = time.Duration(1 * time.Hour)
 
 func InitRedis(params *RedisConfig) (client *redis.Client, err error) {
 	for i := 0; i < 10; i++ {

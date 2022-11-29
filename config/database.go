@@ -4,29 +4,34 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 	"time"
 )
 
 type Database struct {
-	Username                     string
-	Password                     string
-	Hostname                     string
-	Port                         int
-	DatabaseName                 string
-	RelationalDatabaseDriverName string
+	Username                     string `validate:"required"`
+	Password                     string `validate:"required"`
+	Hostname                     string `validate:"required"`
+	Port                         string `validate:"required"`
+	DatabaseName                 string `validate:"required"`
+	RelationalDatabaseDriverName string `validate:"required"`
 }
 
 var db *sql.DB
 
 func initDatabase(params *Database) error {
+	port, err := strconv.Atoi(params.Port)
+	if err != nil {
+		return err
+	}
+
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		params.Username, params.Password,
-		params.Hostname, params.Port,
+		params.Hostname, port,
 		params.DatabaseName,
 	)
 
-	var err error
 	var secondAttempt int64 = 1
 
 	for {
