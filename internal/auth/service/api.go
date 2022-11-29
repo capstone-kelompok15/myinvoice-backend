@@ -8,4 +8,5 @@ import (
 
 type CustomerService interface {
 	CustomerRegistration(ctx context.Context, params *dto.CustomerRequest) error
+	CustomerEmailVerification(ctx context.Context, req *dto.CustomerEmailVerification) error
 }

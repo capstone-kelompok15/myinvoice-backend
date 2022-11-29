@@ -13,10 +13,10 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/randomutils"
 )
 
-func (s customerService) CustomerRegistration(ctx context.Context, params *dto.CustomerRequest) error {
+func (s *customerService) CustomerRegistration(ctx context.Context, params *dto.CustomerRequest) error {
 	exist, valid, err := s.repo.CheckEmailExistAndValid(ctx, params)
 	if err != nil && err != sql.ErrNoRows {
-		s.log.Warningln("[CustomerRegistration] Error while checking the existence of the email")
+		s.log.Warningln("[CustomerRegistration] Error while checking the existence of the email", err.Error())
 		return err
 	}
 
@@ -29,14 +29,13 @@ func (s customerService) CustomerRegistration(ctx context.Context, params *dto.C
 
 		err = s.repo.CustomerRegistration(ctx, params)
 		if err != nil {
-			s.log.Warningln("[CustomerRegistration] Error while calling the repo function")
+			s.log.Warningln("[CustomerRegistration] Error while calling the repo function", err.Error())
 			return err
 		}
 	}
 
 	code := randomutils.GenerateNRandomString(4)
 	code = strings.ToUpper(code)
-	s.redis.Set(ctx, fmt.Sprintf("regis:%s", params.Email), code, 5*time.Minute)
 
 	mg := s.mailgun.NewMessage(
 		s.config.Mailgun.SenderEmail,
@@ -49,6 +48,12 @@ func (s customerService) CustomerRegistration(ctx context.Context, params *dto.C
 	_, _, err = s.mailgun.Send(ctx, mg)
 	if err != nil {
 		s.log.Warningln("[CustomerRegistration] Error while send the email:", err.Error())
+		return err
+	}
+
+	err = s.redis.Set(ctx, fmt.Sprintf("regis:%s", params.Email), code, 5*time.Minute).Err()
+	if err != nil {
+		s.log.Warningln("[CustomerRegistration] Error while setting code to the redis:", err.Error())
 		return err
 	}
 
