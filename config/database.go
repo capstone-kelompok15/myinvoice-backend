@@ -1,11 +1,12 @@
 package config
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"strconv"
 	"time"
+
+	"github.com/jmoiron/sqlx"
 )
 
 type Database struct {
@@ -17,7 +18,7 @@ type Database struct {
 	RelationalDatabaseDriverName string `validate:"required"`
 }
 
-var db *sql.DB
+var db *sqlx.DB
 
 func initDatabase(params *Database) error {
 	port, err := strconv.Atoi(params.Port)
@@ -35,7 +36,7 @@ func initDatabase(params *Database) error {
 	var secondAttempt int64 = 1
 
 	for {
-		if db, err = sql.Open(params.RelationalDatabaseDriverName, dsn); err == nil {
+		if db, err = sqlx.Open(params.RelationalDatabaseDriverName, dsn); err == nil {
 			break
 		}
 
@@ -56,7 +57,7 @@ func initDatabase(params *Database) error {
 	return nil
 }
 
-func GetDatabaseConn(params *Database) (*sql.DB, error) {
+func GetDatabaseConn(params *Database) (*sqlx.DB, error) {
 	var err error
 
 	if db == nil {
@@ -70,7 +71,7 @@ func GetDatabaseConn(params *Database) (*sql.DB, error) {
 	return db, nil
 }
 
-func CloseDatabaseConnection(db *sql.DB) error {
+func CloseDatabaseConnection(db *sqlx.DB) error {
 	err := db.Close()
 	return err
 }

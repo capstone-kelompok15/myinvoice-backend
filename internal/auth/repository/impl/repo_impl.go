@@ -1,20 +1,19 @@
 package impl
 
 import (
-	"database/sql"
-
 	"github.com/Masterminds/squirrel"
+	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 )
 
 type customerRepository struct {
-	db                  *sql.DB
+	db                  *sqlx.DB
 	log                 *logrus.Entry
 	squirrelBaseBuilder squirrel.StatementBuilderType
 }
 
 type CustomerRepositoryParams struct {
-	DB  *sql.DB
+	DB  *sqlx.DB
 	Log *logrus.Entry
 }
 
