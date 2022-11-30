@@ -33,5 +33,11 @@ func (s *customerService) CustomerEmailVerification(ctx context.Context, req *dt
 		return err
 	}
 
+	err = s.redis.Del(ctx, redisKey).Err()
+	if err != nil {
+		s.log.Warningln("[CustomerEmailVerification] Error while destroying the redis key", err.Error())
+		return err
+	}
+
 	return nil
 }
