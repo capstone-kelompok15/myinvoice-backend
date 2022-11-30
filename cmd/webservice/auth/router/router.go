@@ -25,4 +25,5 @@ func InitCustomerRouter(params *RouterParams) {
 
 	customerV1Group := params.E.Group(apiversioning.APIVersionOne + "/auth")
 	customerV1Group.POST("/register/customer", customerHandler.RegisterCustomer())
+	customerV1Group.POST("/verification/refresh", customerHandler.RefreshEmailVerificationCode())
 }
