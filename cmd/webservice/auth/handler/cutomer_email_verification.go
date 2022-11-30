@@ -7,9 +7,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h *customerHandler) RegisterCustomer() echo.HandlerFunc {
+func (h *customerHandler) CustomerEmailVerification() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var req dto.CustomerRequest
+		var req dto.CustomerEmailVerification
 		err := c.Bind(&req)
 		if err != nil {
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
@@ -26,22 +26,23 @@ func (h *customerHandler) RegisterCustomer() echo.HandlerFunc {
 			})
 		}
 
-		err = h.service.CustomerRegistration(c.Request().Context(), &req)
+		err = h.service.CustomerEmailVerification(c.Request().Context(), &req)
 		if err != nil {
-			if err == customerrors.ErrAccountDuplicated {
+			if err == customerrors.ErrUnauthorized {
 				return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
-					Err: customerrors.ErrAccountDuplicated,
+					Err: err,
 				})
 			}
-			h.log.Warningln("[RegisterCustomer] Error while calling the service function")
+
+			h.log.Warningln("[CustomerEmailVerification] Error while calling the service function")
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: customerrors.ErrInternalServer,
 			})
 		}
 
 		return httputils.WriteResponse(c, httputils.SuccessResponseParams{
-			Code: 201,
-			Data: "User Created!",
+			Code: 200,
+			Data: "Email Verified",
 		})
 	}
 }

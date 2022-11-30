@@ -6,6 +6,11 @@ type CustomerRequest struct {
 	FullName string `json:"full_name" validate:"required"`
 }
 
+type CustomerEmailVerification struct {
+	Email string `json:"email" validate:"required,email"`
+	Code  string `json:"code" validate:"required,min=4,max=4"`
+}
+
 type CustomerRefreshEmailVerificationcode struct {
 	Email string `json:"email" validate:"required,email"`
 }
