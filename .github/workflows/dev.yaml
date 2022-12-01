@@ -11,7 +11,15 @@ env:
   DOCKER_SERVICE_NAME: backend-service
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Running the test
+        run: go test ./... --cover
   build:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
