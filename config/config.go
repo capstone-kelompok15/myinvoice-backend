@@ -15,6 +15,7 @@ type Config struct {
 	Cloudinary
 	RedisConfig
 	Mailgun
+	CustomerToken
 }
 
 var config *Config
@@ -56,6 +57,9 @@ func initConfig() error {
 			PublicApiKey:  os.Getenv("MAILGUN_PUBLIC_API_KEY"),
 			Domain:        os.Getenv("MAILGUN_DOMAIN"),
 			SenderEmail:   os.Getenv("MAILGUN_SENDER_EMAIL"),
+		},
+		CustomerToken: CustomerToken{
+			SecretKey: os.Getenv("CUSTOMER_SECRET_KEY"),
 		},
 	}
 

@@ -7,7 +7,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-func ValidateAccessToken(conf *config.JWTConfig, accessToken string) (*dto.UserContext, error) {
+func ValidateAccessToken(conf *config.JWTConfig, accessToken string) (*dto.AdminContext, error) {
 	token, err := jwt.Parse(accessToken, func(t *jwt.Token) (interface{}, error) {
 		if method, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, customerrors.ErrUnauthorized
@@ -26,7 +26,7 @@ func ValidateAccessToken(conf *config.JWTConfig, accessToken string) (*dto.UserC
 	if !ok || !token.Valid {
 		return nil, customerrors.ErrUnauthorized
 	}
-	user := dto.UserContext{
+	user := dto.AdminContext{
 		ID: int(mapClaims["id"].(float64)),
 	}
 

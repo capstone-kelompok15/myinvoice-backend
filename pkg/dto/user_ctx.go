@@ -4,6 +4,6 @@ const (
 	AccountCTXKey = "ACCOUNT-CTX-KEY"
 )
 
-type UserContext struct {
+type AdminContext struct {
 	ID int
 }
