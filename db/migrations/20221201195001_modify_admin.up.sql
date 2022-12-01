@@ -1,0 +1,1 @@
+ALTER TABLE admins ADD COLUMN is_verified boolean;

@@ -17,7 +17,7 @@ func (s *customerService) RefreshEmailVerificationCode(ctx context.Context, emai
 		Email: email,
 	}
 
-	exist, verif, err := s.repo.CheckEmailExistAndValid(ctx, &adapter)
+	exist, verif, err := s.repo.CheckCustomerEmailExistAndValid(ctx, &adapter)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			return customerrors.ErrRecordNotFound
