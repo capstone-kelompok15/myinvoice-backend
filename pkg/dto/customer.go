@@ -14,3 +14,18 @@ type CustomerEmailVerification struct {
 type CustomerRefreshEmailVerificationcode struct {
 	Email string `json:"email" validate:"required,email"`
 }
+
+type CustomerLoginRequest struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=8"`
+	DeviceID string `json:"device_id" validate:"required"`
+}
+
+type CustomerContext struct {
+	ID       int    `json:"id" db:"id"`
+	FullName string `json:"full_name" db:"full_name"`
+}
+
+type CustomerAccessToken struct {
+	AccessToken string `json:"access_token"`
+}

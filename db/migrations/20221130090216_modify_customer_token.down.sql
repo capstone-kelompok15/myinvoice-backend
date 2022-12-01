@@ -1,0 +1,1 @@
+ALTER TABLE customer_tokens ADD COLUMN token text;

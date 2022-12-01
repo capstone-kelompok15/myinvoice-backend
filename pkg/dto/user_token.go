@@ -8,15 +8,15 @@ import (
 
 type UserClaims struct {
 	jwt.StandardClaims
-	UserContext
+	AdminContext
 }
 
-func NewUserClaims(acc *UserContext) *UserClaims {
+func NewUserClaims(acc *AdminContext) *UserClaims {
 	return &UserClaims{
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(1 * time.Hour).Unix(),
 		},
-		UserContext: UserContext{
+		AdminContext: AdminContext{
 			ID: acc.ID,
 		},
 	}

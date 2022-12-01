@@ -6,8 +6,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func UserFromRequestContext(ec echo.Context) *dto.UserContext {
-	extractedAccount, ok := ec.Get(dto.AccountCTXKey).(*dto.UserContext)
+func UserFromRequestContext(ec echo.Context) *dto.AdminContext {
+	extractedAccount, ok := ec.Get(dto.AccountCTXKey).(*dto.AdminContext)
 	if !ok {
 		return nil
 	}
