@@ -26,14 +26,13 @@ func (r *customerRepository) CustomerEmailVerification(ctx context.Context, req 
 		Set("is_verified", true).
 		Where(fmt.Sprintf("customer_id = (%s)", subQuerySQL)).
 		ToSql()
-
-	args = append(args, arg2...)
-	args = append(args, arg1...)
-
 	if err != nil {
 		r.log.Warningln("[CustomerEmailVerification] Error while create update sql from squirrel", err.Error())
 		return err
 	}
+
+	args = append(args, arg2...)
+	args = append(args, arg1...)
 
 	r.db.ExecContext(ctx, updateVerifiedStatusSQL, args...)
 
