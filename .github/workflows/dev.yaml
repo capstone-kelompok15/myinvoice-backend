@@ -1,0 +1,44 @@
+name: Staging Phase
+
+on:
+  push:
+    branches:
+      - "main"
+
+env:
+  DOCKER_IMAGE_REPOSITORY_NAME: capstone-project-alterra
+  DOCKER_IMAGE_TAG_NAME: dev
+  DOCKER_SERVICE_NAME: backend-service
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Set Up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_IMAGE_REPOSITORY_NAME }}:${{ env.DOCKER_IMAGE_TAG_NAME }}-${{ github.sha }},${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_IMAGE_REPOSITORY_NAME }}:${{ env.DOCKER_IMAGE_TAG_NAME }}-latest
+      - name: Executing remote command using ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_SERVER }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd capstone-project-alterra/dev
+            docker compose rm -sf ${{ env.DOCKER_SERVICE_NAME }}
+            docker rmi ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_IMAGE_REPOSITORY_NAME }}:${{ env.DOCKER_IMAGE_TAG_NAME }}-latest
+            docker compose up -d ${{ env.DOCKER_SERVICE_NAME }}
