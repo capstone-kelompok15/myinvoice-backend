@@ -29,4 +29,5 @@ func InitCustomerRouter(params *RouterParams) {
 	customerV1Group.POST("/verification/customer", customerHandler.CustomerEmailVerification())
 	customerV1Group.POST("/verification/refresh", customerHandler.RefreshEmailVerificationCode())
 	customerV1Group.POST("/login/customer", customerHandler.CustomerLogin())
+	customerV1Group.POST("/login/admin", customerHandler.AdminLogin())
 }

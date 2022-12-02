@@ -6,7 +6,6 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/passwordutils"
-	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/randomutils"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/tokenutils"
 )
 
@@ -16,7 +15,7 @@ func (s *customerService) LoginAdmin(ctx context.Context, req *dto.AdminLoginReq
 	adminContext, err := s.repo.LoginAdmin(ctx, req)
 	if err != nil {
 		if err != customerrors.ErrRecordNotFound {
-			s.log.Warningln("[CustomerLogin] Error while authorize customer login", err.Error())
+			s.log.Warningln("[AdminLogin] Error while authorize customer login", err.Error())
 		}
 		return nil, customerrors.ErrUnauthorized
 	}
@@ -24,12 +23,21 @@ func (s *customerService) LoginAdmin(ctx context.Context, req *dto.AdminLoginReq
 	var loginResponse dto.AdminLoginResponse
 	loginResponse.AccessToken, err = tokenutils.NewAccessToken(s.config.JWTSecretKey, adminContext)
 	if err != nil {
-		s.log.Warningln("[CustomerLogin] Error while creating access token", err.Error())
-		return nil, customerrors.ErrUnauthorized
+		s.log.Warningln("[AdminLogin] Error while creating access token", err.Error())
+		return nil, err
 	}
 
-	refreshToken := randomutils.GenerateNRandomString(64)
-	loginResponse.RefreshToken = refreshToken
+	refreshToken := tokenutils.NewRefreshToken(&tokenutils.RefreshTokenParams{
+		UserID: adminContext.ID,
+	})
 
-	return nil, nil
+	err = s.repo.InsertRefreshToken(ctx, refreshToken)
+	if err != nil {
+		s.log.Warningln("[AdminLogin] Error while inserting refresh token", err.Error())
+		return nil, err
+	}
+
+	loginResponse.RefreshToken = refreshToken.Token
+
+	return &loginResponse, nil
 }
