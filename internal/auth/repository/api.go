@@ -15,4 +15,5 @@ type CustomerRepository interface {
 	InsertCustomerAccessToken(ctx context.Context, customerID int, deviceID string) error
 	CheckAdminEmailExistAndValid(ctx context.Context, params *dto.MerchantRegisterRequest) (exists, valid bool, err error)
 	MerchantRegistration(ctx context.Context, req *dto.MerchantRegisterRequest) error
+	LoginAdmin(ctx context.Context, req *dto.AdminLoginRequest) (*dto.AdminContext, error)
 }

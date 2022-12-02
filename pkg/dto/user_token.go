@@ -14,10 +14,12 @@ type UserClaims struct {
 func NewUserClaims(acc *AdminContext) *UserClaims {
 	return &UserClaims{
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(1 * time.Hour).Unix(),
+			ExpiresAt: time.Now().Add(2 * time.Hour).Unix(),
 		},
 		AdminContext: AdminContext{
-			ID: acc.ID,
+			ID:           acc.ID,
+			MerchantID:   acc.MerchantID,
+			MerchantName: acc.MerchantName,
 		},
 	}
 }
