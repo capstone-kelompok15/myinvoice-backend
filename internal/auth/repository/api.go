@@ -7,10 +7,12 @@ import (
 )
 
 type CustomerRepository interface {
-	CheckEmailExistAndValid(ctx context.Context, params *dto.CustomerRequest) (exists, valid bool, err error)
+	CheckCustomerEmailExistAndValid(ctx context.Context, params *dto.CustomerRequest) (exists, valid bool, err error)
 	CustomerRegistration(ctx context.Context, params *dto.CustomerRequest) error
 	CustomerEmailVerification(ctx context.Context, req *dto.CustomerEmailVerification) error
 	AuthorizeCustomerLogin(ctx context.Context, req *dto.CustomerLoginRequest) (*dto.CustomerContext, error)
 	InvalidCustomerAccessToken(ctx context.Context, customerID int) error
 	InsertCustomerAccessToken(ctx context.Context, customerID int, deviceID string) error
+	CheckAdminEmailExistAndValid(ctx context.Context, params *dto.MerchantRegisterRequest) (exists, valid bool, err error)
+	MerchantRegistration(ctx context.Context, req *dto.MerchantRegisterRequest) error
 }
