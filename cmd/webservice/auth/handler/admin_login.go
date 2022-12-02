@@ -7,9 +7,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h *customerHandler) CustomerLogin() echo.HandlerFunc {
+func (h *customerHandler) AdminLogin() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var req dto.CustomerLoginRequest
+		var req dto.AdminLoginRequest
 		err := c.Bind(&req)
 		if err != nil {
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
@@ -26,7 +26,7 @@ func (h *customerHandler) CustomerLogin() echo.HandlerFunc {
 			})
 		}
 
-		accessToken, err := h.service.CustomerLogin(c.Request().Context(), &req)
+		token, err := h.service.LoginAdmin(c.Request().Context(), &req)
 		if err != nil {
 			if err == customerrors.ErrUnauthorized {
 				return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
@@ -41,7 +41,7 @@ func (h *customerHandler) CustomerLogin() echo.HandlerFunc {
 		}
 
 		return httputils.WriteResponse(c, httputils.SuccessResponseParams{
-			Data: accessToken,
+			Data: token,
 		})
 	}
 }

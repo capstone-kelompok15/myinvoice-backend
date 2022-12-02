@@ -1,1 +1,1 @@
-ALTER TABLE admins DROP COLUMN is_verified boolean;
+ALTER TABLE admins DROP COLUMN is_verified;

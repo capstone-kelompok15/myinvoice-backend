@@ -12,4 +12,5 @@ type CustomerService interface {
 	RefreshEmailVerificationCode(ctx context.Context, email string) error
 	CustomerLogin(ctx context.Context, req *dto.CustomerLoginRequest) (*dto.CustomerAccessToken, error)
 	MerchantRegistration(ctx context.Context, req *dto.MerchantRegisterRequest) error
+	LoginAdmin(ctx context.Context, req *dto.AdminLoginRequest) (*dto.AdminLoginResponse, error)
 }
