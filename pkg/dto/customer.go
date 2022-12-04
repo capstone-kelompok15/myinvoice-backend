@@ -29,3 +29,7 @@ type CustomerContext struct {
 type CustomerAccessToken struct {
 	AccessToken string `json:"access_token"`
 }
+
+type CustomerResetPasswordRequest struct {
+	Email string `json:"email"`
+}

@@ -7,7 +7,7 @@ import (
 )
 
 type CustomerRepository interface {
-	CheckCustomerEmailExistAndValid(ctx context.Context, params *dto.CustomerRequest) (exists, valid bool, err error)
+	CheckCustomerEmailExistAndValid(ctx context.Context, email string) (exists, valid bool, err error)
 	CustomerRegistration(ctx context.Context, params *dto.CustomerRequest) error
 	CustomerEmailVerification(ctx context.Context, req *dto.CustomerEmailVerification) error
 	AuthorizeCustomerLogin(ctx context.Context, req *dto.CustomerLoginRequest) (*dto.CustomerContext, error)

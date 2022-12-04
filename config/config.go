@@ -16,6 +16,7 @@ type Config struct {
 	RedisConfig
 	Mailgun
 	CustomerToken
+	FrontEndURL string `validate:"required,url"`
 }
 
 var config *Config
@@ -61,6 +62,7 @@ func initConfig() error {
 		CustomerToken: CustomerToken{
 			SecretKey: os.Getenv("CUSTOMER_SECRET_KEY"),
 		},
+		FrontEndURL: os.Getenv("FRONTEND_URL"),
 	}
 
 	validator, err := validatorutils.New()

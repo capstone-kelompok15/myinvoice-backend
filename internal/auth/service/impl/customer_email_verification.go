@@ -10,7 +10,7 @@ import (
 )
 
 func (s *customerService) CustomerEmailVerification(ctx context.Context, req *dto.CustomerEmailVerification) error {
-	redisKey := fmt.Sprintf("regis:%s", req.Email)
+	redisKey := fmt.Sprintf("customer-regis:%s", req.Email)
 
 	code, err := s.redis.Get(ctx, redisKey).Result()
 

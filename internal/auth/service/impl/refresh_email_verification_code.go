@@ -7,17 +7,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/randomutils"
 )
 
 func (s *customerService) RefreshEmailVerificationCode(ctx context.Context, email string) error {
-	adapter := dto.CustomerRequest{
-		Email: email,
-	}
-
-	exist, verif, err := s.repo.CheckCustomerEmailExistAndValid(ctx, &adapter)
+	exist, verif, err := s.repo.CheckCustomerEmailExistAndValid(ctx, email)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			return customerrors.ErrRecordNotFound
@@ -32,7 +27,7 @@ func (s *customerService) RefreshEmailVerificationCode(ctx context.Context, emai
 
 	code := randomutils.GenerateNRandomString(4)
 	code = strings.ToUpper(code)
-	s.redis.Set(ctx, fmt.Sprintf("regis:%s", email), code, 5*time.Minute)
+	s.redis.Set(ctx, fmt.Sprintf("customer-regis:%s", email), code, 5*time.Minute)
 
 	mg := s.mailgun.NewMessage(
 		s.config.Mailgun.SenderEmail,

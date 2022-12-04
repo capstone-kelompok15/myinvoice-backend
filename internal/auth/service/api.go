@@ -14,4 +14,5 @@ type CustomerService interface {
 	MerchantRegistration(ctx context.Context, req *dto.MerchantRegisterRequest) error
 	LoginAdmin(ctx context.Context, req *dto.AdminLoginRequest) (*dto.AdminLoginResponse, error)
 	GenerateNewAccessToken(ctx context.Context, refreshTokens string) (*string, error)
+	CustomerResetPasswordRequest(ctx context.Context, email string) error
 }
