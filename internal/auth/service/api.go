@@ -15,4 +15,5 @@ type CustomerService interface {
 	LoginAdmin(ctx context.Context, req *dto.AdminLoginRequest) (*dto.AdminLoginResponse, error)
 	GenerateNewAccessToken(ctx context.Context, refreshTokens string) (*string, error)
 	CustomerResetPasswordRequest(ctx context.Context, email string) error
+	ResetPassword(ctx context.Context, req *dto.CustomerResetPassword) error
 }

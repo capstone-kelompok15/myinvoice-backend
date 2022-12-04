@@ -31,5 +31,6 @@ func InitCustomerRouter(params *RouterParams) {
 	customerV1Group.POST("/login/customer", customerHandler.CustomerLogin())
 	customerV1Group.POST("/login/admin", customerHandler.AdminLogin())
 	customerV1Group.POST("/admin/refresh", customerHandler.AdminRefreshToken())
-	customerV1Group.POST("/reset/password/customer", customerHandler.CustomerResetPasswordRequest())
+	customerV1Group.POST("/reset/password/request/customer", customerHandler.CustomerResetPasswordRequest())
+	customerV1Group.POST("/reset/password/customer", customerHandler.CustomerResetPassword())
 }

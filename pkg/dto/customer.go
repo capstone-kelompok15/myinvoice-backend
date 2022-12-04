@@ -33,3 +33,9 @@ type CustomerAccessToken struct {
 type CustomerResetPasswordRequest struct {
 	Email string `json:"email"`
 }
+
+type CustomerResetPassword struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Code     string `json:"code"`
+}
