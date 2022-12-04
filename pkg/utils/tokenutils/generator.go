@@ -13,9 +13,9 @@ type RefreshTokenParams struct {
 	UserID int
 }
 
-func NewRefreshToken(params *RefreshTokenParams) *dto.CustomerRefreshToken {
+func NewRefreshToken(params *RefreshTokenParams) *dto.AdminRefreshToken {
 	generatedToken := randomutils.GenerateNRandomString(128)
-	return &dto.CustomerRefreshToken{
+	return &dto.AdminRefreshToken{
 		Token:          generatedToken,
 		AdminID:        params.UserID,
 		IsValid:        true,

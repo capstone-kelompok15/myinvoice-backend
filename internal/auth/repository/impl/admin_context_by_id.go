@@ -9,16 +9,15 @@ import (
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 )
 
-func (r *customerRepository) LoginAdmin(ctx context.Context, req *dto.AdminLoginRequest) (*dto.AdminContext, error) {
+func (r *customerRepository) GetAdminContextByID(ctx context.Context, adminID int) (*dto.AdminContext, error) {
 	loginSQL, args, err := squirrel.
 		Select("a.id as id", "a.merchant_id as merchant_id", "m.merchant_name as merchant_name").
 		From("admins as a").
 		InnerJoin("merchants as m ON m.id = a.id").
-		Where(squirrel.Eq{"a.email": req.Email}).
-		Where(squirrel.Eq{"a.password": req.Password}).
+		Where(squirrel.Eq{"a.id": adminID}).
 		ToSql()
 	if err != nil {
-		r.log.Warningln("[LoginAdmin] Error while creating sql from squirrel", err.Error())
+		r.log.Warningln("[GetAdminContextByID] Error while creating sql from squirrel", err.Error())
 		return nil, err
 	}
 
@@ -28,9 +27,8 @@ func (r *customerRepository) LoginAdmin(ctx context.Context, req *dto.AdminLogin
 		if err == sql.ErrNoRows {
 			return nil, customerrors.ErrRecordNotFound
 		}
-		r.log.Warningln("[LoginAdmin] Error while exec the query", err.Error())
+		r.log.Warningln("[GetAdminContextByID] Error while exec the query", err.Error())
 		return nil, err
 	}
-
-	return &adminCtx, nil
+	return nil, nil
 }

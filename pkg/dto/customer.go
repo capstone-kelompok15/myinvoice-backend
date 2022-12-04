@@ -1,7 +1,5 @@
 package dto
 
-import "time"
-
 type CustomerRequest struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=8"`
@@ -30,11 +28,4 @@ type CustomerContext struct {
 
 type CustomerAccessToken struct {
 	AccessToken string `json:"access_token"`
-}
-
-type CustomerRefreshToken struct {
-	Token          string
-	AdminID        int
-	IsValid        bool
-	ExpirationDate time.Time
 }
