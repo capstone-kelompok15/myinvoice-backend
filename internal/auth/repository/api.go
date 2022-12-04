@@ -16,5 +16,8 @@ type CustomerRepository interface {
 	CheckAdminEmailExistAndValid(ctx context.Context, params *dto.MerchantRegisterRequest) (exists, valid bool, err error)
 	MerchantRegistration(ctx context.Context, req *dto.MerchantRegisterRequest) error
 	LoginAdmin(ctx context.Context, req *dto.AdminLoginRequest) (*dto.AdminContext, error)
-	InsertRefreshToken(ctx context.Context, req *dto.CustomerRefreshToken) error
+	InsertRefreshToken(ctx context.Context, req *dto.AdminRefreshToken) error
+	GetRefreshToken(ctx context.Context, refreshToken string) (*dto.AdminRefreshToken, error)
+	InvalidateRefreshToken(ctx context.Context, refreshToken *dto.AdminRefreshToken) error
+	GetAdminContextByID(ctx context.Context, adminID int) (*dto.AdminContext, error)
 }
