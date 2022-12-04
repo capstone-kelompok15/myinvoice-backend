@@ -28,16 +28,16 @@ func GenerateCustomerAccessToken(params *CustomerAccessTokenParams) (*string, er
 
 	var accessToken strings.Builder
 
-	headPart := base64.RawStdEncoding.EncodeToString(deviceInformation)
+	headPart := base64.RawURLEncoding.EncodeToString(deviceInformation)
 	accessToken.Write([]byte(headPart + delimiter))
 
-	payloadPart := base64.RawStdEncoding.EncodeToString(userInformation)
+	payloadPart := base64.RawURLEncoding.EncodeToString(userInformation)
 	accessToken.Write([]byte(payloadPart))
 
 	hmacVerifyPart := hmac.New(sha256.New, []byte(params.Config.SecretKey))
 	hmacVerifyPart.Write([]byte(accessToken.String()))
 
-	hmacVerifyPartString := base64.RawStdEncoding.EncodeToString(hmacVerifyPart.Sum(nil))
+	hmacVerifyPartString := base64.RawURLEncoding.EncodeToString(hmacVerifyPart.Sum(nil))
 	accessToken.Write([]byte(delimiter + hmacVerifyPartString))
 
 	return stringutils.MakePointerString(accessToken.String()), nil

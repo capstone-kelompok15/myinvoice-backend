@@ -20,4 +20,5 @@ type CustomerRepository interface {
 	GetRefreshToken(ctx context.Context, refreshToken string) (*dto.AdminRefreshToken, error)
 	InvalidateRefreshToken(ctx context.Context, refreshToken *dto.AdminRefreshToken) error
 	GetAdminContextByID(ctx context.Context, adminID int) (*dto.AdminContext, error)
+	CustomerResetPassword(ctx context.Context, req *dto.CustomerResetPassword) error
 }
