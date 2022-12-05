@@ -1,0 +1,1213 @@
+openapi: 3.0.0
+info:
+  version: '1'
+  title: Invoice API
+  description: Sebagian Besar masih belom fix 
+paths:  
+  /ping:
+    get:
+      tags: 
+        - Ping
+      summary: Test Ping
+      responses:
+        '200':    # status code
+          description: Ping success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: pong
+                   
+  /auth/login/admin:
+    post:
+      tags: 
+        - Auth
+      summary: Login admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+
+      responses:
+        '200':    # status code
+          description: Login success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+                      refresh:
+                        type: string
+  /auth/login/customer:
+    post:
+      tags: 
+          - Auth
+      summary: Login customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                device_id:
+                  type: string
+
+      responses:
+        '200':    # status code
+          description: Login success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+        # '401':    # status code
+        #   description: Login Failed (user not verified)
+        #   content:
+        #     application/json:
+        #       schema: 
+        #         type: object
+        #         properties:
+        #           error:
+        #             type: object
+        #             properties:
+        #               message:
+        #                 type: string
+        #               detail:
+        #                 type: string
+        #           data:
+        #             type: string
+        #             default: null
+                     
+  # Fix
+  /auth/register/merchant:
+    post:
+      tags: 
+        - Auth
+      summary: Register admin
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                  nullable: false
+                password:
+                  type: string
+                  minLength: 8
+                merchant_name:
+                  type: string
+                merchant_address:
+                  type: string
+                merchant_phone_address:
+                  type: string
+                merchant_banks:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      bank_id:
+                        type: integer
+                      on_behalf_of:
+                        type: string
+                      bank_number: 
+                        type: string
+                
+      responses:
+        '201':    # status code
+          description: register admin success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: "Merchant Created!"
+  /auth/register/customer:
+    post:
+      tags: 
+        - Auth
+      summary: Register customer
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  nullable: false
+                password:
+                  type: string
+                  minLength: 8
+                name:
+                  type: string
+
+      responses:
+        '201':    # status code
+          description: register customer success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: "User Created!"
+                    
+  /auth/refresh/admin:
+    post:
+      tags: 
+        - Auth
+      summary: Refresh token for admin
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+      responses:
+        '200':    # status code
+          description: refresh token success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  access_token:
+                    type: string
+  /auth/verification/customer:
+    post:
+      tags: 
+        - Auth
+      summary: Customer Email Verification
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                code:
+                  type: string
+      responses:
+        '200':    # status code
+          description: Email Verification success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: Email Verified!
+  /auth/password/reset/request:
+    post:
+      tags: 
+        - Auth
+      summary: Customer Reset Password (Request Forgot password By Email)
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                 
+      responses:
+        '200':    # status code
+          description: Send Email success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: Email Sent!
+  /auth/password/reset:
+    post:
+      tags: 
+        - Auth
+      summary: Customer Reset Password
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                code:
+                  type: string
+                new_password:
+                  type: string
+                 
+      responses:
+        '200':    # status code
+          description: Customer Reset Password success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: Password Resetted!
+  /auth/verification/refresh:
+    post:
+      tags: 
+        - Auth
+      summary: Refresh Email Verification Code
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                code:
+                  type: string
+                new_password:
+                  type: string
+                 
+      responses:
+        '201':    # status code
+          description: Refresh Email Verification Code success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: Sent new code!
+               
+                    
+                       
+                        
+                      
+  /customers/{id}:
+    get:
+      tags: 
+        - Customer
+      summary: Get customer by id
+      description: Optional extended description in CommonMark or HTML.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: customer id
+          schema:
+            type : integer
+            minimum: 1
+      responses:
+        '200':    # status code
+          description: Get customer by id success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error: 
+                    type: string
+                    default: null
+                  data:                
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      display_profile_url:
+                        type: string
+                      phone_number:
+                        type: string
+                      address:
+                        type: string
+                      is_verified:
+                        type: boolean
+                      is_deactivated:
+                        type: boolean
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+    put:
+      tags: 
+        - Customer
+      summary: update customer by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: customer id
+          schema:
+            type : integer
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  type: string         
+                  
+          
+      responses:
+        '200':    # status code
+          description: update customer success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: Update customer success!
+  /customers:
+    get:
+      tags: 
+        - Customer
+      summary: Get all customer (only verified customer)
+      parameters:
+        - name: page
+          in: query
+          required: true
+          description: filter by page
+          schema:
+            type : integer
+            minimum: 1
+        - name: limit
+          in: query
+          required: true
+          description: filter by limit
+          schema:
+            type : integer
+        - name: name
+          in: query
+          required: false
+          description: search by name
+          schema:
+            type : string
+        - name: email
+          in: query
+          required: false
+          description: search by email
+          schema:
+            type : string
+      responses:
+        '200':    # status code
+          description: Get customer success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error: 
+                    type: string
+                    default: null
+                  data:   
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        display_profile_url:
+                          type: string
+                        phone_number:
+                          type: string
+                        address:
+                          type: string
+                        created_at:
+                          type: string
+                        updated_at:
+                          type: string
+    
+                  
+                 
+  /customers/display_profile:
+    put:
+      tags: 
+        - Customer
+      summary: Update display profile
+       
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+         
+      responses:
+        '200':    # status code
+          description: update display profile success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: object
+                    properties:
+                      display_profile_url:
+                        type: string
+                  
+                   
+  /notifications:
+    get:
+      tags: 
+        - Notification
+      summary: Get notification 
+      parameters:
+        - name: page
+          in: query
+          required: true
+          description: page
+          schema:
+            type : integer
+            minimum: 1
+        - name: limit
+          in: query
+          required: true
+          description: page
+          schema:
+            type : integer
+      responses:
+        '200':    # status code
+          description: Get notifications success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error: 
+                    type: string
+                    default: null
+                  data:   
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        title:
+                          type: string
+                        content:
+                          type: string
+                        created_at:
+                          type: string
+                        updated_at:
+                          type: string
+  /banks:
+    get:
+      tags: 
+        - Bank
+      summary: Get list of bank 
+      responses:
+        '200':    # status code
+          description: Get list of bank success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error: 
+                    type: string
+                    default: null
+                  data:   
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        code:
+                          type: string
+  /merchants/banks:
+    get:
+      tags: 
+        - Merchant
+      summary: Get list of merchant bank
+      parameters:
+        - name: merchant_id
+          in: query
+          required: true
+          description: filter by merchant_id
+          schema:
+            type : string
+           
+      responses:
+        '200':    # status code
+          description: Get list of bank success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error: 
+                    type: string
+                    default: null
+                  data:   
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        code:
+                          type: string
+                        on_behalf_of:
+                          type: string
+                        bank_number:
+                          type: string
+                         
+   
+                 
+  /invoices/count:
+    get:
+      tags: 
+        - Invoice
+      summary: Get invoices count
+      parameters:
+        # - name: merchant_id
+        #   in: query
+        #   required: required
+        #   description: filter by merchant_id 
+        #   schema:
+        #     type : integer
+        - name: payment_status
+          in: query
+          required: false
+          description: filter by payment status
+          schema:
+            type : string
+            enum: [unpaid,paid,pending]
+        - name: range_time
+          in: query
+          required: false
+          description: filter by last ... days  
+          schema:
+            type : integer
+        - name: customer_id
+          in: query
+          required: false
+          description: filter by customer_id  
+          schema:
+            type : integer
+        - name: admin_id
+          in: query
+          required: false
+          description: filter by admin_id  
+          schema:
+            type : integer
+            
+           
+      responses:
+        '200':    # status code
+          description: Get invoices count success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: object
+                    properties:
+                      count: 
+                        type: integer
+  /invoices/payment:
+    get:
+      tags: 
+        - Invoice
+      summary: Get total payment
+      parameters:
+        - name: payment_status
+          in: query
+          required: false
+          description: filter by payment status
+          schema:
+            type : string
+            enum: [unpaid,paid,pending]
+        
+        - name: range_time
+          in: query
+          required: false
+          description: filter by last ... days  
+          schema:
+            type : integer  
+        - name: customer_id
+          in: query
+          required: false
+          description: filter by customer_id  
+          schema:
+            type : integer
+        - name: admin_id
+          in: query
+          required: false
+          description: filter by admin_id  
+          schema:
+            type : integer
+           
+      responses:
+        '200':    # status code
+          description: Get total payment success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: object
+                    properties:
+                      total_payment: 
+                        type: integer
+  /invoices/{id}:
+    get:
+      tags: 
+        - Invoice
+      summary: Get invoice by id 
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id invoice
+          schema:
+            type : integer
+        
+        
+           
+      responses:
+        '200':    # status code
+          description: Get invoice by id success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        payment_status:
+                          type: string
+                          enum: [unpaid,paid,pending]
+                        total_price:
+                          type: integer
+                        due_at:
+                          type: string
+                        created_at:
+                          type: string
+                        updated_at:
+                          type: string
+                        merchant:
+                          type: object 
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            display_profile_url:
+                              type: string
+                            address:
+                              type: string
+                        customer:
+                          type: object 
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            email:
+                              type: string
+                            address:
+                              type: string
+                        payment_method:
+                          type: object 
+                          properties:
+                            payment_type:
+                              type: string
+                              enum: [manual,automatic]
+                            bank_name:
+                              type: string
+                            bank_code:
+                              type: string
+                            bank_number:
+                              type: string
+                            on_behalf_of:
+                              type: string
+                        items:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              product:
+                                type: string
+                              quantity:
+                                type: integer
+                              price:
+                                type: integer
+                              total_price:
+                                type: integer
+                              created_at:
+                                type: string
+                              updated_at:
+                                type: string
+  /invoices:
+    get:
+      tags: 
+        - Invoice
+      summary: Get all invoices 
+      parameters:
+        - name: page
+          in: query
+          required: true
+          description: page
+          schema:
+            type : integer
+        - name: limit
+          in: query
+          required: true
+          description: page
+          schema:
+            type : integer
+        - name: payment_status
+          in: query
+          required: false
+          description: filter by payment status
+          schema:
+            type : string
+            enum: [unpaid,paid,pending]
+        - name: merchant_id
+          in: query
+          required: false
+          description: filter by merchant_id 
+          schema:
+            type : integer
+        - name: customer_id
+          in: query
+          required: false
+          description: filter by customer_id 
+          schema:
+            type : integer
+        - name: range_time
+          in: query
+          required: false
+          description: filter by last ... days  
+          schema:
+            type : integer   
+        
+           
+      responses:
+        '200':    # status code
+          description: Get all invoice success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        payment_status:
+                          type: string
+                          enum: [unpaid,paid,pending]
+                        total_price:
+                          type: integer
+                        due_at:
+                          type: string
+                        created_at:
+                          type: string
+                        updated_at:
+                          type: string
+                        merchant:
+                          type: object 
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            display_profile_url:
+                              type: string
+                            address:
+                              type: string
+                        customer:
+                          type: object 
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            email:
+                              type: string
+                            address:
+                              type: string
+                        payment_method:
+                          type: object 
+                          properties:
+                            payment_type:
+                              type: string
+                              enum: [manual,automatic]
+                            bank_name:
+                              type: string
+                            bank_code:
+                              type: string
+                            bank_number:
+                              type: string
+                            on_behalf_of:
+                              type: string
+                        items:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              product:
+                                type: string
+                              quantity:
+                                type: integer
+                              price:
+                                type: integer
+                              total_price:
+                                type: integer
+                              created_at:
+                                type: string
+                              updated_at:
+                                type: string
+                      
+    post:
+      tags: 
+        - Invoice
+      summary: Create invoices 
+      requestBody:
+        required: true 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_id:
+                  type: integer
+                due_at:
+                  type: string
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product:
+                        type: string
+                      quantity:
+                        type: integer
+                      price:
+                        type: integer
+                   
+ 
+      responses:
+        '201':    # status code
+          description: Create invoice success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      payment_status:
+                        type: string
+                        enum: [unpaid,paid,pending]
+                      total_price:
+                        type: integer
+                      due_at:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      merchant:
+                        type: object 
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          display_profile_url:
+                            type: string
+                          address:
+                            type: string
+                      customer:
+                        type: object 
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          email:
+                            type: string
+                          address:
+                            type: string
+                      payment_method:
+                        type: object 
+                        properties:
+                          payment_type:
+                            type: string
+                            enum: [manual,automatic]
+                          bank_name:
+                            type: string
+                          bank_code:
+                            type: string
+                          bank_number:
+                            type: string
+                          on_behalf_of:
+                            type: string
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            product:
+                              type: string
+                            quantity:
+                              type: integer
+                            price:
+                              type: integer
+                            total_price:
+                              type: integer
+                            created_at:
+                              type: string
+                            updated_at:
+                              type: string
+  /invoices/{id}/status:  
+    put:
+      tags: 
+        - Invoice
+      summary: Update invoices status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: invoice id
+          schema:
+            type : integer
+          
+        
+      requestBody:
+        required: true 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payment_status_id:
+                  type: integer
+      responses:
+        '200':    # status code
+          description: Create invoice success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data: 
+                    type: string
+                    default: Update invoice status success!
+                      
+  /invoices/{id}/approval_document:  
+    put:
+      tags: 
+        - Invoice
+      summary: Update/Upload invoices approval document
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: invoice id
+          schema:
+            type : integer
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':    # status code
+          description: Update/Upload invoice approval document success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data: 
+                    type: string
+                    default: Update invoice status success!
+  /invoices/{id}/payment_method:  
+    put:
+      tags: 
+        - Invoice
+      summary: Update payment method
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: invoice id
+          schema:
+            type : integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                merchant_bank_id:
+                  type: integer
+          
+      responses:
+        '200':    # status code
+          description: Update payment_method success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data: 
+                    type: string
+                    default: Update payment method success!
+                      
+                  
+                 
+                  
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: Default
+    url: https://api.staging.my-invoice.me/api/v1
