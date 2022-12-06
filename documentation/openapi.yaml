@@ -1,20 +1,20 @@
 openapi: 3.0.0
 info:
-  version: '1'
+  version: "1"
   title: Invoice API
-  description: Sebagian Besar masih belom fix 
-paths:  
+  description: "[In Progress] = belum bisa diakses tapi fielnya ga bakal terlalu banyak berubah juga"
+paths:
   /ping:
     get:
-      tags: 
+      tags:
         - Ping
-      summary: Test Ping
+      summary: "Test Ping"
       responses:
-        '200':    # status code
+        "200": # status code
           description: Ping success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   error:
@@ -23,12 +23,12 @@ paths:
                   data:
                     type: string
                     default: pong
-                   
+
   /auth/login/admin:
     post:
-      tags: 
+      tags:
         - Auth
-      summary: Login admin
+      summary: "[In Progress] Login admin"
       requestBody:
         required: true
         content:
@@ -42,11 +42,11 @@ paths:
                   type: string
 
       responses:
-        '200':    # status code
+        "200": # status code
           description: Login success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   error:
@@ -57,12 +57,19 @@ paths:
                     properties:
                       access_token:
                         type: string
-                      refresh:
+                      refresh_token:
                         type: string
+        "400": # status code
+          $ref: "#/components/responses/400"
+        "401": # status code
+          $ref: "#/components/responses/401"
+        "500": # status code
+          $ref: "#/components/responses/500"
+
   /auth/login/customer:
     post:
-      tags: 
-          - Auth
+      tags:
+        - Auth
       summary: Login customer
       requestBody:
         required: true
@@ -79,11 +86,11 @@ paths:
                   type: string
 
       responses:
-        '200':    # status code
+        "200": # status code
           description: Login success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   error:
@@ -94,31 +101,20 @@ paths:
                     properties:
                       access_token:
                         type: string
-        # '401':    # status code
-        #   description: Login Failed (user not verified)
-        #   content:
-        #     application/json:
-        #       schema: 
-        #         type: object
-        #         properties:
-        #           error:
-        #             type: object
-        #             properties:
-        #               message:
-        #                 type: string
-        #               detail:
-        #                 type: string
-        #           data:
-        #             type: string
-        #             default: null
-                     
+        "400": # status code
+          $ref: "#/components/responses/400"
+        "401": # status code
+          $ref: "#/components/responses/401"
+        "500": # status code
+          $ref: "#/components/responses/500"
+
   # Fix
   /auth/register/merchant:
     post:
-      tags: 
+      tags:
         - Auth
-      summary: Register admin
-      requestBody: 
+      summary: "[In Progress] Register admin"
+      requestBody:
         required: true
         content:
           application/json:
@@ -137,7 +133,7 @@ paths:
                   type: string
                 merchant_address:
                   type: string
-                merchant_phone_address:
+                merchant_phone_number:
                   type: string
                 merchant_banks:
                   type: array
@@ -148,15 +144,15 @@ paths:
                         type: integer
                       on_behalf_of:
                         type: string
-                      bank_number: 
+                      bank_number:
                         type: string
-                
+
       responses:
-        '201':    # status code
+        "201": # status code
           description: register admin success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   error:
@@ -165,12 +161,17 @@ paths:
                   data:
                     type: string
                     default: "Merchant Created!"
+        "400": # status code
+          $ref: "#/components/responses/400"
+
+        "500": # status code
+          $ref: "#/components/responses/500"
   /auth/register/customer:
     post:
-      tags: 
+      tags:
         - Auth
       summary: Register customer
-      requestBody: 
+      requestBody:
         required: true
         content:
           application/json:
@@ -183,15 +184,15 @@ paths:
                 password:
                   type: string
                   minLength: 8
-                name:
+                full_name:
                   type: string
 
       responses:
-        '201':    # status code
+        "201": # status code
           description: register customer success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   error:
@@ -200,13 +201,48 @@ paths:
                   data:
                     type: string
                     default: "User Created!"
-                    
-  /auth/refresh/admin:
+        "400": # status code
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        default: bad request
+                      detail:
+                        type: string
+                  data:
+                    type: string
+                    default: null
+
+        "500": # status code
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        default: internal server error
+                  data:
+                    type: string
+                    default: null
+
+  /auth/admin/refresh:
     post:
-      tags: 
+      tags:
         - Auth
-      summary: Refresh token for admin
-      requestBody: 
+      summary: "[In Progress] Refresh token for admin"
+      requestBody:
         required: true
         content:
           application/json:
@@ -216,21 +252,31 @@ paths:
                 refresh_token:
                   type: string
       responses:
-        '200':    # status code
+        "201": # status code
           description: refresh token success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
-                  access_token:
+                  error:
                     type: string
+                    default: null
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+        "400": # status code
+          $ref: "#/components/responses/400"
+        "500": # status code
+          $ref: "#/components/responses/500"
   /auth/verification/customer:
     post:
-      tags: 
+      tags:
         - Auth
-      summary: Customer Email Verification
-      requestBody: 
+      summary: "[In Progress] Customer Email Verification"
+      requestBody:
         required: true
         content:
           application/json:
@@ -242,11 +288,11 @@ paths:
                 code:
                   type: string
       responses:
-        '200':    # status code
+        "200": # status code
           description: Email Verification success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   error:
@@ -255,74 +301,16 @@ paths:
                   data:
                     type: string
                     default: Email Verified!
-  /auth/password/reset/request:
-    post:
-      tags: 
-        - Auth
-      summary: Customer Reset Password (Request Forgot password By Email)
-      requestBody: 
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                 
-      responses:
-        '200':    # status code
-          description: Send Email success
-          content:
-            application/json:
-              schema: 
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: Email Sent!
-  /auth/password/reset:
-    post:
-      tags: 
-        - Auth
-      summary: Customer Reset Password
-      requestBody: 
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                code:
-                  type: string
-                new_password:
-                  type: string
-                 
-      responses:
-        '200':    # status code
-          description: Customer Reset Password success
-          content:
-            application/json:
-              schema: 
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: Password Resetted!
+        "400": # status code
+          $ref: "#/components/responses/400"
+        "500": # status code
+          $ref: "#/components/responses/500"
   /auth/verification/refresh:
     post:
-      tags: 
+      tags:
         - Auth
       summary: Refresh Email Verification Code
-      requestBody: 
+      requestBody:
         required: true
         content:
           application/json:
@@ -331,17 +319,12 @@ paths:
               properties:
                 email:
                   type: string
-                code:
-                  type: string
-                new_password:
-                  type: string
-                 
       responses:
-        '201':    # status code
+        "201": # status code
           description: Refresh Email Verification Code success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   error:
@@ -350,37 +333,109 @@ paths:
                   data:
                     type: string
                     default: Sent new code!
-               
-                    
-                       
-                        
-                      
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /auth/reset/password/request/customer:
+    post:
+      tags:
+        - Auth
+      summary: "[In Progress] Customer Reset Password (Request Forgot password By Email)"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+
+      responses:
+        "200": # status code
+          description: Send Email success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: Email Sent!
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
+  /auth/reset/password/customer:
+    post:
+      tags:
+        - Auth
+      summary: "[In Progress] Customer Reset Password"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                code:
+                  type: string
+
+      responses:
+        "200": # status code
+          description: Customer Reset Password success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: Password was reset
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
+
   /customers/{id}:
     get:
-      tags: 
+      tags:
         - Customer
-      summary: Get customer by id
-      description: Optional extended description in CommonMark or HTML.
+      summary: "[In Progress] Get customer by id"
+      description: Get customer by id
       parameters:
         - name: id
           in: path
           required: true
           description: customer id
           schema:
-            type : integer
+            type: integer
             minimum: 1
       responses:
-        '200':    # status code
+        "200": # status code
           description: Get customer by id success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
-                  error: 
+                  error:
                     type: string
                     default: null
-                  data:                
+                  data:
                     type: object
                     properties:
                       id:
@@ -403,17 +458,24 @@ paths:
                         type: string
                       updated_at:
                         type: string
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+
     put:
-      tags: 
+      tags:
         - Customer
-      summary: update customer by id
+      summary: "[In Progress] update customer by id"
       parameters:
         - name: id
           in: path
           required: true
           description: customer id
           schema:
-            type : integer
+            type: integer
             minimum: 1
       requestBody:
         required: true
@@ -427,15 +489,14 @@ paths:
                 phone:
                   type: string
                 address:
-                  type: string         
-                  
-          
+                  type: string
+
       responses:
-        '200':    # status code
+        "200": # status code
           description: update customer success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   error:
@@ -444,49 +505,55 @@ paths:
                   data:
                     type: string
                     default: Update customer success!
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
   /customers:
     get:
-      tags: 
+      tags:
         - Customer
-      summary: Get all customer (only verified customer)
+      summary: "[In Progress] Get all customer"
       parameters:
         - name: page
           in: query
           required: true
           description: filter by page
           schema:
-            type : integer
+            type: integer
             minimum: 1
         - name: limit
           in: query
           required: true
           description: filter by limit
           schema:
-            type : integer
+            type: integer
         - name: name
           in: query
           required: false
           description: search by name
           schema:
-            type : string
+            type: string
         - name: email
           in: query
           required: false
           description: search by email
           schema:
-            type : string
+            type: string
       responses:
-        '200':    # status code
+        "200": # status code
           description: Get customer success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
-                  error: 
+                  error:
                     type: string
                     default: null
-                  data:   
+                  data:
                     type: array
                     items:
                       type: object
@@ -507,15 +574,16 @@ paths:
                           type: string
                         updated_at:
                           type: string
-    
-                  
-                 
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
+
   /customers/display_profile:
     put:
-      tags: 
+      tags:
         - Customer
-      summary: Update display profile
-       
+      summary: "[In Progress] Update display profile"
       requestBody:
         content:
           multipart/form-data:
@@ -525,13 +593,13 @@ paths:
                 file:
                   type: string
                   format: binary
-         
+
       responses:
-        '200':    # status code
+        "200": # status code
           description: update display profile success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   error:
@@ -542,39 +610,44 @@ paths:
                     properties:
                       display_profile_url:
                         type: string
-                  
-                   
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+
   /notifications:
     get:
-      tags: 
+      tags:
         - Notification
-      summary: Get notification 
+      summary: "[In Progress] Get notification "
       parameters:
         - name: page
           in: query
           required: true
           description: page
           schema:
-            type : integer
+            type: integer
             minimum: 1
         - name: limit
           in: query
           required: true
           description: page
           schema:
-            type : integer
+            type: integer
       responses:
-        '200':    # status code
+        "200": # status code
           description: Get notifications success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
-                  error: 
+                  error:
                     type: string
                     default: null
-                  data:   
+                  data:
                     type: array
                     items:
                       type: object
@@ -589,23 +662,27 @@ paths:
                           type: string
                         updated_at:
                           type: string
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
   /banks:
     get:
-      tags: 
+      tags:
         - Bank
-      summary: Get list of bank 
+      summary: "[In Progress] Get list of bank"
       responses:
-        '200':    # status code
+        "200": # status code
           description: Get list of bank success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
-                  error: 
+                  error:
                     type: string
                     default: null
-                  data:   
+                  data:
                     type: array
                     items:
                       type: object
@@ -616,31 +693,36 @@ paths:
                           type: string
                         code:
                           type: string
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
+
   /merchants/banks:
     get:
-      tags: 
+      tags:
         - Merchant
-      summary: Get list of merchant bank
+      summary: "[In Progress] Get list of merchant bank"
       parameters:
         - name: merchant_id
           in: query
           required: true
           description: filter by merchant_id
           schema:
-            type : string
-           
+            type: string
+
       responses:
-        '200':    # status code
+        "200": # status code
           description: Get list of bank success
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
-                  error: 
+                  error:
                     type: string
                     default: null
-                  data:   
+                  data:
                     type: array
                     items:
                       type: object
@@ -655,19 +737,149 @@ paths:
                           type: string
                         bank_number:
                           type: string
-                         
-   
-                 
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /merchants/{id}:
+    get:
+      tags:
+        - Merchant
+      summary: "[In Progress] Get merchant by id"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id
+          schema:
+            type: integer
+
+      responses:
+        "200": # status code
+          description: Get merchant by id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        merchant_name:
+                          type: string
+                        merchant_address:
+                          type: string
+                        merchant_phone_number:
+                          type: string
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+    put:
+      tags:
+        - Merchant
+      summary: "[In Progress] Update merchant by id"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id
+          schema:
+            type: integer
+      requestBody:
+        description: payload
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                merchant_name:
+                  type: string
+                merchant_address:
+                  type: string
+                merchant_phone_number:
+                  type: string
+
+      responses:
+        "200": # status code
+          description: Update merchant by id success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: Update Merchant Success!
+
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+
+  /merchant/display_profile:
+    put:
+      tags:
+        - Merchant
+      summary: "[In Progress] Update display profile"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+
+      responses:
+        "200": # status code
+          description: update display profile success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: object
+                    properties:
+                      display_profile_url:
+                        type: string
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
   /invoices/count:
     get:
-      tags: 
+      tags:
         - Invoice
-      summary: Get invoices count
+      summary: "[In Progress] Get invoices count"
       parameters:
         # - name: merchant_id
         #   in: query
         #   required: required
-        #   description: filter by merchant_id 
+        #   description: filter by merchant_id
         #   schema:
         #     type : integer
         - name: payment_status
@@ -675,30 +887,29 @@ paths:
           required: false
           description: filter by payment status
           schema:
-            type : string
-            enum: [unpaid,paid,pending]
+            type: string
+            enum: [unpaid, paid, pending]
         - name: range_time
           in: query
           required: false
-          description: filter by last ... days  
+          description: filter by last ... days
           schema:
-            type : integer
+            type: integer
         - name: customer_id
           in: query
           required: false
-          description: filter by customer_id  
+          description: filter by customer_id
           schema:
-            type : integer
+            type: integer
         - name: admin_id
           in: query
           required: false
-          description: filter by admin_id  
+          description: filter by admin_id
           schema:
-            type : integer
-            
-           
+            type: integer
+
       responses:
-        '200':    # status code
+        "200": # status code
           description: Get invoices count success
           content:
             application/json:
@@ -711,43 +922,49 @@ paths:
                   data:
                     type: object
                     properties:
-                      count: 
+                      count:
                         type: integer
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
   /invoices/payment:
     get:
-      tags: 
+      tags:
         - Invoice
-      summary: Get total payment
+      summary: "[In Progress] Get total payment"
       parameters:
         - name: payment_status
           in: query
           required: false
           description: filter by payment status
           schema:
-            type : string
-            enum: [unpaid,paid,pending]
-        
+            type: string
+            enum: [unpaid, paid, pending]
+
         - name: range_time
           in: query
           required: false
-          description: filter by last ... days  
+          description: filter by last ... days
           schema:
-            type : integer  
+            type: integer
         - name: customer_id
           in: query
           required: false
-          description: filter by customer_id  
+          description: filter by customer_id
           schema:
-            type : integer
+            type: integer
         - name: admin_id
           in: query
           required: false
-          description: filter by admin_id  
+          description: filter by admin_id
           schema:
-            type : integer
-           
+            type: integer
+
       responses:
-        '200':    # status code
+        "200": # status code
           description: Get total payment success
           content:
             application/json:
@@ -760,25 +977,27 @@ paths:
                   data:
                     type: object
                     properties:
-                      total_payment: 
+                      total_payment:
                         type: integer
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
   /invoices/{id}:
     get:
-      tags: 
+      tags:
         - Invoice
-      summary: Get invoice by id 
+      summary: "[In Progress] Get invoice by id "
       parameters:
         - name: id
           in: path
           required: true
           description: id invoice
           schema:
-            type : integer
-        
-        
-           
+            type: integer
+
       responses:
-        '200':    # status code
+        "200": # status code
           description: Get invoice by id success
           content:
             application/json:
@@ -797,7 +1016,7 @@ paths:
                           type: integer
                         payment_status:
                           type: string
-                          enum: [unpaid,paid,pending]
+                          enum: [unpaid, paid, pending]
                         total_price:
                           type: integer
                         due_at:
@@ -807,7 +1026,7 @@ paths:
                         updated_at:
                           type: string
                         merchant:
-                          type: object 
+                          type: object
                           properties:
                             id:
                               type: string
@@ -818,7 +1037,7 @@ paths:
                             address:
                               type: string
                         customer:
-                          type: object 
+                          type: object
                           properties:
                             id:
                               type: string
@@ -829,11 +1048,11 @@ paths:
                             address:
                               type: string
                         payment_method:
-                          type: object 
+                          type: object
                           properties:
                             payment_type:
                               type: string
-                              enum: [manual,automatic]
+                              enum: [manual, automatic]
                             bank_name:
                               type: string
                             bank_code:
@@ -859,53 +1078,58 @@ paths:
                                 type: string
                               updated_at:
                                 type: string
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
   /invoices:
     get:
-      tags: 
+      tags:
         - Invoice
-      summary: Get all invoices 
+      summary: "[In Progress] Get all invoices "
       parameters:
         - name: page
           in: query
           required: true
           description: page
           schema:
-            type : integer
+            type: integer
         - name: limit
           in: query
           required: true
           description: page
           schema:
-            type : integer
+            type: integer
         - name: payment_status
           in: query
           required: false
           description: filter by payment status
           schema:
-            type : string
-            enum: [unpaid,paid,pending]
+            type: string
+            enum: [unpaid, paid, pending]
         - name: merchant_id
           in: query
           required: false
-          description: filter by merchant_id 
+          description: filter by merchant_id
           schema:
-            type : integer
+            type: integer
         - name: customer_id
           in: query
           required: false
-          description: filter by customer_id 
+          description: filter by customer_id
           schema:
-            type : integer
+            type: integer
         - name: range_time
           in: query
           required: false
-          description: filter by last ... days  
+          description: filter by last ... days
           schema:
-            type : integer   
-        
-           
+            type: integer
+
       responses:
-        '200':    # status code
+        "200": # status code
           description: Get all invoice success
           content:
             application/json:
@@ -924,7 +1148,7 @@ paths:
                           type: integer
                         payment_status:
                           type: string
-                          enum: [unpaid,paid,pending]
+                          enum: [unpaid, paid, pending]
                         total_price:
                           type: integer
                         due_at:
@@ -934,7 +1158,7 @@ paths:
                         updated_at:
                           type: string
                         merchant:
-                          type: object 
+                          type: object
                           properties:
                             id:
                               type: string
@@ -945,7 +1169,7 @@ paths:
                             address:
                               type: string
                         customer:
-                          type: object 
+                          type: object
                           properties:
                             id:
                               type: string
@@ -956,11 +1180,11 @@ paths:
                             address:
                               type: string
                         payment_method:
-                          type: object 
+                          type: object
                           properties:
                             payment_type:
                               type: string
-                              enum: [manual,automatic]
+                              enum: [manual, automatic]
                             bank_name:
                               type: string
                             bank_code:
@@ -986,13 +1210,17 @@ paths:
                                 type: string
                               updated_at:
                                 type: string
-                      
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
+
     post:
-      tags: 
+      tags:
         - Invoice
-      summary: Create invoices 
+      summary: "[In Progress] Create invoices"
       requestBody:
-        required: true 
+        required: true
         content:
           application/json:
             schema:
@@ -1013,10 +1241,9 @@ paths:
                         type: integer
                       price:
                         type: integer
-                   
- 
+
       responses:
-        '201':    # status code
+        "201": # status code
           description: Create invoice success
           content:
             application/json:
@@ -1033,7 +1260,7 @@ paths:
                         type: integer
                       payment_status:
                         type: string
-                        enum: [unpaid,paid,pending]
+                        enum: [unpaid, paid, pending]
                       total_price:
                         type: integer
                       due_at:
@@ -1043,7 +1270,7 @@ paths:
                       updated_at:
                         type: string
                       merchant:
-                        type: object 
+                        type: object
                         properties:
                           id:
                             type: string
@@ -1054,7 +1281,7 @@ paths:
                           address:
                             type: string
                       customer:
-                        type: object 
+                        type: object
                         properties:
                           id:
                             type: string
@@ -1065,11 +1292,11 @@ paths:
                           address:
                             type: string
                       payment_method:
-                        type: object 
+                        type: object
                         properties:
                           payment_type:
                             type: string
-                            enum: [manual,automatic]
+                            enum: [manual, automatic]
                           bank_name:
                             type: string
                           bank_code:
@@ -1095,22 +1322,25 @@ paths:
                               type: string
                             updated_at:
                               type: string
-  /invoices/{id}/status:  
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
+  /invoices/{id}/status:
     put:
-      tags: 
+      tags:
         - Invoice
-      summary: Update invoices status
+      summary: "[In Progress] Update invoices status"
       parameters:
         - name: id
           in: path
           required: true
           description: invoice id
           schema:
-            type : integer
-          
-        
+            type: integer
+
       requestBody:
-        required: true 
+        required: true
         content:
           application/json:
             schema:
@@ -1119,7 +1349,7 @@ paths:
                 payment_status_id:
                   type: integer
       responses:
-        '200':    # status code
+        "200": # status code
           description: Create invoice success
           content:
             application/json:
@@ -1129,22 +1359,28 @@ paths:
                   error:
                     type: string
                     default: null
-                  data: 
+                  data:
                     type: string
                     default: Update invoice status success!
-                      
-  /invoices/{id}/approval_document:  
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+
+  /invoices/{id}/approval_document:
     put:
-      tags: 
+      tags:
         - Invoice
-      summary: Update/Upload invoices approval document
+      summary: "[In Progress] Update/Upload invoices approval document"
       parameters:
         - name: id
           in: path
           required: true
           description: invoice id
           schema:
-            type : integer
+            type: integer
       requestBody:
         content:
           multipart/form-data:
@@ -1155,7 +1391,7 @@ paths:
                   type: string
                   format: binary
       responses:
-        '200':    # status code
+        "200": # status code
           description: Update/Upload invoice approval document success
           content:
             application/json:
@@ -1165,21 +1401,27 @@ paths:
                   error:
                     type: string
                     default: null
-                  data: 
+                  data:
                     type: string
                     default: Update invoice status success!
-  /invoices/{id}/payment_method:  
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /invoices/{id}/payment_method:
     put:
-      tags: 
+      tags:
         - Invoice
-      summary: Update payment method
+      summary: "[In Progress] Update payment method"
       parameters:
         - name: id
           in: path
           required: true
           description: invoice id
           schema:
-            type : integer
+            type: integer
       requestBody:
         content:
           application/json:
@@ -1188,9 +1430,9 @@ paths:
               properties:
                 merchant_bank_id:
                   type: integer
-          
+
       responses:
-        '200':    # status code
+        "200": # status code
           description: Update payment_method success
           content:
             application/json:
@@ -1200,13 +1442,79 @@ paths:
                   error:
                     type: string
                     default: null
-                  data: 
+                  data:
                     type: string
                     default: Update payment method success!
-                      
-                  
-                 
-                  
+
+components:
+  responses:
+    400:
+      description: bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    default: bad request
+                  detail:
+                    type: string
+              data:
+                type: string
+                default: null
+    401:
+      description: unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    default: unauthorized
+              data:
+                type: string
+                default: null
+    404:
+      description: not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    default: not found
+              data:
+                type: string
+                default: null
+    500:
+      description: internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    default: internal server error
+              data:
+                type: string
+                default: null
+
 servers:
   # Added by API Auto Mocking Plugin
   - description: Default
