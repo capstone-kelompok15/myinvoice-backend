@@ -1,0 +1,4 @@
+DELETE FROM banks;
+
+ALTER TABLE banks DROP COLUMN is_active;
+ALTER TABLE banks MODIFY COLUMN code int NOT NULL;

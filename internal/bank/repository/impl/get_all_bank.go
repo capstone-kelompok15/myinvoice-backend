@@ -11,7 +11,7 @@ import (
 
 func (r *bankRepository) GetAllBank(ctx context.Context) (*[]dto.BankResponse, error) {
 	getAllBankSql, _, err := squirrel.
-		Select("*").
+		Select("id", "bank_name", "code").
 		From("banks").
 		ToSql()
 	if err != nil {
