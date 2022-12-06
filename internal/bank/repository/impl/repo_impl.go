@@ -1,15 +1,13 @@
 package impl
 
 import (
-	"github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 )
 
 type bankRepository struct {
-	db                  *sqlx.DB
-	log                 *logrus.Entry
-	squirrelBaseBuilder squirrel.StatementBuilderType
+	db  *sqlx.DB
+	log *logrus.Entry
 }
 
 type BankRepositoryParams struct {
@@ -18,10 +16,8 @@ type BankRepositoryParams struct {
 }
 
 func NewBankRepository(params *BankRepositoryParams) *bankRepository {
-	selectActiveBank := squirrel.StatementBuilder.Where(squirrel.Eq{"is_inactive": 0})
 	return &bankRepository{
-		db:                  params.DB,
-		squirrelBaseBuilder: selectActiveBank,
-		log:                 params.Log,
+		db:  params.DB,
+		log: params.Log,
 	}
 }
