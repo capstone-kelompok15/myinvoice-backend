@@ -10,7 +10,7 @@ CREATE TABLE customers (
 CREATE TABLE customer_details (
 	customer_id integer PRIMARY KEY,
 	full_name text NOT NULL,
-	diplay_profile_url text,
+	display_profile_url text,
 	FOREIGN KEY (customer_id) REFERENCES customers(id)
 );
 

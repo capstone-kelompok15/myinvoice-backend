@@ -10,7 +10,7 @@ CREATE TABLE merchant_details (
 	merchant_id integer PRIMARY KEY,
 	merchant_address text,
 	phone_number text,
-	diplay_profile_url text,
+	display_profile_url text,
 	FOREIGN KEY (merchant_id) REFERENCES merchants(id)
 );
 
