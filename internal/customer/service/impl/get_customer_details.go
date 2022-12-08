@@ -17,5 +17,9 @@ func (s *customerService) GetCustomerDetails(ctx context.Context, req *dto.Custo
 		return nil, err
 	}
 
+	if customerDetails.DisplayProfilePictureURL == nil {
+		customerDetails.DisplayProfilePictureURL = &s.config.DefaultProfilePictureURL
+	}
+
 	return customerDetails, nil
 }
