@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h *customerHandler) CustomerLogin() echo.HandlerFunc {
+func (h *authHandler) CustomerLogin() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var req dto.CustomerLoginRequest
 		err := c.Bind(&req)

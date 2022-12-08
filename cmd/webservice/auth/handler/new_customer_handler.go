@@ -6,20 +6,20 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type customerHandler struct {
-	service   service.CustomerService
+type authHandler struct {
+	service   service.AuthService
 	log       *logrus.Entry
 	validator *validatorutils.Validator
 }
 
-type CustomerHandler struct {
-	Service   service.CustomerService
+type AuthHandlerParams struct {
+	Service   service.AuthService
 	Log       *logrus.Entry
 	Validator *validatorutils.Validator
 }
 
-func NewCustomerHandler(params *CustomerHandler) *customerHandler {
-	return &customerHandler{
+func NewAuthHandler(params *AuthHandlerParams) *authHandler {
+	return &authHandler{
 		service:   params.Service,
 		log:       params.Log,
 		validator: params.Validator,

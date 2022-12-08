@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h *customerHandler) RefreshEmailVerificationCode() echo.HandlerFunc {
+func (h *authHandler) RefreshEmailVerificationCode() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var req dto.CustomerRefreshEmailVerificationcode
 		err := c.Bind(&req)

@@ -6,7 +6,7 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 )
 
-type CustomerRepository interface {
+type AuthRepository interface {
 	CheckCustomerEmailExistAndValid(ctx context.Context, email string) (exists, valid bool, err error)
 	CustomerRegistration(ctx context.Context, params *dto.CustomerRequest) error
 	CustomerEmailVerification(ctx context.Context, req *dto.CustomerEmailVerification) error

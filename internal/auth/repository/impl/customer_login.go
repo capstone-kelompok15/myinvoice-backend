@@ -9,7 +9,7 @@ import (
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 )
 
-func (r *customerRepository) AuthorizeCustomerLogin(ctx context.Context, req *dto.CustomerLoginRequest) (*dto.CustomerContext, error) {
+func (r *authRepository) AuthorizeCustomerLogin(ctx context.Context, req *dto.CustomerLoginRequest) (*dto.CustomerContext, error) {
 	loginSQL, args, err := squirrel.
 		Select("c.id as id", "cd.full_name as full_name").
 		From("customers as c").

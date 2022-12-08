@@ -1,5 +1,11 @@
 package dto
 
+import "github.com/capstone-kelompok15/myinvoice-backend/config"
+
+const (
+	CustomerCTXKey = "CUSTOMER-CTX-KEY"
+)
+
 type CustomerRequest struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=8"`
@@ -23,6 +29,7 @@ type CustomerLoginRequest struct {
 
 type CustomerContext struct {
 	ID       int    `json:"id" db:"id"`
+	DeviceID string `json:"device_id"`
 	FullName string `json:"full_name" db:"full_name"`
 }
 
@@ -38,4 +45,27 @@ type CustomerResetPassword struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 	Code     string `json:"code"`
+}
+
+type CustomerDetails struct {
+	ID                       int     `json:"id" db:"id"`
+	Email                    string  `json:"email" db:"email"`
+	FullName                 string  `json:"full_name" db:"full_name"`
+	DisplayProfilePictureURL *string `json:"display_profile_picture_url" db:"display_profile_url"`
+}
+
+type CustomerAccessTokenParams struct {
+	DeviceInformation string
+	UserInformation   *CustomerContext
+	Config            *config.CustomerToken
+}
+
+type HeaderCustomerTokenPart struct {
+	DeviceID string `json:"device_id"`
+	Date     int64  `json:"issuer_at"`
+}
+
+type PayloadCustomerTokenPart struct {
+	ID       int    `json:"id"`
+	FullName string `json:"full_name"`
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/tokenutils"
 )
 
-func (s *customerService) LoginAdmin(ctx context.Context, req *dto.AdminLoginRequest) (*dto.AdminLoginResponse, error) {
+func (s *authService) LoginAdmin(ctx context.Context, req *dto.AdminLoginRequest) (*dto.AdminLoginResponse, error) {
 	req.Password = passwordutils.HashPassword(req.Password)
 
 	adminContext, err := s.repo.LoginAdmin(ctx, req)

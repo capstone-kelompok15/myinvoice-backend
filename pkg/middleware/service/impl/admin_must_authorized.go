@@ -1,9 +1,8 @@
-package middleware
+package impl
 
 import (
 	"strings"
 
-	"github.com/capstone-kelompok15/myinvoice-backend/config"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/httputils"
@@ -11,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func MustAuthorized(config *config.JWTConfig) echo.MiddlewareFunc {
+func (m *middleware) MustAuthorized() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			authorization := c.Request().Header.Get("Authorization")
@@ -39,7 +38,7 @@ func MustAuthorized(config *config.JWTConfig) echo.MiddlewareFunc {
 
 			accessToken := splitted[1]
 
-			user, err := tokenutils.ValidateAccessToken(config, accessToken)
+			user, err := tokenutils.ValidateAccessToken(&m.config.JWTConfig, accessToken)
 			if err != nil {
 				return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 					Err: customerrors.ErrUnauthorized,

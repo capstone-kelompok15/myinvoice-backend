@@ -7,7 +7,7 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 )
 
-func (r *customerRepository) CustomerResetPassword(ctx context.Context, req *dto.CustomerResetPassword) error {
+func (r *authRepository) CustomerResetPassword(ctx context.Context, req *dto.CustomerResetPassword) error {
 	customerResetPasswordSQL, args, err := squirrel.
 		Update("customers").
 		Set("customer_password", req.Password).

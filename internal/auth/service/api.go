@@ -6,7 +6,7 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 )
 
-type CustomerService interface {
+type AuthService interface {
 	CustomerRegistration(ctx context.Context, params *dto.CustomerRequest) error
 	CustomerEmailVerification(ctx context.Context, req *dto.CustomerEmailVerification) error
 	RefreshEmailVerificationCode(ctx context.Context, email string) error

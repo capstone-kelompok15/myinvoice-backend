@@ -6,7 +6,7 @@ import (
 	"github.com/Masterminds/squirrel"
 )
 
-func (r *customerRepository) InsertCustomerAccessToken(ctx context.Context, customerID int, deviceID string) error {
+func (r *authRepository) InsertCustomerAccessToken(ctx context.Context, customerID int, deviceID string) error {
 	insertCustomerAccessTokenSQL, args, err := squirrel.
 		Insert("customer_tokens").
 		Columns("customer_id", "device_id", "is_login").

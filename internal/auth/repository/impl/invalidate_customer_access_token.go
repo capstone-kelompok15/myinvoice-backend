@@ -6,7 +6,7 @@ import (
 	"github.com/Masterminds/squirrel"
 )
 
-func (r *customerRepository) InvalidCustomerAccessToken(ctx context.Context, customerID int) error {
+func (r *authRepository) InvalidCustomerAccessToken(ctx context.Context, customerID int) error {
 	invalidateAccessTokenSQL, args, err := squirrel.
 		Update("customer_tokens").
 		Set("is_login", false).

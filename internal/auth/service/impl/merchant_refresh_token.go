@@ -8,7 +8,7 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/tokenutils"
 )
 
-func (s *customerService) GenerateNewAccessToken(ctx context.Context, refreshTokens string) (*string, error) {
+func (s *authService) GenerateNewAccessToken(ctx context.Context, refreshTokens string) (*string, error) {
 	refreshTokenRes, err := s.repo.GetRefreshToken(ctx, refreshTokens)
 	if err != nil {
 		if err == customerrors.ErrUnauthorized {

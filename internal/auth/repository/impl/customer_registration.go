@@ -7,7 +7,7 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 )
 
-func (r *customerRepository) CustomerRegistration(ctx context.Context, params *dto.CustomerRequest) error {
+func (r *authRepository) CustomerRegistration(ctx context.Context, params *dto.CustomerRequest) error {
 	insertCustomerSQL, args, err := squirrel.
 		Insert("customers").
 		Columns("email", "customer_password").

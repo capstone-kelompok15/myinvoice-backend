@@ -9,7 +9,7 @@ import (
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 )
 
-func (r *customerRepository) InvalidateRefreshToken(ctx context.Context, refreshToken *dto.AdminRefreshToken) error {
+func (r *authRepository) InvalidateRefreshToken(ctx context.Context, refreshToken *dto.AdminRefreshToken) error {
 	getRefreshTokenSQL, args, err := squirrel.
 		Update("refresh_tokens").
 		Set("is_valid", false).

@@ -9,7 +9,7 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-func (s *customerService) CustomerEmailVerification(ctx context.Context, req *dto.CustomerEmailVerification) error {
+func (s *authService) CustomerEmailVerification(ctx context.Context, req *dto.CustomerEmailVerification) error {
 	redisKey := fmt.Sprintf("customer-regis:%s", req.Email)
 
 	code, err := s.redis.Get(ctx, redisKey).Result()

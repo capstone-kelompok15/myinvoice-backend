@@ -7,7 +7,7 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 )
 
-func (r *customerRepository) MerchantRegistration(ctx context.Context, req *dto.MerchantRegisterRequest) error {
+func (r *authRepository) MerchantRegistration(ctx context.Context, req *dto.MerchantRegisterRequest) error {
 	// Begin the transaction
 	tx, err := r.db.BeginTxx(ctx, nil)
 	if err != nil {

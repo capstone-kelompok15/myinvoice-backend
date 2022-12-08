@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h *customerHandler) CustomerEmailVerification() echo.HandlerFunc {
+func (h *authHandler) CustomerEmailVerification() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var req dto.CustomerEmailVerification
 		err := c.Bind(&req)

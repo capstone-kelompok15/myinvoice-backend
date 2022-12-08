@@ -10,7 +10,7 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-func (s *customerService) ResetPassword(ctx context.Context, req *dto.CustomerResetPassword) error {
+func (s *authService) ResetPassword(ctx context.Context, req *dto.CustomerResetPassword) error {
 	var err error
 
 	key := fmt.Sprintf("customer-reset-password:%s", req.Email)

@@ -7,20 +7,14 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/capstone-kelompok15/myinvoice-backend/config"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
+	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/dateutils"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/stringutils"
 )
 
-type CustomerAccessTokenParams struct {
-	DeviceInformation string
-	UserInformation   *dto.CustomerContext
-	Config            *config.CustomerToken
-}
-
 const delimiter = "."
 
-func GenerateCustomerAccessToken(params *CustomerAccessTokenParams) (*string, error) {
+func GenerateCustomerAccessToken(params *dto.CustomerAccessTokenParams) (*string, error) {
 	deviceInformation, userInformation, err := marshalParams(params)
 	if err != nil {
 		return nil, err
@@ -34,20 +28,25 @@ func GenerateCustomerAccessToken(params *CustomerAccessTokenParams) (*string, er
 	payloadPart := base64.RawURLEncoding.EncodeToString(userInformation)
 	accessToken.Write([]byte(payloadPart))
 
-	hmacVerifyPart := hmac.New(sha256.New, []byte(params.Config.SecretKey))
-	hmacVerifyPart.Write([]byte(accessToken.String()))
+	signaturePart := CreateSignatureToken(accessToken, params.Config.SecretKey)
 
-	hmacVerifyPartString := base64.RawURLEncoding.EncodeToString(hmacVerifyPart.Sum(nil))
+	hmacVerifyPartString := base64.RawURLEncoding.EncodeToString([]byte(signaturePart))
 	accessToken.Write([]byte(delimiter + hmacVerifyPartString))
 
 	return stringutils.MakePointerString(accessToken.String()), nil
 }
 
-func marshalParams(params *CustomerAccessTokenParams) (deviceInformation, userInformation []byte, err error) {
-	deviceInformationStruct := struct {
-		DeviceID string `json:"device_id"`
-	}{
+func CreateSignatureToken(unsignedAccessToken strings.Builder, secretKey string) string {
+	hmacVerifyPart := hmac.New(sha256.New, []byte(secretKey))
+	hmacVerifyPart.Write([]byte(unsignedAccessToken.String()))
+	signaturePart := string(hmacVerifyPart.Sum(nil))
+	return signaturePart
+}
+
+func marshalParams(params *dto.CustomerAccessTokenParams) (deviceInformation, userInformation []byte, err error) {
+	deviceInformationStruct := dto.HeaderCustomerTokenPart{
 		DeviceID: params.DeviceInformation,
+		Date:     dateutils.NowNanoTimeStamp(),
 	}
 
 	deviceInformation, err = json.Marshal(deviceInformationStruct)
@@ -55,10 +54,7 @@ func marshalParams(params *CustomerAccessTokenParams) (deviceInformation, userIn
 		return nil, nil, err
 	}
 
-	userInformationStruct := struct {
-		ID       int    `json:"id"`
-		FullName string `json:"full_name"`
-	}{
+	userInformationStruct := dto.PayloadCustomerTokenPart{
 		ID:       params.UserInformation.ID,
 		FullName: params.UserInformation.FullName,
 	}

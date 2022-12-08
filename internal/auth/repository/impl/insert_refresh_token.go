@@ -7,7 +7,7 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 )
 
-func (r *customerRepository) InsertRefreshToken(ctx context.Context, req *dto.AdminRefreshToken) error {
+func (r *authRepository) InsertRefreshToken(ctx context.Context, req *dto.AdminRefreshToken) error {
 	insertRefreshTokenSQL, args, err := squirrel.
 		Insert("refresh_tokens").
 		Columns("admin_id", "token", "is_valid", "expired_date").

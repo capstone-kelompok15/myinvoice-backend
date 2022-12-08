@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h *customerHandler) CustomerResetPasswordRequest() echo.HandlerFunc {
+func (h *authHandler) CustomerResetPasswordRequest() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var req dto.CustomerResetPasswordRequest
 		err := c.Bind(&req)

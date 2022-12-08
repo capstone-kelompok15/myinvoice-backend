@@ -13,7 +13,7 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/randomutils"
 )
 
-func (s *customerService) MerchantRegistration(ctx context.Context, req *dto.MerchantRegisterRequest) error {
+func (s *authService) MerchantRegistration(ctx context.Context, req *dto.MerchantRegisterRequest) error {
 	exist, valid, err := s.repo.CheckAdminEmailExistAndValid(ctx, req)
 	if err != nil && err != sql.ErrNoRows {
 		s.log.Warningln("[CustomerRegistration] Error while checking the existence of the email", err.Error())
