@@ -10,7 +10,7 @@ import (
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 )
 
-func (r *customerRepository) GetRefreshToken(ctx context.Context, refreshToken string) (*dto.AdminRefreshToken, error) {
+func (r *authRepository) GetRefreshToken(ctx context.Context, refreshToken string) (*dto.AdminRefreshToken, error) {
 	now := time.Now().String()
 	getRefreshTokenSQL, args, err := squirrel.
 		Select("*").

@@ -8,7 +8,7 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 )
 
-func (r *customerRepository) CustomerEmailVerification(ctx context.Context, req *dto.CustomerEmailVerification) error {
+func (r *authRepository) CustomerEmailVerification(ctx context.Context, req *dto.CustomerEmailVerification) error {
 	var args []interface{}
 
 	subQuerySQL, arg1, err := squirrel.

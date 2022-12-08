@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h *customerHandler) AdminRefreshToken() echo.HandlerFunc {
+func (h *authHandler) AdminRefreshToken() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var req dto.AdminRefreshTokenRequest
 		err := c.Bind(&req)

@@ -10,7 +10,7 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/randomutils"
 )
 
-func (s *customerService) CustomerResetPasswordRequest(ctx context.Context, email string) error {
+func (s *authService) CustomerResetPasswordRequest(ctx context.Context, email string) error {
 	exist, valid, err := s.repo.CheckCustomerEmailExistAndValid(ctx, email)
 	if err != nil {
 		if err == sql.ErrNoRows {

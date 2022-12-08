@@ -12,5 +12,11 @@ func StringToDate(date string) (*time.Time, error) {
 
 func NowToString() string {
 	now := time.Now()
-	return now.String()
+	formatted := now.Format(time.RFC3339Nano)
+	return formatted
+}
+
+func NowNanoTimeStamp() int64 {
+	now := time.Now()
+	return now.UnixNano()
 }

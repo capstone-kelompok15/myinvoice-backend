@@ -13,24 +13,24 @@ type RouterParams struct {
 	E         *echo.Echo
 	Log       *logrus.Entry
 	Validator *validatorutils.Validator
-	Service   service.CustomerService
+	Service   service.AuthService
 }
 
-func InitCustomerRouter(params *RouterParams) {
-	customerHandler := handler.NewCustomerHandler(&handler.CustomerHandler{
+func InitAuthRouter(params *RouterParams) {
+	authHandler := handler.NewAuthHandler(&handler.AuthHandlerParams{
 		Service:   params.Service,
 		Log:       params.Log,
 		Validator: params.Validator,
 	})
 
-	customerV1Group := params.E.Group(apiversioning.APIVersionOne + "/auth")
-	customerV1Group.POST("/register/customer", customerHandler.RegisterCustomer())
-	customerV1Group.POST("/register/merchant", customerHandler.RegisterMerchant())
-	customerV1Group.POST("/verification/customer", customerHandler.CustomerEmailVerification())
-	customerV1Group.POST("/verification/refresh", customerHandler.RefreshEmailVerificationCode())
-	customerV1Group.POST("/login/customer", customerHandler.CustomerLogin())
-	customerV1Group.POST("/login/admin", customerHandler.AdminLogin())
-	customerV1Group.POST("/admin/refresh", customerHandler.AdminRefreshToken())
-	customerV1Group.POST("/reset/password/request/customer", customerHandler.CustomerResetPasswordRequest())
-	customerV1Group.POST("/reset/password/customer", customerHandler.CustomerResetPassword())
+	authV1Group := params.E.Group(apiversioning.APIVersionOne + "/auth")
+	authV1Group.POST("/register/customer", authHandler.RegisterCustomer())
+	authV1Group.POST("/register/merchant", authHandler.RegisterMerchant())
+	authV1Group.POST("/verification/customer", authHandler.CustomerEmailVerification())
+	authV1Group.POST("/verification/refresh", authHandler.RefreshEmailVerificationCode())
+	authV1Group.POST("/login/customer", authHandler.CustomerLogin())
+	authV1Group.POST("/login/admin", authHandler.AdminLogin())
+	authV1Group.POST("/admin/refresh", authHandler.AdminRefreshToken())
+	authV1Group.POST("/reset/password/request/customer", authHandler.CustomerResetPasswordRequest())
+	authV1Group.POST("/reset/password/customer", authHandler.CustomerResetPassword())
 }

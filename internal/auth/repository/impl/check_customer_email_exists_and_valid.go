@@ -6,7 +6,7 @@ import (
 	"github.com/Masterminds/squirrel"
 )
 
-func (r *customerRepository) CheckCustomerEmailExistAndValid(ctx context.Context, email string) (exists, valid bool, err error) {
+func (r *authRepository) CheckCustomerEmailExistAndValid(ctx context.Context, email string) (exists, valid bool, err error) {
 	getCustomerVerifyStatusSQL, args, err := squirrel.
 		Select("cs.is_verified").
 		From("customers as c").

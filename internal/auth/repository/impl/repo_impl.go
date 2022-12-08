@@ -6,20 +6,20 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type customerRepository struct {
+type authRepository struct {
 	db                  *sqlx.DB
 	log                 *logrus.Entry
 	squirrelBaseBuilder squirrel.StatementBuilderType
 }
 
-type CustomerRepositoryParams struct {
+type AuthRepositoryParams struct {
 	DB  *sqlx.DB
 	Log *logrus.Entry
 }
 
-func NewCustomerRepository(params *CustomerRepositoryParams) *customerRepository {
+func NewAuthRepository(params *AuthRepositoryParams) *authRepository {
 	selectActiveCustomer := squirrel.StatementBuilder.Where(squirrel.Eq{"is_inactive": 0})
-	return &customerRepository{
+	return &authRepository{
 		db:                  params.DB,
 		squirrelBaseBuilder: selectActiveCustomer,
 		log:                 params.Log,
