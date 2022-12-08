@@ -18,21 +18,24 @@ func (s *authService) CustomerLogin(ctx context.Context, req *dto.CustomerLoginR
 
 	customerContext, err := s.repo.AuthorizeCustomerLogin(ctx, req)
 	if err != nil {
-		s.log.Warningln("[CustomerLogin] Error while authorize customer login", err.Error())
-		return nil, customerrors.ErrUnauthorized
+		if err == customerrors.ErrUnauthorized {
+			return nil, customerrors.ErrUnauthorized
+		}
+		s.log.Warningln("[CustomerLogin] Error while authorize customer login:", err.Error())
+		return nil, err
 	}
 	customerContext.DeviceID = req.DeviceID
 
 	err = s.repo.InvalidCustomerAccessToken(ctx, customerContext.ID)
 	if err != nil {
-		s.log.Warningln("[CustomerLogin] Error while calling the repo function", err.Error())
+		s.log.Warningln("[CustomerLogin] Error while calling the repo function:", err.Error())
 		return nil, err
 	}
 
 	deviceID := passwordutils.HashPassword(req.DeviceID)
 	err = s.repo.InsertCustomerAccessToken(ctx, customerContext.ID, deviceID)
 	if err != nil {
-		s.log.Warningln("[CustomerLogin] Error while calling the repo function", err.Error())
+		s.log.Warningln("[CustomerLogin] Error while calling the repo function:", err.Error())
 		return nil, err
 	}
 
@@ -42,7 +45,7 @@ func (s *authService) CustomerLogin(ctx context.Context, req *dto.CustomerLoginR
 		Config:            &s.config.CustomerToken,
 	})
 	if err != nil {
-		s.log.Warningln("[CustomerLogin] Error while generating customer access token", err.Error())
+		s.log.Warningln("[CustomerLogin] Error while generating customer access token:", err.Error())
 		return nil, err
 	}
 
@@ -61,9 +64,10 @@ func (s *authService) CustomerLogin(ctx context.Context, req *dto.CustomerLoginR
 	if res.Err() != nil {
 		if res.Err() == redis.Nil {
 			s.redis.Set(ctx, redisKey, string(customerContextJson), 1*time.Hour)
+		} else {
+			s.log.Warningln("[CustomerLogin] Error while getting the cache from redis", res.Err().Error())
+			return nil, err
 		}
-		s.log.Warningln("[CustomerLogin] Error while getting the cache from redis", err.Error())
-		return nil, err
 	} else if res.Val() != string(customerContextJson) {
 		s.redis.Set(ctx, redisKey, string(customerContextJson), 1*time.Hour)
 	}

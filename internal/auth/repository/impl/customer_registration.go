@@ -31,7 +31,7 @@ func (r *authRepository) CustomerRegistration(ctx context.Context, params *dto.C
 	insertCustomerSettingSQL, _, err := squirrel.
 		Insert("customer_settings").
 		Columns("customer_id", "is_verified", "is_deactivated").
-		Values(1, false, true).
+		Values(1, false, false).
 		ToSql()
 	if err != nil {
 		r.log.Warningln("[CustomerRegistration] Error while create customer_details sql from squirrel", err.Error())
