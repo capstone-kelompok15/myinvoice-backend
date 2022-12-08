@@ -8,4 +8,5 @@ import (
 
 type CustomerService interface {
 	GetCustomerDetails(ctx context.Context, req *dto.CustomerContext) (*dto.CustomerDetails, error)
+	UpdateProfilePicture(ctx context.Context, userID *int, newProfilePictureURL *string) (*string, error)
 }

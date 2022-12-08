@@ -69,3 +69,7 @@ type PayloadCustomerTokenPart struct {
 	ID       int    `json:"id"`
 	FullName string `json:"full_name"`
 }
+
+type UpdateProfilePictureResponse struct {
+	ImageURL string `json:"image_url"`
+}
