@@ -4,11 +4,14 @@ import (
 	"log"
 
 	authrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/auth/router"
+	bankrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/bank/router"
 	customerrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/customer/router"
 	pingrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/ping/router"
 	"github.com/capstone-kelompok15/myinvoice-backend/config"
 	authrepository "github.com/capstone-kelompok15/myinvoice-backend/internal/auth/repository/impl"
 	authservice "github.com/capstone-kelompok15/myinvoice-backend/internal/auth/service/impl"
+	bankrepository "github.com/capstone-kelompok15/myinvoice-backend/internal/bank/repository/impl"
+	bankservice "github.com/capstone-kelompok15/myinvoice-backend/internal/bank/service/impl"
 	customerrepository "github.com/capstone-kelompok15/myinvoice-backend/internal/customer/repository/impl"
 	customerservice "github.com/capstone-kelompok15/myinvoice-backend/internal/customer/service/impl"
 	pingservice "github.com/capstone-kelompok15/myinvoice-backend/internal/ping/service/impl"
@@ -146,6 +149,33 @@ func InitWebService(params *WebServiceParams) error {
 		Middleware: middleware,
 		Log: params.Log.WithFields(logrus.Fields{
 			"domain": "auth",
+			"layer":  "handler",
+		}),
+	})
+
+	bankRepository := bankrepository.NewBankRepository(&bankrepository.BankRepositoryParams{
+		DB: db,
+		Log: params.Log.WithFields(logrus.Fields{
+			"domain": "bank",
+			"layer":  "repository",
+		}),
+	})
+
+	bankService := bankservice.NewBankService(&bankservice.BankServiceParams{
+		Repo:   bankRepository,
+		Config: params.Config,
+		Log: params.Log.WithFields(logrus.Fields{
+			"domain": "bank",
+			"layer":  "service",
+		}),
+	})
+
+	bankrouter.InitBankRouter(&bankrouter.RouterParams{
+		E:         e,
+		Service:   bankService,
+		Validator: validator,
+		Log: params.Log.WithFields(logrus.Fields{
+			"domain": "bank",
 			"layer":  "handler",
 		}),
 	})
