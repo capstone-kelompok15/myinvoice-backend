@@ -11,7 +11,7 @@ import (
 
 func (r *customerRepository) GetCustomerDetail(ctx context.Context, customerID int) (*dto.CustomerDetails, error) {
 	getCustomerDetailSQL, args, err := squirrel.
-		Select("c.id as id", "c.email as email", "cd.full_name as full_name", "cd.diplay_profile_url as display_profile_url").
+		Select("c.id as id", "c.email as email", "cd.full_name as full_name", "cd.display_profile_url as display_profile_url").
 		From("customers as c").
 		InnerJoin("customer_details as cd on c.id = cd.customer_id").
 		Where(squirrel.Eq{"c.id": customerID}).
