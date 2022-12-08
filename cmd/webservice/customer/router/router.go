@@ -28,4 +28,5 @@ func InitCustomerRouter(params *RouterParams) {
 	customerV1Group := params.E.Group(apiversioning.APIVersionOne + "/customer")
 	customerV1Group.GET("/me", customerHandler.GetCustomerDetails(), params.Middleware.CustomerMustAuthorized())
 	customerV1Group.PATCH("/me/picture", customerHandler.UpdateCustomerProfilePicture(), params.Middleware.CustomerMustAuthorized())
+	customerV1Group.PUT("/me", customerHandler.UpdateCustomer(), params.Middleware.CustomerMustAuthorized())
 }

@@ -9,4 +9,5 @@ import (
 type CustomerRepository interface {
 	GetCustomerDetail(ctx context.Context, customerID int) (*dto.CustomerDetails, error)
 	UpdateProfilePicture(ctx context.Context, userID *int, newProfilePictureURL *string) error
+	UpdateCustomer(ctx context.Context, customerID *int, newData *dto.CustomerUpdateRequest) error
 }
