@@ -1,8 +1,6 @@
 package webservice
 
 import (
-	"log"
-
 	authrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/auth/router"
 	bankrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/bank/router"
 	customerrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/customer/router"
@@ -31,17 +29,17 @@ type WebServiceParams struct {
 func InitWebService(params *WebServiceParams) error {
 	db, err := config.GetDatabaseConn(&params.Config.Database)
 	if err != nil {
-		log.Println("[ERROR] while get database connection")
+		params.Log.Warningln("[ERROR] while get database connection:", err.Error())
 		return err
 	}
 
 	defer func() error {
 		err := config.CloseDatabaseConnection(db)
 		if err != nil {
-			log.Println("[ERROR] while close database connection")
+			params.Log.Warningln("[ERROR] while close database connection:", err.Error())
 			return err
 		}
-		log.Println("[INFO] Database connection closed gracefully")
+		params.Log.Warningln("[INFO] Database connection closed gracefully:", err.Error())
 		return nil
 	}()
 
@@ -54,17 +52,22 @@ func InitWebService(params *WebServiceParams) error {
 
 	validator, err := validatorutils.New()
 	if err != nil {
-		params.Log.Warningln("[ERROR] while creating the validator")
+		params.Log.Warningln("[ERROR] while creating the validator:", err.Error())
 		return err
 	}
 
 	redis, err := config.InitRedis(&params.Config.RedisConfig)
 	if err != nil {
-		params.Log.Warningln("[ERROR] while creating the redis client")
+		params.Log.Warningln("[ERROR] while creating the redis client:", err.Error())
 		return err
 	}
 
 	mailgunClient := config.InitMailgun(&params.Config.Mailgun)
+	cloudinary, err := config.GetCloudinaryConn(&params.Config.Cloudinary)
+	if err != nil {
+		params.Log.Warningln("[ERROR] while creating the cloudinary client:", err.Error())
+		return err
+	}
 
 	// Middleware
 	repositoryMiddleware := customrepositorymiddleware.NewRepositoryMiddleware(&customrepositorymiddleware.MiddlewareRepositoryParams{
@@ -132,10 +135,11 @@ func InitWebService(params *WebServiceParams) error {
 	})
 
 	customerService := customerservice.NewCustomerService(&customerservice.CustomerServiceParams{
-		Repo:    customerRepository,
-		Redis:   redis,
-		Mailgun: mailgunClient,
-		Config:  params.Config,
+		Repo:       customerRepository,
+		Redis:      redis,
+		Mailgun:    mailgunClient,
+		Config:     params.Config,
+		Cloudinary: cloudinary,
 		Log: params.Log.WithFields(logrus.Fields{
 			"domain": "customer",
 			"layer":  "service",
@@ -186,7 +190,7 @@ func InitWebService(params *WebServiceParams) error {
 	})
 
 	if err != nil {
-		params.Log.Warningln("[ERROR] while starting the server")
+		params.Log.Warningln("[ERROR] while starting the server:", err.Error())
 		return err
 	}
 

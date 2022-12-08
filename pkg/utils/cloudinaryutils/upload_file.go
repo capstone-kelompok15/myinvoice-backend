@@ -13,7 +13,6 @@ type UploadFileParams struct {
 	Ctx      context.Context
 	Cld      *cloudinary.Cloudinary
 	Filename string
-	Username string
 }
 
 func UploadFile(params UploadFileParams) (*string, error) {
