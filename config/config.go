@@ -42,7 +42,9 @@ func initConfig() error {
 			JWTSecretKey: os.Getenv("JWT_SECRET_KEY"),
 		},
 		Server: Server{
-			Port: os.Getenv("APP_PORT"),
+			Port:                 os.Getenv("APP_PORT"),
+			Environment:          os.Getenv("APP_ENVIRONMENT"),
+			WhiteListAllowOrigin: os.Getenv("WHITELIST_ALLOW_ORIGIN"),
 		},
 		Cloudinary: Cloudinary{
 			APIKey:    os.Getenv("API_KEY"),
@@ -75,6 +77,14 @@ func initConfig() error {
 	err = validator.Validate.Struct(config)
 	if err != nil {
 		return err
+	}
+
+	if config.Server.Environment == "prod" && config.Server.WhiteListAllowOrigin == "" {
+		return err
+	}
+
+	if config.Server.Environment == "dev" {
+		config.Server.WhiteListAllowOrigin = "*"
 	}
 
 	return nil

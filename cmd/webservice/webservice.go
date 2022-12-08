@@ -1,6 +1,8 @@
 package webservice
 
 import (
+	"strings"
+
 	authrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/auth/router"
 	bankrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/bank/router"
 	customerrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/customer/router"
@@ -18,6 +20,7 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/validatorutils"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/sirupsen/logrus"
 )
 
@@ -43,12 +46,14 @@ func InitWebService(params *WebServiceParams) error {
 		return nil
 	}()
 
-	// cloudinary, err := config.GetCloudinaryConn(&params.Config.Cloudinary)
-	// if err != nil {
-	// 	log.Fatal(err.Error())
-	// }
+	whiteListAllowOrigin := strings.Split(params.Config.Server.WhiteListAllowOrigin, ",")
 
 	e := echo.New()
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:     whiteListAllowOrigin,
+		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
+		AllowCredentials: true,
+	}))
 
 	validator, err := validatorutils.New()
 	if err != nil {
@@ -63,6 +68,7 @@ func InitWebService(params *WebServiceParams) error {
 	}
 
 	mailgunClient := config.InitMailgun(&params.Config.Mailgun)
+
 	cloudinary, err := config.GetCloudinaryConn(&params.Config.Cloudinary)
 	if err != nil {
 		params.Log.Warningln("[ERROR] while creating the cloudinary client:", err.Error())

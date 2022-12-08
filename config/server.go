@@ -13,8 +13,10 @@ import (
 )
 
 type Server struct {
-	E    *echo.Echo
-	Port string `validate:"required"`
+	E                    *echo.Echo
+	Port                 string `validate:"required"`
+	Environment          string `validate:"oneof='dev' 'prod'"`
+	WhiteListAllowOrigin string
 }
 
 func StartServer(param Server) error {
