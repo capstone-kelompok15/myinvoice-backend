@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (m *middleware) MustAuthorized() echo.MiddlewareFunc {
+func (m *middleware) AdminMustAuthorized() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			authorization := c.Request().Header.Get("Authorization")

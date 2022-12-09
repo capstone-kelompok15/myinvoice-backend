@@ -13,9 +13,9 @@ func (r *authRepository) LoginAdmin(ctx context.Context, req *dto.AdminLoginRequ
 	loginSQL, args, err := squirrel.
 		Select("a.id as id", "a.merchant_id as merchant_id", "m.merchant_name as merchant_name").
 		From("admins as a").
-		InnerJoin("merchants as m ON m.id = a.id").
+		InnerJoin("merchants as m ON m.id = a.merchant_id").
 		Where(squirrel.Eq{"a.email": req.Email}).
-		Where(squirrel.Eq{"a.password": req.Password}).
+		Where(squirrel.Eq{"a.admin_password": req.Password}).
 		ToSql()
 	if err != nil {
 		r.log.Warningln("[LoginAdmin] Error while creating sql from squirrel", err.Error())

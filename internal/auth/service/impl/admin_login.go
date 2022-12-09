@@ -11,7 +11,6 @@ import (
 
 func (s *authService) LoginAdmin(ctx context.Context, req *dto.AdminLoginRequest) (*dto.AdminLoginResponse, error) {
 	req.Password = passwordutils.HashPassword(req.Password)
-
 	adminContext, err := s.repo.LoginAdmin(ctx, req)
 	if err != nil {
 		if err != customerrors.ErrRecordNotFound {

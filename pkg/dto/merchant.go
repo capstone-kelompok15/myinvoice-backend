@@ -15,3 +15,28 @@ type MerchantBankRegisterRequest struct {
 	OnBehalfOf string `json:"on_behalf_of" validate:"required"`
 	BankNumber string `json:"bank_number" validate:"required"`
 }
+
+type OverviewMerchantDashboard struct {
+	PaymentReceivedQuantity int64 `json:"payment_received_quantity"`
+	CustomerQuantity        int   `json:"customer_quantity"`
+	InvoiceQuantity         int   `json:"invoice_quantity"`
+	UnpaidInvoiceQuantity   int   `json:"unpaid_invoice_quantity"`
+}
+
+type RecentInvoiceMerchantDashboard struct {
+	Price              int64  `json:"price" db:"price"`
+	InvoiceID          int64  `json:"invoice_id" db:"invoice_id"`
+	CustomerName       string `json:"customer_name" db:"customer_name"`
+	InvoiceExpiredDate string `json:"invoice_expired_date" db:"invoice_expired_date"`
+}
+
+type RecentPaymentMerchantDashboard struct {
+	RecentInvoiceMerchantDashboard
+	PaymentType string `json:"payment_type" db:"payment_type"`
+}
+
+type MerchantDashbaord struct {
+	OverviewMerchantDashboard      `json:"overview"`
+	RecentInvoiceMerchantDashboard []RecentInvoiceMerchantDashboard `json:"recent_invoice"`
+	RecentPaymentMerchantDashboard []RecentPaymentMerchantDashboard `json:"recent_payment"`
+}

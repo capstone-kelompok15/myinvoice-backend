@@ -9,14 +9,14 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type RouterParams struct {
+type BankRouterParams struct {
 	E         *echo.Echo
 	Log       *logrus.Entry
 	Validator *validatorutils.Validator
 	Service   service.BankService
 }
 
-func InitBankRouter(params *RouterParams) {
+func InitBankRouter(params *BankRouterParams) {
 	bankHandler := handler.NewBankHandler(&handler.BankHandler{
 		Service:   params.Service,
 		Log:       params.Log,
