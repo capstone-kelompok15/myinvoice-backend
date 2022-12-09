@@ -6,6 +6,10 @@ const (
 	CustomerCTXKey = "CUSTOMER-CTX-KEY"
 )
 
+type CustomerUpdateRequest struct {
+	FullName string `json:"full_name" validate:"required"`
+	Address  string `json:"address" validate:"required"`
+}
 type CustomerRequest struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=8"`
