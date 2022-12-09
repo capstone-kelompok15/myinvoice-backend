@@ -11,6 +11,21 @@ type CustomerRequest struct {
 	Password string `json:"password" validate:"required,min=8"`
 	FullName string `json:"full_name" validate:"required"`
 }
+type GetAllCustomerRequest struct {
+	Page  uint64 `query:"page" validate:"required"`
+	Limit uint64 `query:"limit" validate:"required"`
+	Name  string `query:"name"`
+	Email string `query:"email"`
+}
+type GetAllCustomerRespond struct {
+	ID                int     `json:"id" db:"id"`
+	FullName          string  `json:"full_name" db:"full_name"`
+	Email             string  `json:"email" db:"email"`
+	DisplayProfileURL *string `json:"display_profile_url" db:"display_profile_url"`
+	Address           string  `json:"address" db:"address"`
+	CreatedAt         string  `json:"created_at" db:"created_at"`
+	UpdatedAt         string  `json:"updated_at" db:"updated_at"`
+}
 
 type CustomerEmailVerification struct {
 	Email string `json:"email" validate:"required,email"`
