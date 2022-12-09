@@ -27,7 +27,7 @@ paths:
   /auth/login/admin:
     post:
       tags:
-        - Auth
+        - Auth Admin
       summary: "[In Progress] Login admin"
       requestBody:
         required: true
@@ -69,7 +69,7 @@ paths:
   /auth/login/customer:
     post:
       tags:
-        - Auth
+        - Auth Customer
       summary: Login customer
       requestBody:
         required: true
@@ -112,7 +112,7 @@ paths:
   /auth/register/merchant:
     post:
       tags:
-        - Auth
+        - Auth Admin
       summary: "Register admin"
       requestBody:
         required: true
@@ -169,7 +169,7 @@ paths:
   /auth/register/customer:
     post:
       tags:
-        - Auth
+        - Auth Customer
       summary: Register customer
       requestBody:
         required: true
@@ -240,7 +240,7 @@ paths:
   /auth/admin/refresh:
     post:
       tags:
-        - Auth
+        - Auth Admin
       summary: "[In Progress] Refresh token for admin"
       requestBody:
         required: true
@@ -271,10 +271,44 @@ paths:
           $ref: "#/components/responses/400"
         "500": # status code
           $ref: "#/components/responses/500"
+  /auth/verification/admin:
+    post:
+      tags:
+        - Auth Admin
+      summary: "[In Progress] Admin Email Verification"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                code:
+                  type: string
+      responses:
+        "200": # status code
+          description: Email Verification success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: Email Verified!
+        "400": # status code
+          $ref: "#/components/responses/400"
+        "500": # status code
+          $ref: "#/components/responses/500"
   /auth/verification/customer:
     post:
       tags:
-        - Auth
+        - Auth Customer
       summary: "Customer Email Verification"
       requestBody:
         required: true
@@ -342,7 +376,7 @@ paths:
   /auth/reset/password/request/customer:
     post:
       tags:
-        - Auth
+        - Auth Customer
       summary: "Customer Reset Password (Request Forgot password By Email)"
       requestBody:
         required: true
@@ -375,8 +409,8 @@ paths:
   /auth/reset/password/customer:
     post:
       tags:
-        - Auth
-      summary: "Customer Reset Password"
+        - Auth Customer
+      summary: "Customer Reset Password (When Forgot Password)"
       requestBody:
         required: true
         content:
@@ -394,6 +428,76 @@ paths:
       responses:
         "200": # status code
           description: Customer Reset Password success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: Password was reset
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
+  /auth/reset/password/request/admin:
+    post:
+      tags:
+        - Auth Admin
+      summary: "[In Progress] Customer Reset Password (Request Forgot password By Email)"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+
+      responses:
+        "200": # status code
+          description: Send Email success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: Email Sent!
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
+  /auth/reset/password/admin:
+    post:
+      tags:
+        - Auth Admin
+      summary: "[In Progress] Admin Reset Password (When Forgot Password)"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                code:
+                  type: string
+
+      responses:
+        "200": # status code
+          description: Admin Reset Password success
           content:
             application/json:
               schema:
