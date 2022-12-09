@@ -113,7 +113,7 @@ paths:
     post:
       tags:
         - Auth
-      summary: "[In Progress] Register admin"
+      summary: "Register admin"
       requestBody:
         required: true
         content:
@@ -275,7 +275,7 @@ paths:
     post:
       tags:
         - Auth
-      summary: "[In Progress] Customer Email Verification"
+      summary: "Customer Email Verification"
       requestBody:
         required: true
         content:
@@ -343,7 +343,7 @@ paths:
     post:
       tags:
         - Auth
-      summary: "[In Progress] Customer Reset Password (Request Forgot password By Email)"
+      summary: "Customer Reset Password (Request Forgot password By Email)"
       requestBody:
         required: true
         content:
@@ -376,7 +376,7 @@ paths:
     post:
       tags:
         - Auth
-      summary: "[In Progress] Customer Reset Password"
+      summary: "Customer Reset Password"
       requestBody:
         required: true
         content:
@@ -410,20 +410,15 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
-  /customers/{id}:
+  /customers/me:
     get:
+      security:
+        - customerBearerAuth: []
       tags:
         - Customer
-      summary: "[In Progress] Get customer by id"
+      summary: "Get customer"
       description: Get customer by id
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: customer id
-          schema:
-            type: integer
-            minimum: 1
+
       responses:
         "200": # status code
           description: Get customer by id success
@@ -440,23 +435,13 @@ paths:
                     properties:
                       id:
                         type: integer
-                      name:
+                      full_name:
                         type: string
                       email:
                         type: string
-                      display_profile_url:
-                        type: string
-                      phone_number:
+                      display_profile_picture_url:
                         type: string
                       address:
-                        type: string
-                      is_verified:
-                        type: boolean
-                      is_deactivated:
-                        type: boolean
-                      created_at:
-                        type: string
-                      updated_at:
                         type: string
         "400":
           $ref: "#/components/responses/400"
@@ -466,17 +451,12 @@ paths:
           $ref: "#/components/responses/500"
 
     put:
+      security:
+        - customerBearerAuth: []
       tags:
         - Customer
-      summary: "[In Progress] update customer by id"
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: customer id
-          schema:
-            type: integer
-            minimum: 1
+      summary: "[In Progress] update customer"
+
       requestBody:
         required: true
         content:
@@ -485,8 +465,6 @@ paths:
               type: object
               properties:
                 name:
-                  type: string
-                phone:
                   type: string
                 address:
                   type: string
@@ -513,6 +491,8 @@ paths:
           $ref: "#/components/responses/500"
   /customers:
     get:
+      security:
+        - merchantBearerAuth: []
       tags:
         - Customer
       summary: "[In Progress] Get all customer"
@@ -579,18 +559,20 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
-  /customers/display_profile:
-    put:
+  /customers/me/picture:
+    patch:
+      security:
+        - customerBearerAuth: []
       tags:
         - Customer
-      summary: "[In Progress] Update display profile"
+      summary: "Update display profile"
       requestBody:
         content:
           multipart/form-data:
             schema:
               type: object
               properties:
-                file:
+                profile_picture:
                   type: string
                   format: binary
 
@@ -608,7 +590,7 @@ paths:
                   data:
                     type: object
                     properties:
-                      display_profile_url:
+                      image_url:
                         type: string
         "400":
           $ref: "#/components/responses/400"
@@ -670,7 +652,7 @@ paths:
     get:
       tags:
         - Bank
-      summary: "[In Progress] Get list of bank"
+      summary: "Get list of bank"
       responses:
         "200": # status code
           description: Get list of bank success
@@ -1514,7 +1496,15 @@ components:
               data:
                 type: string
                 default: null
-
+  securitySchemes:
+    customerBearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT # optional, arbitrary value for documentation purposes
+    merchantBearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT # optional, arbitrary value for documentation purposes
 servers:
   # Added by API Auto Mocking Plugin
   - description: Default
