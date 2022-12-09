@@ -514,6 +514,98 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
+  /customers/notifications:
+    get:
+      security:
+        - customerBearerAuth: []
+      tags:
+        - Customer
+      summary: "[In Progress] Get customer notification"
+      description: Get all notifications customer
+      parameters:
+        - name: page
+          in: query
+          required: true
+          description: page
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          required: true
+          description: page
+          schema:
+            type: integer
+      responses:
+        "200": # status code
+          description: Get notifications success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        notification_type:
+                          type: string
+                        title:
+                          type: string
+                        content:
+                          type: string
+                        is_read:
+                          type: boolean
+                        created_at:
+                          type: string
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /customers/notifications/{id}:
+    put:
+      security:
+        - customerBearerAuth: []
+      tags:
+        - Customer
+      summary: "[In Progress] Update notification is_read to true"
+      description: "Update Notification status is_read to true"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: notification id
+          schema:
+            type: integer
+
+      responses:
+        "200": # status code
+          description: Update notifications success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: "Update notification success"
+
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
   /customers/me:
     get:
       security:
@@ -703,55 +795,6 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
-  /notifications:
-    get:
-      tags:
-        - Notification
-      summary: "[In Progress] Get notification "
-      parameters:
-        - name: page
-          in: query
-          required: true
-          description: page
-          schema:
-            type: integer
-            minimum: 1
-        - name: limit
-          in: query
-          required: true
-          description: page
-          schema:
-            type: integer
-      responses:
-        "200": # status code
-          description: Get notifications success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        title:
-                          type: string
-                        content:
-                          type: string
-                        created_at:
-                          type: string
-                        updated_at:
-                          type: string
-        "400":
-          $ref: "#/components/responses/400"
-        "500":
-          $ref: "#/components/responses/500"
   /banks:
     get:
       tags:
@@ -784,6 +827,98 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
+  /merchants/notifications:
+    get:
+      security:
+        - merchantBearerAuth: []
+      tags:
+        - Merchant
+      summary: "[In Progress] Get merchant notification"
+      description: Get all notifications merchant
+      parameters:
+        - name: page
+          in: query
+          required: true
+          description: page
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          required: true
+          description: page
+          schema:
+            type: integer
+      responses:
+        "200": # status code
+          description: Get notifications success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        notification_type:
+                          type: string
+                        title:
+                          type: string
+                        content:
+                          type: string
+                        is_read:
+                          type: boolean
+                        created_at:
+                          type: string
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /merchants/notifications/{id}:
+    put:
+      security:
+        - merchantBearerAuth: []
+      tags:
+        - Merchant
+      summary: "[In Progress] Update notification is_read to true"
+      description: "Update Notification status is_read to true"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: notification id
+          schema:
+            type: integer
+
+      responses:
+        "200": # status code
+          description: Update notifications success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: "Update notification success"
+
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
   /merchants/banks:
     get:
       tags:
