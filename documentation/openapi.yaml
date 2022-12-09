@@ -1,523 +1,405 @@
+---
 openapi: 3.0.0
 info:
-  version: "1"
   title: Invoice API
   description: "[In Progress] = belum bisa diakses tapi fielnya ga bakal terlalu banyak berubah juga"
+  version: "1"
+servers:
+  - url: https://api.staging.my-invoice.me/api/v1
+    description: Default
 paths:
   /ping:
     get:
       tags:
         - Ping
-      summary: "Test Ping"
+      summary: Test Ping
       responses:
-        "200": # status code
+        "200":
           description: Ping success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: pong
-
+                $ref: "#/components/schemas/inline_response_200"
   /auth/login/admin:
     post:
       tags:
         - Auth Admin
       summary: "[In Progress] Login admin"
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                password:
-                  type: string
-
+              $ref: "#/components/schemas/login_admin_body"
+        required: true
       responses:
-        "200": # status code
+        "200":
           description: Login success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: object
-                    properties:
-                      access_token:
-                        type: string
-                      refresh_token:
-                        type: string
-        "400": # status code
-          $ref: "#/components/responses/400"
-        "401": # status code
-          $ref: "#/components/responses/401"
-        "500": # status code
-          $ref: "#/components/responses/500"
-
+                $ref: "#/components/schemas/inline_response_200_1"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_401"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /auth/login/customer:
     post:
       tags:
         - Auth Customer
       summary: Login customer
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                password:
-                  type: string
-                device_id:
-                  type: string
-
+              $ref: "#/components/schemas/login_customer_body"
+        required: true
       responses:
-        "200": # status code
+        "200":
           description: Login success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: object
-                    properties:
-                      access_token:
-                        type: string
-        "400": # status code
-          $ref: "#/components/responses/400"
-        "401": # status code
-          $ref: "#/components/responses/401"
-        "500": # status code
-          $ref: "#/components/responses/500"
-
-  # Fix
+                $ref: "#/components/schemas/inline_response_200_2"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_401"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /auth/register/merchant:
     post:
       tags:
         - Auth Admin
-      summary: "Register admin"
+      summary: Register admin
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                email:
-                  type: string
-                  nullable: false
-                password:
-                  type: string
-                  minLength: 8
-                merchant_name:
-                  type: string
-                merchant_address:
-                  type: string
-                merchant_phone_number:
-                  type: string
-                merchant_banks:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      bank_id:
-                        type: integer
-                      on_behalf_of:
-                        type: string
-                      bank_number:
-                        type: string
-
+              $ref: "#/components/schemas/register_merchant_body"
+        required: true
       responses:
-        "201": # status code
+        "201":
           description: register admin success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: "Merchant Created!"
-        "400": # status code
-          $ref: "#/components/responses/400"
-
-        "500": # status code
-          $ref: "#/components/responses/500"
+                $ref: "#/components/schemas/inline_response_201"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /auth/register/customer:
     post:
       tags:
         - Auth Customer
       summary: Register customer
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  nullable: false
-                password:
-                  type: string
-                  minLength: 8
-                full_name:
-                  type: string
-
+              $ref: "#/components/schemas/register_customer_body"
+        required: true
       responses:
-        "201": # status code
+        "201":
           description: register customer success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: "User Created!"
-        "400": # status code
+                $ref: "#/components/schemas/inline_response_201_1"
+        "400":
           description: bad request
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: object
-                    properties:
-                      message:
-                        type: string
-                        default: bad request
-                      detail:
-                        type: string
-                  data:
-                    type: string
-                    default: null
-
-        "500": # status code
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
           description: internal server error
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: object
-                    properties:
-                      message:
-                        type: string
-                        default: internal server error
-                  data:
-                    type: string
-                    default: null
-
+                $ref: "#/components/schemas/inline_response_500"
   /auth/admin/refresh:
     post:
       tags:
         - Auth Admin
       summary: "[In Progress] Refresh token for admin"
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                refresh_token:
-                  type: string
+              $ref: "#/components/schemas/admin_refresh_body"
+        required: true
       responses:
-        "201": # status code
+        "201":
           description: refresh token success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: object
-                    properties:
-                      access_token:
-                        type: string
-        "400": # status code
-          $ref: "#/components/responses/400"
-        "500": # status code
-          $ref: "#/components/responses/500"
+                $ref: "#/components/schemas/inline_response_200_2"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /auth/verification/admin:
     post:
       tags:
         - Auth Admin
       summary: "[In Progress] Admin Email Verification"
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                code:
-                  type: string
+              $ref: "#/components/schemas/verification_admin_body"
+        required: true
       responses:
-        "200": # status code
+        "200":
           description: Email Verification success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: Email Verified!
-        "400": # status code
-          $ref: "#/components/responses/400"
-        "500": # status code
-          $ref: "#/components/responses/500"
+                $ref: "#/components/schemas/inline_response_200_3"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /auth/verification/customer:
     post:
       tags:
         - Auth Customer
-      summary: "Customer Email Verification"
+      summary: Customer Email Verification
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                code:
-                  type: string
+              $ref: "#/components/schemas/verification_customer_body"
+        required: true
       responses:
-        "200": # status code
+        "200":
           description: Email Verification success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: Email Verified!
-        "400": # status code
-          $ref: "#/components/responses/400"
-        "500": # status code
-          $ref: "#/components/responses/500"
+                $ref: "#/components/schemas/inline_response_200_3"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /auth/verification/refresh:
     post:
       tags:
         - Auth
       summary: Refresh Email Verification Code
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
+              $ref: "#/components/schemas/verification_refresh_body"
+        required: true
       responses:
-        "201": # status code
+        "201":
           description: Refresh Email Verification Code success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: Sent new code!
+                $ref: "#/components/schemas/inline_response_201_2"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /auth/reset/password/request/customer:
     post:
       tags:
         - Auth Customer
-      summary: "Customer Reset Password (Request Forgot password By Email)"
+      summary: Customer Reset Password (Request Forgot password By Email)
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-
+              $ref: "#/components/schemas/request_customer_body"
+        required: true
       responses:
-        "200": # status code
+        "200":
           description: Send Email success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: Email Sent!
+                $ref: "#/components/schemas/inline_response_200_4"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "500":
-          $ref: "#/components/responses/500"
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /auth/reset/password/customer:
     post:
       tags:
         - Auth Customer
-      summary: "Customer Reset Password (When Forgot Password)"
+      summary: Customer Reset Password (When Forgot Password)
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                password:
-                  type: string
-                code:
-                  type: string
-
+              $ref: "#/components/schemas/password_customer_body"
+        required: true
       responses:
-        "200": # status code
+        "200":
           description: Customer Reset Password success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: Password was reset
+                $ref: "#/components/schemas/inline_response_200_5"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "500":
-          $ref: "#/components/responses/500"
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /auth/reset/password/request/admin:
     post:
       tags:
         - Auth Admin
       summary: "[In Progress] Customer Reset Password (Request Forgot password By Email)"
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-
+              $ref: "#/components/schemas/request_admin_body"
+        required: true
       responses:
-        "200": # status code
+        "200":
           description: Send Email success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: Email Sent!
+                $ref: "#/components/schemas/inline_response_200_4"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "500":
-          $ref: "#/components/responses/500"
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /auth/reset/password/admin:
     post:
       tags:
         - Auth Admin
       summary: "[In Progress] Admin Reset Password (When Forgot Password)"
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                password:
-                  type: string
-                code:
-                  type: string
-
+              $ref: "#/components/schemas/password_admin_body"
+        required: true
       responses:
-        "200": # status code
+        "200":
           description: Admin Reset Password success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: Password was reset
+                $ref: "#/components/schemas/inline_response_200_5"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "500":
-          $ref: "#/components/responses/500"
-
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /customers/notifications:
     get:
-      security:
-        - customerBearerAuth: []
       tags:
         - Customer
       summary: "[In Progress] Get customer notification"
@@ -525,312 +407,358 @@ paths:
       parameters:
         - name: page
           in: query
-          required: true
           description: page
+          required: true
+          style: form
+          explode: true
           schema:
             type: integer
         - name: limit
           in: query
-          required: true
           description: page
+          required: true
+          style: form
+          explode: true
           schema:
             type: integer
       responses:
-        "200": # status code
+        "200":
           description: Get notifications success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        notification_type:
-                          type: string
-                        title:
-                          type: string
-                        content:
-                          type: string
-                        is_read:
-                          type: boolean
-                        created_at:
-                          type: string
+                $ref: "#/components/schemas/inline_response_200_6"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
-  /customers/notifications/{id}:
-    put:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
       security:
         - customerBearerAuth: []
+  /customers/notifications/{id}:
+    put:
       tags:
         - Customer
       summary: "[In Progress] Update notification is_read to true"
-      description: "Update Notification status is_read to true"
+      description: Update Notification status is_read to true
       parameters:
         - name: id
           in: path
-          required: true
           description: notification id
+          required: true
+          style: simple
+          explode: false
           schema:
             type: integer
-
       responses:
-        "200": # status code
+        "200":
           description: Update notifications success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: "Update notification success"
-
+                $ref: "#/components/schemas/inline_response_200_7"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
-  /customers/me:
-    get:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
       security:
         - customerBearerAuth: []
+  /customers/me:
+    get:
       tags:
         - Customer
-      summary: "Get customer"
+      summary: Get customer
       description: Get customer by id
-
       responses:
-        "200": # status code
+        "200":
           description: Get customer by id success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                      full_name:
-                        type: string
-                      email:
-                        type: string
-                      display_profile_picture_url:
-                        type: string
-                      address:
-                        type: string
+                $ref: "#/components/schemas/inline_response_200_8"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
-
-    put:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
       security:
         - customerBearerAuth: []
+    put:
       tags:
         - Customer
       summary: "[In Progress] update customer"
-
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                address:
-                  type: string
-
+              $ref: "#/components/schemas/customers_me_body"
+        required: true
       responses:
-        "200": # status code
+        "200":
           description: update customer success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: Update customer success!
+                $ref: "#/components/schemas/inline_response_200_9"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+      security:
+        - customerBearerAuth: []
   /customers:
     get:
-      security:
-        - merchantBearerAuth: []
       tags:
         - Customer
       summary: "[In Progress] Get all customer"
       parameters:
         - name: page
           in: query
-          required: true
           description: filter by page
+          required: true
+          style: form
+          explode: true
           schema:
-            type: integer
             minimum: 1
+            type: integer
         - name: limit
           in: query
-          required: true
           description: filter by limit
+          required: true
+          style: form
+          explode: true
           schema:
             type: integer
         - name: name
           in: query
-          required: false
           description: search by name
+          required: false
+          style: form
+          explode: true
           schema:
             type: string
         - name: email
           in: query
-          required: false
           description: search by email
+          required: false
+          style: form
+          explode: true
           schema:
             type: string
       responses:
-        "200": # status code
+        "200":
           description: Get customer success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        name:
-                          type: string
-                        email:
-                          type: string
-                        display_profile_url:
-                          type: string
-                        phone_number:
-                          type: string
-                        address:
-                          type: string
-                        created_at:
-                          type: string
-                        updated_at:
-                          type: string
+                $ref: "#/components/schemas/inline_response_200_10"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "500":
-          $ref: "#/components/responses/500"
-
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+      security:
+        - merchantBearerAuth: []
   /customers/me/picture:
     patch:
-      security:
-        - customerBearerAuth: []
       tags:
         - Customer
-      summary: "Update display profile"
+      summary: Update display profile
       requestBody:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                profile_picture:
-                  type: string
-                  format: binary
-
+              $ref: "#/components/schemas/me_picture_body"
       responses:
-        "200": # status code
+        "200":
           description: update display profile success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: object
-                    properties:
-                      image_url:
-                        type: string
+                $ref: "#/components/schemas/inline_response_200_11"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
-
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+      security:
+        - customerBearerAuth: []
   /banks:
     get:
       tags:
         - Bank
-      summary: "Get list of bank"
+      summary: Get list of bank
       responses:
-        "200": # status code
+        "200":
           description: Get list of bank success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_200_12"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /merchants/dashboard:
+    get:
+      tags:
+        - Merchant
+      summary: "Get informations for swagger"
+      description: This endpoint will provide the information that will be use on dashboard
+      responses:
+        "200":
+          description: Success
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   error:
-                    type: string
+                    type: object
+                    nullable: true
                     default: null
                   data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        name:
-                          type: string
-                        code:
-                          type: string
-        "400":
-          $ref: "#/components/responses/400"
+                    type: object
+                    properties:
+                      overview:
+                        type: object
+                        properties:
+                          payment_received_quantity:
+                            type: number
+                            default: 0
+                          customer_quantity:
+                            type: number
+                            default: 0
+                          invoice_quantity:
+                            type: number
+                            default: 0
+                          unpaid_invoice_quantity:
+                            type: number
+                            default: 0
+                      recent_invoice:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            price:
+                              type: number
+                              default: 0
+                            invoice_id:
+                              type: number
+                              default: 0
+                            customer_name:
+                              type: string
+                            invoice_expired_date:
+                              type: string
+                      recent_payment:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            price:
+                              type: number
+                              default: 0
+                            invoice_id:
+                              type: number
+                              default: 0
+                            customer_name:
+                              type: string
+                            invoice_expired_date:
+                              type: string
+                            payment_type:
+                              type: string
         "500":
-          $ref: "#/components/responses/500"
-
-  /merchants/notifications:
-    get:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
       security:
         - merchantBearerAuth: []
+  /merchants/notifications:
+    get:
       tags:
         - Merchant
       summary: "[In Progress] Get merchant notification"
@@ -838,87 +766,89 @@ paths:
       parameters:
         - name: page
           in: query
-          required: true
           description: page
+          required: true
+          style: form
+          explode: true
           schema:
             type: integer
         - name: limit
           in: query
-          required: true
           description: page
+          required: true
+          style: form
+          explode: true
           schema:
             type: integer
       responses:
-        "200": # status code
+        "200":
           description: Get notifications success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        notification_type:
-                          type: string
-                        title:
-                          type: string
-                        content:
-                          type: string
-                        is_read:
-                          type: boolean
-                        created_at:
-                          type: string
+                $ref: "#/components/schemas/inline_response_200_6"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
-  /merchants/notifications/{id}:
-    put:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
       security:
         - merchantBearerAuth: []
+  /merchants/notifications/{id}:
+    put:
       tags:
         - Merchant
       summary: "[In Progress] Update notification is_read to true"
-      description: "Update Notification status is_read to true"
+      description: Update Notification status is_read to true
       parameters:
         - name: id
           in: path
-          required: true
           description: notification id
+          required: true
+          style: simple
+          explode: false
           schema:
             type: integer
-
       responses:
-        "200": # status code
+        "200":
           description: Update notifications success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: "Update notification success"
-
+                $ref: "#/components/schemas/inline_response_200_7"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+      security:
+        - merchantBearerAuth: []
   /merchants/banks:
     get:
       tags:
@@ -927,43 +857,37 @@ paths:
       parameters:
         - name: merchant_id
           in: query
-          required: true
           description: filter by merchant_id
+          required: true
+          style: form
+          explode: true
           schema:
             type: string
-
       responses:
-        "200": # status code
+        "200":
           description: Get list of bank success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        name:
-                          type: string
-                        code:
-                          type: string
-                        on_behalf_of:
-                          type: string
-                        bank_number:
-                          type: string
+                $ref: "#/components/schemas/inline_response_200_13"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /merchants/{id}:
     get:
       tags:
@@ -972,41 +896,37 @@ paths:
       parameters:
         - name: id
           in: path
-          required: true
           description: id
+          required: true
+          style: simple
+          explode: false
           schema:
             type: integer
-
       responses:
-        "200": # status code
+        "200":
           description: Get merchant by id
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        merchant_name:
-                          type: string
-                        merchant_address:
-                          type: string
-                        merchant_phone_number:
-                          type: string
+                $ref: "#/components/schemas/inline_response_200_14"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
     put:
       tags:
         - Merchant
@@ -1014,8 +934,10 @@ paths:
       parameters:
         - name: id
           in: path
-          required: true
           description: id
+          required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       requestBody:
@@ -1023,37 +945,32 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                merchant_name:
-                  type: string
-                merchant_address:
-                  type: string
-                merchant_phone_number:
-                  type: string
-
+              $ref: "#/components/schemas/merchants_id_body"
       responses:
-        "200": # status code
+        "200":
           description: Update merchant by id success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: Update Merchant Success!
-
+                $ref: "#/components/schemas/inline_response_200_15"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
-
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /merchant/display_profile:
     put:
       tags:
@@ -1063,94 +980,99 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-
+              $ref: "#/components/schemas/merchant_display_profile_body"
       responses:
-        "200": # status code
+        "200":
           description: update display profile success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: object
-                    properties:
-                      display_profile_url:
-                        type: string
+                $ref: "#/components/schemas/inline_response_200_16"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /invoices/count:
     get:
       tags:
         - Invoice
       summary: "[In Progress] Get invoices count"
       parameters:
-        # - name: merchant_id
-        #   in: query
-        #   required: required
-        #   description: filter by merchant_id
-        #   schema:
-        #     type : integer
         - name: payment_status
           in: query
-          required: false
           description: filter by payment status
+          required: false
+          style: form
+          explode: true
           schema:
             type: string
-            enum: [unpaid, paid, pending]
+            enum:
+              - unpaid
+              - paid
+              - pending
         - name: range_time
           in: query
-          required: false
           description: filter by last ... days
+          required: false
+          style: form
+          explode: true
           schema:
             type: integer
         - name: customer_id
           in: query
-          required: false
           description: filter by customer_id
+          required: false
+          style: form
+          explode: true
           schema:
             type: integer
         - name: admin_id
           in: query
-          required: false
           description: filter by admin_id
+          required: false
+          style: form
+          explode: true
           schema:
             type: integer
-
       responses:
-        "200": # status code
+        "200":
           description: Get invoices count success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: object
-                    properties:
-                      count:
-                        type: integer
+                $ref: "#/components/schemas/inline_response_200_17"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /invoices/payment:
     get:
       tags:
@@ -1159,51 +1081,59 @@ paths:
       parameters:
         - name: payment_status
           in: query
-          required: false
           description: filter by payment status
+          required: false
+          style: form
+          explode: true
           schema:
             type: string
-            enum: [unpaid, paid, pending]
-
+            enum:
+              - unpaid
+              - paid
+              - pending
         - name: range_time
           in: query
-          required: false
           description: filter by last ... days
+          required: false
+          style: form
+          explode: true
           schema:
             type: integer
         - name: customer_id
           in: query
-          required: false
           description: filter by customer_id
+          required: false
+          style: form
+          explode: true
           schema:
             type: integer
         - name: admin_id
           in: query
-          required: false
           description: filter by admin_id
+          required: false
+          style: form
+          explode: true
           schema:
             type: integer
-
       responses:
-        "200": # status code
+        "200":
           description: Get total payment success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: object
-                    properties:
-                      total_payment:
-                        type: integer
+                $ref: "#/components/schemas/inline_response_200_18"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "500":
-          $ref: "#/components/responses/500"
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /invoices/{id}:
     get:
       tags:
@@ -1212,99 +1142,37 @@ paths:
       parameters:
         - name: id
           in: path
-          required: true
           description: id invoice
+          required: true
+          style: simple
+          explode: false
           schema:
             type: integer
-
       responses:
-        "200": # status code
+        "200":
           description: Get invoice by id success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        payment_status:
-                          type: string
-                          enum: [unpaid, paid, pending]
-                        total_price:
-                          type: integer
-                        due_at:
-                          type: string
-                        created_at:
-                          type: string
-                        updated_at:
-                          type: string
-                        merchant:
-                          type: object
-                          properties:
-                            id:
-                              type: string
-                            name:
-                              type: string
-                            display_profile_url:
-                              type: string
-                            address:
-                              type: string
-                        customer:
-                          type: object
-                          properties:
-                            id:
-                              type: string
-                            name:
-                              type: string
-                            email:
-                              type: string
-                            address:
-                              type: string
-                        payment_method:
-                          type: object
-                          properties:
-                            payment_type:
-                              type: string
-                              enum: [manual, automatic]
-                            bank_name:
-                              type: string
-                            bank_code:
-                              type: string
-                            bank_number:
-                              type: string
-                            on_behalf_of:
-                              type: string
-                        items:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              product:
-                                type: string
-                              quantity:
-                                type: integer
-                              price:
-                                type: integer
-                              total_price:
-                                type: integer
-                              created_at:
-                                type: string
-                              updated_at:
-                                type: string
+                $ref: "#/components/schemas/inline_response_200_19"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /invoices:
     get:
       tags:
@@ -1313,240 +1181,104 @@ paths:
       parameters:
         - name: page
           in: query
-          required: true
           description: page
+          required: true
+          style: form
+          explode: true
           schema:
             type: integer
         - name: limit
           in: query
-          required: true
           description: page
+          required: true
+          style: form
+          explode: true
           schema:
             type: integer
         - name: payment_status
           in: query
-          required: false
           description: filter by payment status
+          required: false
+          style: form
+          explode: true
           schema:
             type: string
-            enum: [unpaid, paid, pending]
+            enum:
+              - unpaid
+              - paid
+              - pending
         - name: merchant_id
           in: query
-          required: false
           description: filter by merchant_id
+          required: false
+          style: form
+          explode: true
           schema:
             type: integer
         - name: customer_id
           in: query
-          required: false
           description: filter by customer_id
+          required: false
+          style: form
+          explode: true
           schema:
             type: integer
         - name: range_time
           in: query
-          required: false
           description: filter by last ... days
+          required: false
+          style: form
+          explode: true
           schema:
             type: integer
-
       responses:
-        "200": # status code
+        "200":
           description: Get all invoice success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        payment_status:
-                          type: string
-                          enum: [unpaid, paid, pending]
-                        total_price:
-                          type: integer
-                        due_at:
-                          type: string
-                        created_at:
-                          type: string
-                        updated_at:
-                          type: string
-                        merchant:
-                          type: object
-                          properties:
-                            id:
-                              type: string
-                            name:
-                              type: string
-                            display_profile_url:
-                              type: string
-                            address:
-                              type: string
-                        customer:
-                          type: object
-                          properties:
-                            id:
-                              type: string
-                            name:
-                              type: string
-                            email:
-                              type: string
-                            address:
-                              type: string
-                        payment_method:
-                          type: object
-                          properties:
-                            payment_type:
-                              type: string
-                              enum: [manual, automatic]
-                            bank_name:
-                              type: string
-                            bank_code:
-                              type: string
-                            bank_number:
-                              type: string
-                            on_behalf_of:
-                              type: string
-                        items:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              product:
-                                type: string
-                              quantity:
-                                type: integer
-                              price:
-                                type: integer
-                              total_price:
-                                type: integer
-                              created_at:
-                                type: string
-                              updated_at:
-                                type: string
+                $ref: "#/components/schemas/inline_response_200_19"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "500":
-          $ref: "#/components/responses/500"
-
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
     post:
       tags:
         - Invoice
       summary: "[In Progress] Create invoices"
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                customer_id:
-                  type: integer
-                due_at:
-                  type: string
-                items:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      product:
-                        type: string
-                      quantity:
-                        type: integer
-                      price:
-                        type: integer
-
+              $ref: "#/components/schemas/invoices_body"
+        required: true
       responses:
-        "201": # status code
+        "201":
           description: Create invoice success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                      payment_status:
-                        type: string
-                        enum: [unpaid, paid, pending]
-                      total_price:
-                        type: integer
-                      due_at:
-                        type: string
-                      created_at:
-                        type: string
-                      updated_at:
-                        type: string
-                      merchant:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          name:
-                            type: string
-                          display_profile_url:
-                            type: string
-                          address:
-                            type: string
-                      customer:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          name:
-                            type: string
-                          email:
-                            type: string
-                          address:
-                            type: string
-                      payment_method:
-                        type: object
-                        properties:
-                          payment_type:
-                            type: string
-                            enum: [manual, automatic]
-                          bank_name:
-                            type: string
-                          bank_code:
-                            type: string
-                          bank_number:
-                            type: string
-                          on_behalf_of:
-                            type: string
-                      items:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            product:
-                              type: string
-                            quantity:
-                              type: integer
-                            price:
-                              type: integer
-                            total_price:
-                              type: integer
-                            created_at:
-                              type: string
-                            updated_at:
-                              type: string
+                $ref: "#/components/schemas/inline_response_201_3"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "500":
-          $ref: "#/components/responses/500"
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /invoices/{id}/status:
     put:
       tags:
@@ -1555,41 +1287,43 @@ paths:
       parameters:
         - name: id
           in: path
-          required: true
           description: invoice id
+          required: true
+          style: simple
+          explode: false
           schema:
             type: integer
-
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                payment_status_id:
-                  type: integer
+              $ref: "#/components/schemas/id_status_body"
+        required: true
       responses:
-        "200": # status code
+        "200":
           description: Create invoice success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: Update invoice status success!
+                $ref: "#/components/schemas/inline_response_200_20"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
-
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /invoices/{id}/approval_document:
     put:
       tags:
@@ -1598,39 +1332,42 @@ paths:
       parameters:
         - name: id
           in: path
-          required: true
           description: invoice id
+          required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       requestBody:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
+              $ref: "#/components/schemas/id_approval_document_body"
       responses:
-        "200": # status code
+        "200":
           description: Update/Upload invoice approval document success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: Update invoice status success!
+                $ref: "#/components/schemas/inline_response_200_20"
         "400":
-          $ref: "#/components/responses/400"
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "404":
-          $ref: "#/components/responses/404"
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
         "500":
-          $ref: "#/components/responses/500"
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /invoices/{id}/payment_method:
     put:
       tags:
@@ -1639,112 +1376,686 @@ paths:
       parameters:
         - name: id
           in: path
-          required: true
           description: invoice id
+          required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                merchant_bank_id:
-                  type: integer
-
+              $ref: "#/components/schemas/id_payment_method_body"
       responses:
-        "200": # status code
+        "200":
           description: Update payment_method success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    default: null
-                  data:
-                    type: string
-                    default: Update payment method success!
-
+                $ref: "#/components/schemas/inline_response_200_21"
 components:
+  schemas:
+    verification_customer_body:
+      type: object
+      properties:
+        email:
+          type: string
+        code:
+          type: string
+    inline_response_200_16_data:
+      type: object
+      properties:
+        display_profile_url:
+          type: string
+    inline_response_401_error:
+      type: object
+      properties:
+        message:
+          type: string
+          default: unauthorized
+    merchants_id_body:
+      type: object
+      properties:
+        merchant_name:
+          type: string
+        merchant_address:
+          type: string
+        merchant_phone_number:
+          type: string
+    inline_response_200_19_items:
+      type: object
+      properties:
+        product:
+          type: string
+        quantity:
+          type: integer
+        price:
+          type: integer
+        total_price:
+          type: integer
+        created_at:
+          type: string
+        updated_at:
+          type: string
+    inline_response_200_11_data:
+      type: object
+      properties:
+        image_url:
+          type: string
+    verification_admin_body:
+      type: object
+      properties:
+        email:
+          type: string
+        code:
+          type: string
+    inline_response_500_error:
+      type: object
+      properties:
+        message:
+          type: string
+          default: internal server error
+    request_admin_body:
+      type: object
+      properties:
+        email:
+          type: string
+    inline_response_200_19_merchant:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        display_profile_url:
+          type: string
+        address:
+          type: string
+    login_customer_body:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        device_id:
+          type: string
+    customers_me_body:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+    inline_response_500:
+      type: object
+      properties:
+        error:
+          $ref: "#/components/schemas/inline_response_500_error"
+        data:
+          type: string
+          nullable: true
+          default: null
+    inline_response_200_9:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: string
+          default: Update customer success!
+    inline_response_200_21:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: string
+          default: Update payment method success!
+    inline_response_200_5:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: string
+          default: Password was reset
+    inline_response_200_6:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/inline_response_200_6_data"
+    inline_response_200_7:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: string
+          default: Update notification success
+    inline_response_200_20:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: string
+          default: Update invoice status success!
+    inline_response_200_8:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          $ref: "#/components/schemas/inline_response_200_8_data"
+    me_picture_body:
+      type: object
+      properties:
+        profile_picture:
+          type: string
+          format: binary
+    admin_refresh_body:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+    id_approval_document_body:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+    inline_response_200_6_data:
+      type: object
+      properties:
+        id:
+          type: integer
+        notification_type:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        is_read:
+          type: boolean
+        created_at:
+          type: string
+    invoices_body:
+      type: object
+      properties:
+        customer_id:
+          type: integer
+        due_at:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/invoices_items"
+    inline_response_200_1:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          $ref: "#/components/schemas/inline_response_200_1_data"
+    inline_response_200_10_data:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        display_profile_url:
+          type: string
+        phone_number:
+          type: string
+        address:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+    inline_response_200_2:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          $ref: "#/components/schemas/inline_response_200_2_data"
+    inline_response_200_3:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: string
+          default: Email Verified!
+    inline_response_404_error:
+      type: object
+      properties:
+        message:
+          type: string
+          default: not found
+    authregistermerchant_merchant_banks:
+      type: object
+      properties:
+        bank_id:
+          type: integer
+        on_behalf_of:
+          type: string
+        bank_number:
+          type: string
+    inline_response_200_4:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: string
+          default: Email Sent!
+    inline_response_200_13_data:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        code:
+          type: string
+        on_behalf_of:
+          type: string
+        bank_number:
+          type: string
+    inline_response_200_11:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          $ref: "#/components/schemas/inline_response_200_11_data"
+    id_status_body:
+      type: object
+      properties:
+        payment_status_id:
+          type: integer
+    inline_response_200_10:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/inline_response_200_10_data"
+    inline_response_200_13:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/inline_response_200_13_data"
+    inline_response_200_12:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/inline_response_200_12_data"
+    inline_response_200_19_data:
+      type: object
+      properties:
+        id:
+          type: integer
+        payment_status:
+          type: string
+          enum:
+            - unpaid
+            - paid
+            - pending
+        total_price:
+          type: integer
+        due_at:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        merchant:
+          $ref: "#/components/schemas/inline_response_200_19_merchant"
+        customer:
+          $ref: "#/components/schemas/inline_response_200_19_customer"
+        payment_method:
+          $ref: "#/components/schemas/inline_response_200_19_payment_method"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/inline_response_200_19_items"
+    inline_response_200_19:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/inline_response_200_19_data"
+    inline_response_200_8_data:
+      type: object
+      properties:
+        id:
+          type: integer
+        full_name:
+          type: string
+        email:
+          type: string
+        display_profile_picture_url:
+          type: string
+        address:
+          type: string
+    inline_response_200_18:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          $ref: "#/components/schemas/inline_response_200_18_data"
+    verification_refresh_body:
+      type: object
+      properties:
+        email:
+          type: string
+    inline_response_200_15:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: string
+          default: Update Merchant Success!
+    inline_response_200_14:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/inline_response_200_14_data"
+    inline_response_200_17:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          $ref: "#/components/schemas/inline_response_200_17_data"
+    inline_response_200_16:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          $ref: "#/components/schemas/inline_response_200_16_data"
+    password_admin_body:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        code:
+          type: string
+    inline_response_200_1_data:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+    inline_response_200_14_data:
+      type: object
+      properties:
+        id:
+          type: string
+        merchant_name:
+          type: string
+        merchant_address:
+          type: string
+        merchant_phone_number:
+          type: string
+    inline_response_200_19_payment_method:
+      type: object
+      properties:
+        payment_type:
+          type: string
+          enum:
+            - manual
+            - automatic
+        bank_name:
+          type: string
+        bank_code:
+          type: string
+        bank_number:
+          type: string
+        on_behalf_of:
+          type: string
+    inline_response_201:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: string
+          default: Merchant Created!
+    inline_response_200:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: string
+          default: pong
+    inline_response_200_18_data:
+      type: object
+      properties:
+        total_payment:
+          type: integer
+    id_payment_method_body:
+      type: object
+      properties:
+        merchant_bank_id:
+          type: integer
+    inline_response_401:
+      type: object
+      properties:
+        error:
+          $ref: "#/components/schemas/inline_response_401_error"
+        data:
+          type: string
+    inline_response_400:
+      type: object
+      properties:
+        error:
+          $ref: "#/components/schemas/inline_response_400_error"
+        data:
+          type: string
+    inline_response_400_error:
+      type: object
+      properties:
+        message:
+          type: string
+          default: bad request
+        detail:
+          type: string
+    register_merchant_body:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          nullable: false
+        password:
+          minLength: 8
+          type: string
+        merchant_name:
+          type: string
+        merchant_address:
+          type: string
+        merchant_phone_number:
+          type: string
+        merchant_banks:
+          type: array
+          items:
+            $ref: "#/components/schemas/authregistermerchant_merchant_banks"
+    inline_response_404:
+      type: object
+      properties:
+        error:
+          $ref: "#/components/schemas/inline_response_404_error"
+        data:
+          type: string
+    request_customer_body:
+      type: object
+      properties:
+        email:
+          type: string
+    invoices_items:
+      type: object
+      properties:
+        product:
+          type: string
+        quantity:
+          type: integer
+        price:
+          type: integer
+    inline_response_200_12_data:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        code:
+          type: string
+    password_customer_body:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        code:
+          type: string
+    merchant_display_profile_body:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+    register_customer_body:
+      type: object
+      properties:
+        email:
+          type: string
+          nullable: false
+        password:
+          minLength: 8
+          type: string
+        full_name:
+          type: string
+    inline_response_200_17_data:
+      type: object
+      properties:
+        count:
+          type: integer
+    inline_response_200_19_customer:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        address:
+          type: string
+    inline_response_201_1:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: string
+          default: User Created!
+    inline_response_201_2:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          type: string
+          default: Sent new code!
+    inline_response_201_3:
+      type: object
+      properties:
+        error:
+          type: string
+        data:
+          $ref: "#/components/schemas/inline_response_200_19_data"
+    inline_response_200_2_data:
+      type: object
+      properties:
+        access_token:
+          type: string
+    login_admin_body:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
   responses:
-    400:
+    "400":
       description: bad request
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              error:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    default: bad request
-                  detail:
-                    type: string
-              data:
-                type: string
-                default: null
-    401:
+            $ref: "#/components/schemas/inline_response_400"
+    "401":
       description: unauthorized
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              error:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    default: unauthorized
-              data:
-                type: string
-                default: null
-    404:
+            $ref: "#/components/schemas/inline_response_401"
+    "404":
       description: not found
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              error:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    default: not found
-              data:
-                type: string
-                default: null
-    500:
+            $ref: "#/components/schemas/inline_response_404"
+    "500":
       description: internal server error
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              error:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    default: internal server error
-              data:
-                type: string
-                default: null
+            $ref: "#/components/schemas/inline_response_500"
   securitySchemes:
-    customerBearerAuth: # arbitrary name for the security scheme
+    customerBearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT # optional, arbitrary value for documentation purposes
-    merchantBearerAuth: # arbitrary name for the security scheme
+      bearerFormat: JWT
+    merchantBearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT # optional, arbitrary value for documentation purposes
-servers:
-  # Added by API Auto Mocking Plugin
-  - description: Default
-    url: https://api.staging.my-invoice.me/api/v1
+      bearerFormat: JWT

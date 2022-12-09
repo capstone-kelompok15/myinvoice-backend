@@ -6,6 +6,7 @@ import (
 	authrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/auth/router"
 	bankrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/bank/router"
 	customerrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/customer/router"
+	merchantrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/merchant/router"
 	pingrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/ping/router"
 	"github.com/capstone-kelompok15/myinvoice-backend/config"
 	authrepository "github.com/capstone-kelompok15/myinvoice-backend/internal/auth/repository/impl"
@@ -14,6 +15,8 @@ import (
 	bankservice "github.com/capstone-kelompok15/myinvoice-backend/internal/bank/service/impl"
 	customerrepository "github.com/capstone-kelompok15/myinvoice-backend/internal/customer/repository/impl"
 	customerservice "github.com/capstone-kelompok15/myinvoice-backend/internal/customer/service/impl"
+	merchantrepository "github.com/capstone-kelompok15/myinvoice-backend/internal/merchant/repository/impl"
+	merchantservice "github.com/capstone-kelompok15/myinvoice-backend/internal/merchant/service/impl"
 	pingservice "github.com/capstone-kelompok15/myinvoice-backend/internal/ping/service/impl"
 	customrepositorymiddleware "github.com/capstone-kelompok15/myinvoice-backend/pkg/middleware/repository/impl"
 	customservicemiddleware "github.com/capstone-kelompok15/myinvoice-backend/pkg/middleware/service/impl"
@@ -163,6 +166,7 @@ func InitWebService(params *WebServiceParams) error {
 		}),
 	})
 
+	// Bank
 	bankRepository := bankrepository.NewBankRepository(&bankrepository.BankRepositoryParams{
 		DB: db,
 		Log: params.Log.WithFields(logrus.Fields{
@@ -180,12 +184,41 @@ func InitWebService(params *WebServiceParams) error {
 		}),
 	})
 
-	bankrouter.InitBankRouter(&bankrouter.RouterParams{
+	bankrouter.InitBankRouter(&bankrouter.BankRouterParams{
 		E:         e,
 		Service:   bankService,
 		Validator: validator,
 		Log: params.Log.WithFields(logrus.Fields{
 			"domain": "bank",
+			"layer":  "handler",
+		}),
+	})
+
+	// Merchant
+	merchantRepository := merchantrepository.NewBankRepository(&merchantrepository.MerchantRepositoryParams{
+		DB: db,
+		Log: params.Log.WithFields(logrus.Fields{
+			"domain": "merchant",
+			"layer":  "repository",
+		}),
+	})
+
+	merchantService := merchantservice.NewMerchantService(&merchantservice.MerchantServiceParams{
+		Repo:   merchantRepository,
+		Config: params.Config,
+		Log: params.Log.WithFields(logrus.Fields{
+			"domain": "bank",
+			"layer":  "service",
+		}),
+	})
+
+	merchantrouter.InitMerchantRouter(&merchantrouter.MerchantRouterParams{
+		E:          e,
+		Validator:  validator,
+		Service:    merchantService,
+		Middleware: middleware,
+		Log: params.Log.WithFields(logrus.Fields{
+			"domain": "merchant",
 			"layer":  "handler",
 		}),
 	})
