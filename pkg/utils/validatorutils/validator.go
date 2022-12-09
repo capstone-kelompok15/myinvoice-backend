@@ -31,7 +31,7 @@ func New() (*Validator, error) {
 	}, nil
 }
 
-func (v Validator) TranslateValidatorError(err error) (errs []string) {
+func (v *Validator) TranslateValidatorError(err error) (errs []string) {
 	validatorErrs := err.(validator.ValidationErrors)
 	for _, e := range validatorErrs {
 		translatedErr := fmt.Errorf(e.Translate(v.Translator))

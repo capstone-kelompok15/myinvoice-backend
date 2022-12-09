@@ -33,7 +33,7 @@ func (h *authHandler) RegisterMerchant() echo.HandlerFunc {
 			nestedErrs = append(nestedErrs, err)
 		}
 
-		if len(nestedErrs) != 0 {
+		if nestedErrs[0] != nil {
 			var nestedDetails []map[string]interface{}
 			for index, nestedErr := range nestedErrs {
 				errStr := h.validator.TranslateValidatorError(nestedErr)

@@ -14,19 +14,12 @@ func (r *authRepository) MerchantRegistration(ctx context.Context, req *dto.Merc
 		r.log.Warningln("[AdminRegistration] Error while begin transaction:", err.Error())
 		return err
 	}
-
-	defer func() error {
-		err := tx.Rollback()
-		if err != nil {
-			r.log.Warningln("[AdminRegistration] Error while rollback the transaction:", err.Error())
-		}
-		return err
-	}()
+	defer tx.Rollback()
 
 	// Insert Merchant
 	insertMerchantSQL, arg1, err := squirrel.
 		Insert("merchants").
-		Columns("name").
+		Columns("merchant_name").
 		Values(req.MerchantName).
 		ToSql()
 	if err != nil {
@@ -49,8 +42,8 @@ func (r *authRepository) MerchantRegistration(ctx context.Context, req *dto.Merc
 	// Insert merchant detail
 	insertMerchantDetailSQL, arg2, err := squirrel.
 		Insert("merchant_details").
-		Columns("merchant_id", "address", "phone_number").
-		Values(merchantID, req.MerchantAddress, req.MerchantPhoneNumber).
+		Columns("merchant_id", "merchant_address").
+		Values(merchantID, req.MerchantAddress).
 		ToSql()
 	if err != nil {
 		r.log.Warningln("[AdminRegistration] Error while create merchant detail sql from squirrel:", err.Error())
@@ -88,7 +81,7 @@ func (r *authRepository) MerchantRegistration(ctx context.Context, req *dto.Merc
 	// Create merchant admin
 	insertMerchantAdmin, arg4, err := squirrel.
 		Insert("admins").
-		Columns("merchant_id", "username", "password", "email", "is_verified").
+		Columns("merchant_id", "username", "admin_password", "email", "is_verified").
 		Values(merchantID, req.Username, req.Password, req.Email, false).
 		ToSql()
 	if err != nil {
