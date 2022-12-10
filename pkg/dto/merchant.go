@@ -46,3 +46,14 @@ type AdminResetPassword struct {
 	Password string `json:"password" validate:"required,min=8"`
 	Code     string `json:"code" validate:"required"`
 }
+
+type GetMerchantBankRequest struct {
+	MerchantID int `param:"merchant_id"`
+}
+
+type GetMerchantBankResponse struct {
+	BankName   string `json:"bank_name" db:"bank_name"`
+	BankCode   string `json:"bank_code" db:"bank_code"`
+	OnBehalfOf string `json:"on_behalf_of" db:"on_behalf_of"`
+	BankNumber string `json:"bank_number" db:"bank_number"`
+}
