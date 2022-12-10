@@ -245,7 +245,7 @@ paths:
   /auth/verification/customer/refresh:
     post:
       tags:
-        - Auth
+        - Auth Customer
       summary: Refresh Email Verification Code
       requestBody:
         content:
@@ -281,7 +281,7 @@ paths:
   /auth/verification/admin/refresh:
     post:
       tags:
-        - Auth
+        - Auth Admin
       summary: Refresh Email Verification Code
       requestBody:
         content:
@@ -320,7 +320,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /auth/reset/password/request/customer:
+  /auth/reset/password/admin/request:
+    post:
+      tags:
+        - Auth Admin
+      summary: Admin Reset Password (Request Forgot password By Email)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/request_customer_body"
+        required: true
+      responses:
+        "200":
+          description: Send Email success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_200_4"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /auth/reset/password/customer/request:
     post:
       tags:
         - Auth Customer
