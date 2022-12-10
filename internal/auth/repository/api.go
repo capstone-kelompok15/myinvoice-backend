@@ -22,4 +22,5 @@ type AuthRepository interface {
 	GetAdminContextByID(ctx context.Context, adminID int) (*dto.AdminContext, error)
 	AdminEmailVerification(ctx context.Context, req *dto.AdminEmailVerification) error
 	CustomerResetPassword(ctx context.Context, req *dto.CustomerResetPassword) error
+	AdminResetPassword(ctx context.Context, req *dto.AdminResetPassword) error
 }

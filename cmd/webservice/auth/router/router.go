@@ -36,4 +36,5 @@ func InitAuthRouter(params *RouterParams) {
 	authV1Group.POST("/reset/password/customer/request", authHandler.CustomerResetPasswordRequest())
 	authV1Group.POST("/reset/password/customer", authHandler.CustomerResetPassword())
 	authV1Group.POST("/reset/password/admin/request", authHandler.AdminResetPasswordRequest())
+	authV1Group.POST("/reset/password/admin", authHandler.AdminResetPassword())
 }
