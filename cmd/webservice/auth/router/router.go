@@ -27,6 +27,7 @@ func InitAuthRouter(params *RouterParams) {
 	authV1Group.POST("/register/customer", authHandler.RegisterCustomer())
 	authV1Group.POST("/register/merchant", authHandler.RegisterMerchant())
 	authV1Group.POST("/verification/customer", authHandler.CustomerEmailVerification())
+	authV1Group.POST("/verification/admin", authHandler.AdminEmailVerification())
 	authV1Group.POST("/verification/refresh", authHandler.RefreshEmailVerificationCode())
 	authV1Group.POST("/login/customer", authHandler.CustomerLogin())
 	authV1Group.POST("/login/admin", authHandler.AdminLogin())
