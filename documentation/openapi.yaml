@@ -921,17 +921,16 @@ paths:
                 $ref: "#/components/schemas/inline_response_500"
       security:
         - merchantBearerAuth: []
-  /merchants/banks:
+  /merchants/{merchant_id}/banks:
     get:
       tags:
         - Merchant
-      summary: "[In Progress] Get list of merchant bank"
+      summary: "Get list of merchant bank"
       parameters:
         - name: merchant_id
-          in: query
+          in: path
           description: filter by merchant_id
           required: true
-          style: form
           explode: true
           schema:
             type: string
