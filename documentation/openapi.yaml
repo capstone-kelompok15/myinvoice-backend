@@ -242,7 +242,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /auth/verification/refresh:
+  /auth/verification/customer/refresh:
     post:
       tags:
         - Auth
@@ -260,6 +260,48 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_201_2"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "404":
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /auth/verification/admin/refresh:
+    post:
+      tags:
+        - Auth
+      summary: Refresh Email Verification Code
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/verification_refresh_body"
+        required: true
+      responses:
+        "201":
+          description: Refresh Email Verification Code success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  data:
+                    type: string
+                    default: New code sent!
         "400":
           description: bad request
           content:
