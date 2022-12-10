@@ -7,5 +7,5 @@ import (
 )
 
 type MerchantService interface {
-	GetDashboard(ctx context.Context, merchantID int) (*dto.MerchantDashbaord, error)
+	GetDashboard(ctx context.Context, merchantID int) (*dto.MerchantDashboard, error)
 }

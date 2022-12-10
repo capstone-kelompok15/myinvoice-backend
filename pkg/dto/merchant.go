@@ -35,8 +35,14 @@ type RecentPaymentMerchantDashboard struct {
 	PaymentType string `json:"payment_type" db:"payment_type"`
 }
 
-type MerchantDashbaord struct {
+type MerchantDashboard struct {
 	OverviewMerchantDashboard      `json:"overview"`
 	RecentInvoiceMerchantDashboard []RecentInvoiceMerchantDashboard `json:"recent_invoice"`
 	RecentPaymentMerchantDashboard []RecentPaymentMerchantDashboard `json:"recent_payment"`
+}
+
+type AdminResetPassword struct {
+	Email    string `json:"email" validate:"required"`
+	Password string `json:"password" validate:"required,min=8"`
+	Code     string `json:"code" validate:"required"`
 }

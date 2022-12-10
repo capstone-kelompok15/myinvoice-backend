@@ -380,6 +380,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
+  /auth/reset/password/admin:
+    post:
+      tags:
+        - Auth Admin
+      summary: Admin Reset Password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/password_customer_body"
+        required: true
+      responses:
+        "200":
+          description: Customer Reset Password success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_200_5"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /auth/reset/password/customer:
     post:
       tags:
@@ -428,36 +458,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_200_4"
-        "400":
-          description: bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_400"
-        "500":
-          description: internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_500"
-  /auth/reset/password/admin:
-    post:
-      tags:
-        - Auth Admin
-      summary: "[In Progress] Admin Reset Password (When Forgot Password)"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/password_admin_body"
-        required: true
-      responses:
-        "200":
-          description: Admin Reset Password success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_200_5"
         "400":
           description: bad request
           content:
