@@ -13,7 +13,7 @@ type AuthRepository interface {
 	AuthorizeCustomerLogin(ctx context.Context, req *dto.CustomerLoginRequest) (*dto.CustomerContext, error)
 	InvalidCustomerAccessToken(ctx context.Context, customerID int) error
 	InsertCustomerAccessToken(ctx context.Context, customerID int, deviceID string) error
-	CheckAdminEmailExistAndValid(ctx context.Context, params *dto.MerchantRegisterRequest) (exists, valid bool, err error)
+	CheckAdminEmailExistAndValid(ctx context.Context, email string) (exists, valid bool, err error)
 	MerchantRegistration(ctx context.Context, req *dto.MerchantRegisterRequest) error
 	LoginAdmin(ctx context.Context, req *dto.AdminLoginRequest) (*dto.AdminContext, error)
 	InsertRefreshToken(ctx context.Context, req *dto.AdminRefreshToken) error

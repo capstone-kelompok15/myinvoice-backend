@@ -38,3 +38,7 @@ type AdminEmailVerification struct {
 	Email string `json:"email" validate:"required,email"`
 	Code  string `json:"code" validate:"required,min=32,max=32"`
 }
+
+type AdminRefreshEmailVerificationCode struct {
+	Email string `json:"email" validate:"required,email"`
+}

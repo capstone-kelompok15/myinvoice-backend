@@ -14,7 +14,7 @@ import (
 )
 
 func (s *authService) MerchantRegistration(ctx context.Context, req *dto.MerchantRegisterRequest) error {
-	exist, valid, err := s.repo.CheckAdminEmailExistAndValid(ctx, req)
+	exist, valid, err := s.repo.CheckAdminEmailExistAndValid(ctx, req.Email)
 	if err != nil && err != sql.ErrNoRows {
 		s.log.Warningln("[CustomerRegistration] Error while checking the existence of the email", err.Error())
 		return err
