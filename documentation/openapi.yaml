@@ -186,7 +186,7 @@ paths:
     post:
       tags:
         - Auth Admin
-      summary: "[In Progress] Admin Email Verification"
+      summary: "Admin Email Verification"
       requestBody:
         content:
           application/json:

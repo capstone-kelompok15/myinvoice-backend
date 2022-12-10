@@ -16,4 +16,5 @@ type AuthService interface {
 	GenerateNewAccessToken(ctx context.Context, refreshTokens string) (*string, error)
 	CustomerResetPasswordRequest(ctx context.Context, email string) error
 	ResetPassword(ctx context.Context, req *dto.CustomerResetPassword) error
+	AdminEmailVerification(ctx context.Context, req *dto.AdminEmailVerification) error
 }
