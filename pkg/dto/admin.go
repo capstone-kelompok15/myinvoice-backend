@@ -42,3 +42,7 @@ type AdminEmailVerification struct {
 type AdminRefreshEmailVerificationCode struct {
 	Email string `json:"email" validate:"required,email"`
 }
+
+type AdminResetPasswordRequest struct {
+	Email string `json:"email"`
+}

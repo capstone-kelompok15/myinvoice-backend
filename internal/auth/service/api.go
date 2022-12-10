@@ -18,4 +18,5 @@ type AuthService interface {
 	ResetPassword(ctx context.Context, req *dto.CustomerResetPassword) error
 	AdminEmailVerification(ctx context.Context, req *dto.AdminEmailVerification) error
 	RefreshAdminEmailVerificationCode(ctx context.Context, email string) error
+	AdminResetPasswordRequest(ctx context.Context, email string) error
 }
