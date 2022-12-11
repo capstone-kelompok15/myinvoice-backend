@@ -985,7 +985,7 @@ paths:
         - Merchant
       summary: "Create new merchant bank"
       responses:
-        "200":
+        "201":
           description: Success to create new bank
           content:
             application/json:
