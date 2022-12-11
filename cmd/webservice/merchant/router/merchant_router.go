@@ -29,4 +29,5 @@ func InitMerchantRouter(params *MerchantRouterParams) {
 	merchantV1Group.GET("/dashboard", merchantHandler.GetDashboard(), params.Middleware.AdminMustAuthorized())
 	merchantV1Group.GET("/:merchant_id/banks", merchantHandler.GetMerchantBank())
 	merchantV1Group.PUT("/banks/:merchant_bank_id", merchantHandler.UpdateMerchantBank(), params.Middleware.AdminMustAuthorized())
+	merchantV1Group.POST("/banks", merchantHandler.CreateMerchantBank(), params.Middleware.AdminMustAuthorized())
 }
