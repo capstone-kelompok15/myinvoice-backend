@@ -57,3 +57,15 @@ type GetMerchantBankResponse struct {
 	OnBehalfOf string `json:"on_behalf_of" db:"on_behalf_of"`
 	BankNumber string `json:"bank_number" db:"bank_number"`
 }
+
+type UpdateMerchantBankData struct {
+	BankID     int    `json:"bank_id" validate:"required"`
+	OnBehalfOf string `json:"on_behalf_of" validate:"required"`
+	BankNumber string `json:"bank_number" validate:"required"`
+}
+
+type UpdateMerchantBankDataRequest struct {
+	UpdateMerchantBankData
+	MerchantBankID int `param:"merchant_bank_id" validate:"required"`
+	MerchantID     int
+}
