@@ -58,14 +58,14 @@ type GetMerchantBankResponse struct {
 	BankNumber string `json:"bank_number" db:"bank_number"`
 }
 
-type UpdateMerchantBankData struct {
+type MerchantBankData struct {
 	BankID     int    `json:"bank_id" validate:"required"`
 	OnBehalfOf string `json:"on_behalf_of" validate:"required"`
 	BankNumber string `json:"bank_number" validate:"required"`
 }
 
 type UpdateMerchantBankDataRequest struct {
-	UpdateMerchantBankData
+	MerchantBankData
 	MerchantBankID int `param:"merchant_bank_id" validate:"required"`
 	MerchantID     int
 }
