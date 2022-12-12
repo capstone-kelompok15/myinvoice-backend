@@ -28,16 +28,8 @@ func (h *invoiceHandler) CreateInvoice() echo.HandlerFunc {
 			})
 		}
 
-		adminCtx := authutils.AdminContextFromRequestContext(c)
-		if adminCtx == nil {
-			h.log.Warningln("[CreateMerchantBank] Couldn't extract user account from context")
-			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
-				Err: customerrors.ErrInternalServer,
-			})
-		}
-
 		var nestedErrs []error
-		for _, invoiceDetail := range req.InvoiceDetails {
+		for _, invoiceDetail := range req.Items {
 			err = h.validator.StructCtx(c.Request().Context(), invoiceDetail)
 			nestedErrs = append(nestedErrs, err)
 		}
@@ -58,8 +50,17 @@ func (h *invoiceHandler) CreateInvoice() echo.HandlerFunc {
 			})
 		}
 
+		adminCtx := authutils.AdminContextFromRequestContext(c)
+		if adminCtx == nil {
+			h.log.Warningln("[CreateInvoice] Couldn't extract user account from context")
+			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
+				Err: customerrors.ErrInternalServer,
+			})
+		}
+
 		dueAt, err := dateutils.StringToDate(req.DueAtRequest)
 		if err != nil {
+			h.log.Warningln("[CreateInvoice] Error on converting the string to date")
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: customerrors.ErrInternalServer,
 			})

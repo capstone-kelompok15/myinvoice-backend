@@ -1417,7 +1417,7 @@ paths:
     post:
       tags:
         - Invoice
-      summary: "[In Progress] Create invoices"
+      summary: "Create invoices"
       requestBody:
         content:
           application/json:

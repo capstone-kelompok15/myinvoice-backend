@@ -18,12 +18,12 @@ func (r *invoiceRepository) CreateInvoice(ctx context.Context, merchantID int, r
 	createInvoiceSQL, args1, err := squirrel.
 		Insert("invoices").
 		Columns(
-			"merchant_id", "customer_id", "payment_type_id",
-			"payment_status_id", "merchant_bank_id", "due_at",
+			"merchant_id", "customer_id",
+			"payment_status_id", "due_at",
 		).
 		Values(
-			merchantID, req.CustomerID, req.PaymentType,
-			1, req.MerchantBank, req.DueAt,
+			merchantID, req.CustomerID,
+			1, req.DueAt,
 		).
 		ToSql()
 	if err != nil {
@@ -47,8 +47,8 @@ func (r *invoiceRepository) CreateInvoice(ctx context.Context, merchantID int, r
 		Insert("invoice_details").
 		Columns("invoice_id", "product", "quantity", "price")
 
-	for _, invoiceDetail := range req.InvoiceDetails {
-		createInvoiceDetails = createInvoiceDetails.Values(invoiceID, invoiceDetail.Product, invoiceDetail.Quantity, invoiceDetail.Price)
+	for _, item := range req.Items {
+		createInvoiceDetails = createInvoiceDetails.Values(invoiceID, item.Product, item.Quantity, item.Price)
 	}
 
 	createInvoiceDetailsSQL, args2, err := createInvoiceDetails.ToSql()
