@@ -1406,59 +1406,38 @@ paths:
                     nullable: true
                     default: null
                   data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        invoice_id:
-                          type: integer
-                        merchant_id:
-                          type: integer
-                        customer_id:
-                          type: integer
-                        customer_name:
-                          type: string
-                        payment_status_id:
-                          type: integer
-                        payment_status_name:
-                          type: string
-                        payment_type_id:
-                          type: integer
-                          nullable: true
-                          default: null
-                        merchant_bank_id:
-                          type: integer
-                          nullable: true
-                          default: null
-                        total_price:
-                          type: integer
-                        product_quantity:
-                          type: integer
-                        due_at:
-                          type: string
-                        created_at:
-                          type: string
-                        updated_at:
-                          type: string
-                        invoice_quantity:
-                          type: integer
-                        invoice_detail:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              invoice_detail_id:
-                                type: integer
-                              product:
-                                type: string
-                              quantity:
-                                type: integer
-                              price:
-                                type: integer
-                              created_at:
-                                type: string
-                              updated_at:
-                                type: string
+                    type: object
+                    properties:
+                      pagination:
+                        type: object
+                        properties:
+                          qty:
+                            type: integer
+                      invoices:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            invoice_id:
+                              type: integer
+                            customer_name:
+                              type: string
+                            payment_status_id:
+                              type: integer
+                            payment_status_name:
+                              type: string
+                            payment_type_id:
+                              type: integer
+                              nullable: true
+                              default: null
+                            total_price:
+                              type: integer
+                            due_at:
+                              type: string
+                            created_at:
+                              type: string
+                            updated_at:
+                              type: string
         "400":
           description: bad request
           content:
