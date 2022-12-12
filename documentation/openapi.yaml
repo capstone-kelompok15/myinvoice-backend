@@ -1337,13 +1337,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /invoices:
+  /invoices/merchant:
     get:
       tags:
         - Invoice
-      summary: "[In Progress] Get all invoices "
+      summary: "Get all invoices for specific merchant"
       parameters:
-        - name: page
+        - name: limit
           in: query
           description: page
           required: true
@@ -1351,7 +1351,80 @@ paths:
           explode: true
           schema:
             type: integer
+        - name: offset
+          in: query
+          description: page
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: payment_status_id
+          in: query
+          description: filter by payment status id
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: customer_id
+          in: query
+          description: filter by customer_id
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: start_date
+          in: query
+          description: filter by start date
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: end_date
+          in: query
+          description: filter by end date
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Get all invoice success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_200_19"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /invoices/customer:
+    get:
+      tags:
+        - Invoice
+      summary: "[In Progress] Get all invoices for specific customer"
+      parameters:
         - name: limit
+          in: query
+          description: page
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: offset
           in: query
           description: page
           required: true
@@ -1414,6 +1487,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
+  /invoices:
     post:
       tags:
         - Invoice
