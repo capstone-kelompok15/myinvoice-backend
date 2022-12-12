@@ -31,7 +31,9 @@ type GetAllInvoicesParam struct {
 }
 
 type GetDetailsInvoicesRequest struct {
-	InvoiceID int `param:"invoice_id" validate:"required"`
+	InvoiceID  int `param:"invoice_id" validate:"required"`
+	CustomerID int
+	MerchantID int
 }
 
 type GetInvoiceResponse struct {
