@@ -1123,7 +1123,7 @@ paths:
         - merchantBearerAuth: []
       tags:
         - Merchant
-      summary: "[In Progress] Update display profile"
+      summary: "Update display profile"
       requestBody:
         content:
           multipart/form-data:
@@ -2576,7 +2576,7 @@ components:
     merchant_display_profile_body:
       type: object
       properties:
-        file:
+        profile_picture:
           type: string
           format: binary
     register_customer_body:
