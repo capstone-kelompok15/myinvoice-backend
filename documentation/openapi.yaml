@@ -1339,13 +1339,15 @@ paths:
                 $ref: "#/components/schemas/inline_response_500"
   /invoices/merchant:
     get:
+      security:
+        - merchantBearerAuth: []
       tags:
         - Invoice
       summary: "Get all invoices for specific merchant"
       parameters:
         - name: limit
           in: query
-          description: page
+          description: limit
           required: true
           style: form
           explode: true
@@ -1353,7 +1355,7 @@ paths:
             type: integer
         - name: offset
           in: query
-          description: page
+          description: offset
           required: true
           style: form
           explode: true
@@ -1397,7 +1399,66 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/inline_response_200_19"
+                type: object
+                properties:
+                  error:
+                    type: string
+                    nullable: true
+                    default: null
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        invoice_id:
+                          type: integer
+                        merchant_id:
+                          type: integer
+                        customer_id:
+                          type: integer
+                        customer_name:
+                          type: string
+                        payment_status_id:
+                          type: integer
+                        payment_status_name:
+                          type: string
+                        payment_type_id:
+                          type: integer
+                          nullable: true
+                          default: null
+                        merchant_bank_id:
+                          type: integer
+                          nullable: true
+                          default: null
+                        total_price:
+                          type: integer
+                        product_quantity:
+                          type: integer
+                        due_at:
+                          type: string
+                        created_at:
+                          type: string
+                        updated_at:
+                          type: string
+                        invoice_quantity:
+                          type: integer
+                        invoice_detail:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              invoice_detail_id:
+                                type: integer
+                              product:
+                                type: string
+                              quantity:
+                                type: integer
+                              price:
+                                type: integer
+                              created_at:
+                                type: string
+                              updated_at:
+                                type: string
         "400":
           description: bad request
           content:
