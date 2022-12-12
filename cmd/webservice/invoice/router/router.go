@@ -28,6 +28,7 @@ func InitInvoiceRouter(params *InvoiceRouterParams) {
 	invoiceV1Group := params.E.Group(apiversioning.APIVersionOne + "/invoices")
 	invoiceV1Group.POST("", invoiceHandler.CreateInvoice(), params.Middleware.AdminMustAuthorized())
 	invoiceV1Group.GET("/merchants", invoiceHandler.MerchantGetAllInvoices(), params.Middleware.AdminMustAuthorized())
+	invoiceV1Group.GET("/customers", invoiceHandler.CustomerGetAllInvoices(), params.Middleware.CustomerMustAuthorized())
 	invoiceV1Group.GET("/:invoice_id/merchants", invoiceHandler.GetDetailInvoiceByID(), params.Middleware.AdminMustAuthorized())
 	invoiceV1Group.GET("/:invoice_id/customers", invoiceHandler.GetDetailInvoiceByID(), params.Middleware.CustomerMustAuthorized())
 }

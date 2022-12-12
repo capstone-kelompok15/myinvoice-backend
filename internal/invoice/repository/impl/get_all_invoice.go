@@ -79,6 +79,9 @@ func (r *invoiceRepository) GetAllInvoice(ctx context.Context, req *dto.GetAllIn
 	var count int
 	err = r.db.GetContext(ctx, &count, countInvoicesSQL, args1...)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return &invoices, 0, nil
+		}
 		r.log.Warningln("[GetAllInvoice] Failed on executing count invoice sql:", err.Error())
 		return nil, 0, err
 	}
