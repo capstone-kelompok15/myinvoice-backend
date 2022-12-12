@@ -218,9 +218,10 @@ func InitWebService(params *WebServiceParams) error {
 	})
 
 	merchantService := merchantservice.NewMerchantService(&merchantservice.MerchantServiceParams{
-		RepoNotif: notificationRepository,
-		Repo:      merchantRepository,
-		Config:    params.Config,
+		RepoNotif:  notificationRepository,
+		Repo:       merchantRepository,
+		Config:     params.Config,
+		Cloudinary: cloudinary,
 		Log: params.Log.WithFields(logrus.Fields{
 			"domain": "bank",
 			"layer":  "service",
