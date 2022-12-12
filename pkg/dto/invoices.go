@@ -20,7 +20,7 @@ type GetAllInvoicesParam struct {
 	// General Merchant
 	*DateFilter
 	*PaginationFilter
-	PaymentStatusID int
+	PaymentStatusID int `query:"payment_status_id"`
 
 	// Merchant
 	MerchantID               int

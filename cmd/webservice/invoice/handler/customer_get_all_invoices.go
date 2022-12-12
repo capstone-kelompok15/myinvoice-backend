@@ -8,15 +8,23 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h *invoiceHandler) MerchantGetAllInvoices() echo.HandlerFunc {
+func (h *invoiceHandler) CustomerGetAllInvoices() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		filter := dto.GetAllInvoicesParam{
-			DateFilter:               nil,
-			PaginationFilter:         nil, // required
-			MerchantID:               0,   // required
-			PaymentStatusID:          0,
-			MerchantFilterCustomerID: 0,
+			DateFilter:       nil,
+			PaginationFilter: nil, // required
+			CustomerID:       0,
+			PaymentStatusID:  0,
 		}
+
+		customerCtx := authutils.CustomerFromRequestContext(c)
+		if customerCtx == nil {
+			h.log.Warningln("[GetAllNotificationCustomer] Couldn't extract user account from context")
+			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
+				Err: customerrors.ErrInternalServer,
+			})
+		}
+		filter.CustomerID = customerCtx.ID
 
 		err := c.Bind(&filter)
 		if err != nil {
@@ -25,15 +33,6 @@ func (h *invoiceHandler) MerchantGetAllInvoices() echo.HandlerFunc {
 			})
 		}
 
-		adminCtx := authutils.AdminContextFromRequestContext(c)
-		if adminCtx == nil {
-			h.log.Warningln("[MerchantGetAllInvoices] Couldn't extract user account from context")
-			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
-				Err: customerrors.ErrInternalServer,
-			})
-		}
-
-		filter.MerchantID = adminCtx.MerchantID
 		filter.PaginationFilter = &dto.PaginationFilter{}
 		filter.PaginationFilter.Offset, filter.PaginationFilter.Limit, err = httputils.GetPaginationMandatoryParams(c, true)
 		if err != nil {
