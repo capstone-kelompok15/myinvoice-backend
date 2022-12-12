@@ -71,7 +71,7 @@ func (h *invoiceHandler) MerchantGetAllInvoices() echo.HandlerFunc {
 			}
 		}
 
-		invoices, err := h.service.GetAllInvoice(c.Request().Context(), &filter)
+		invoices, count, err := h.service.GetAllInvoice(c.Request().Context(), &filter)
 		if err != nil {
 			h.log.Warningln("[MerchantGetAllInvoices] Service error:", err.Error())
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
@@ -80,7 +80,12 @@ func (h *invoiceHandler) MerchantGetAllInvoices() echo.HandlerFunc {
 		}
 
 		return httputils.WriteResponse(c, httputils.SuccessResponseParams{
-			Data: *invoices,
+			Data: map[string]interface{}{
+				"pagination": map[string]int{
+					"qty": count,
+				},
+				"invoices": invoices,
+			},
 		})
 	}
 }
