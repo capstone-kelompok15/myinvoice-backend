@@ -3,6 +3,7 @@ package impl
 import (
 	"github.com/capstone-kelompok15/myinvoice-backend/config"
 	"github.com/capstone-kelompok15/myinvoice-backend/internal/customer/repository"
+	repoNotif "github.com/capstone-kelompok15/myinvoice-backend/internal/notification/repository"
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/go-redis/redis/v8"
 	"github.com/mailgun/mailgun-go/v4"
@@ -10,6 +11,7 @@ import (
 )
 
 type customerService struct {
+	repoNotif  repoNotif.NotificationRepository
 	repo       repository.CustomerRepository
 	log        *logrus.Entry
 	redis      *redis.Client
@@ -19,6 +21,7 @@ type customerService struct {
 }
 
 type CustomerServiceParams struct {
+	RepoNotif  repoNotif.NotificationRepository
 	Repo       repository.CustomerRepository
 	Log        *logrus.Entry
 	Redis      *redis.Client
@@ -29,6 +32,7 @@ type CustomerServiceParams struct {
 
 func NewCustomerService(params *CustomerServiceParams) *customerService {
 	return &customerService{
+		repoNotif:  params.RepoNotif,
 		repo:       params.Repo,
 		log:        params.Log,
 		redis:      params.Redis,

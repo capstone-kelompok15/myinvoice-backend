@@ -7,6 +7,10 @@ import (
 )
 
 type MerchantService interface {
+
+
+	GetAllNotificationMerchant(ctx context.Context, merchantID int, req *dto.NotificationRequest) (*[]dto.NotificationRespond, error)
+	MarkNotifMerchantAsRead(ctx context.Context, NotifID int, MerchantID int) error
 	GetDashboard(ctx context.Context, merchantID int) (*dto.MerchantDashboard, error)
 	GetMerchantBank(ctx context.Context, req *dto.GetMerchantBankRequest) (*[]dto.GetMerchantBankResponse, error)
 	UpdateMerchantBank(ctx context.Context, req *dto.UpdateMerchantBankDataRequest) error
