@@ -1337,13 +1337,147 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /invoices:
+  /invoices/merchant:
+    get:
+      security:
+        - merchantBearerAuth: []
+      tags:
+        - Invoice
+      summary: "Get all invoices for specific merchant"
+      parameters:
+        - name: limit
+          in: query
+          description: limit
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: offset
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: payment_status_id
+          in: query
+          description: filter by payment status id
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: customer_id
+          in: query
+          description: filter by customer_id
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: start_date
+          in: query
+          description: filter by start date
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: end_date
+          in: query
+          description: filter by end date
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Get all invoice success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    nullable: true
+                    default: null
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        invoice_id:
+                          type: integer
+                        merchant_id:
+                          type: integer
+                        customer_id:
+                          type: integer
+                        customer_name:
+                          type: string
+                        payment_status_id:
+                          type: integer
+                        payment_status_name:
+                          type: string
+                        payment_type_id:
+                          type: integer
+                          nullable: true
+                          default: null
+                        merchant_bank_id:
+                          type: integer
+                          nullable: true
+                          default: null
+                        total_price:
+                          type: integer
+                        product_quantity:
+                          type: integer
+                        due_at:
+                          type: string
+                        created_at:
+                          type: string
+                        updated_at:
+                          type: string
+                        invoice_quantity:
+                          type: integer
+                        invoice_detail:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              invoice_detail_id:
+                                type: integer
+                              product:
+                                type: string
+                              quantity:
+                                type: integer
+                              price:
+                                type: integer
+                              created_at:
+                                type: string
+                              updated_at:
+                                type: string
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /invoices/customer:
     get:
       tags:
         - Invoice
-      summary: "[In Progress] Get all invoices "
+      summary: "[In Progress] Get all invoices for specific customer"
       parameters:
-        - name: page
+        - name: limit
           in: query
           description: page
           required: true
@@ -1351,7 +1485,7 @@ paths:
           explode: true
           schema:
             type: integer
-        - name: limit
+        - name: offset
           in: query
           description: page
           required: true
@@ -1414,6 +1548,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
+  /invoices:
     post:
       tags:
         - Invoice

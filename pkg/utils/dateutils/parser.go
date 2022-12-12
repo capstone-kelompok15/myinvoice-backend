@@ -1,6 +1,9 @@
 package dateutils
 
-import "time"
+import (
+	"strings"
+	"time"
+)
 
 func StringToDate(date string) (*time.Time, error) {
 	time, err := time.Parse("2006-01-02", date)
@@ -19,4 +22,9 @@ func NowToString() string {
 func NowNanoTimeStamp() int64 {
 	now := time.Now()
 	return now.UnixNano()
+}
+
+func TimeToDateStr(date time.Time) string {
+	dateStr := strings.Split(date.Local().String(), " ")[0]
+	return dateStr
 }
