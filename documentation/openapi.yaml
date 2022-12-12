@@ -1879,32 +1879,9 @@ components:
     inline_response_200_19_data:
       type: object
       properties:
-        id:
-          type: integer
-        payment_status:
+        data:
           type: string
-          enum:
-            - unpaid
-            - paid
-            - pending
-        total_price:
-          type: integer
-        due_at:
-          type: string
-        created_at:
-          type: string
-        updated_at:
-          type: string
-        merchant:
-          $ref: "#/components/schemas/inline_response_200_19_merchant"
-        customer:
-          $ref: "#/components/schemas/inline_response_200_19_customer"
-        payment_method:
-          $ref: "#/components/schemas/inline_response_200_19_payment_method"
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/inline_response_200_19_items"
+          default: "New invoice created!"
     inline_response_200_19:
       type: object
       properties:

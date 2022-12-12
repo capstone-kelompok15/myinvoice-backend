@@ -75,6 +75,7 @@ func (h *invoiceHandler) CreateInvoice() echo.HandlerFunc {
 		}
 
 		return httputils.WriteResponse(c, httputils.SuccessResponseParams{
+			Code: 201,
 			Data: "New invoice created!",
 		})
 	}
