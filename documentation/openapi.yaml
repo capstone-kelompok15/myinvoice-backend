@@ -1282,7 +1282,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /invoices/{invoice_id}/merchant:
+  /invoices/{invoice_id}/merchants:
     get:
       security:
         - merchantBearerAuth: []
@@ -1402,6 +1402,127 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
+  /invoices/{invoice_id}/customers:
+    get:
+      security:
+        - customerBearerAuth: []
+      tags:
+        - Invoice
+      summary: "Get invoice by id by specific customer"
+      parameters:
+        - name: invoice_id
+          in: path
+          description: id invoice
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Get invoice by id success
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                    nullable: true
+                    default: null
+                  data:
+                    type: object
+                    properties:
+                      invoice_id:
+                        type: integer
+                      merchant_id:
+                        type: integer
+                      customer_id:
+                        type: integer
+                      customer_name:
+                        type: string
+                      customer_address:
+                        type: string
+                        nullable: true
+                        default: null
+                      payment_status_id:
+                        type: integer
+                      payment_status_name:
+                        type: string
+                      payment_type_id:
+                        type: integer
+                        nullable: true
+                        default: null
+                      payment_type_name:
+                        type: string
+                        nullable: true
+                        default: null
+                      merchant_bank_id:
+                        type: integer
+                        nullable: true
+                        default: null
+                      total_price:
+                        type: integer
+                      product_quantity:
+                        type: integer
+                      note:
+                        type: string
+                        nullable: true
+                        default: null
+                      message:
+                        type: string
+                        nullable: true
+                        default: null
+                      due_at:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                      invoice_detail:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            invoice_detail_id:
+                              type: integer
+                            product:
+                              type: string
+                            quantity:
+                              type: integer
+                            price:
+                              type: integer
+                            created_at:
+                              type: string
+                            updated_at:
+                              type: string
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "404":
+          description: not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        default: record not found
+                  data:
+                    type: object
+                    default: null
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+
   /invoices/reports:
     get:
       tags:

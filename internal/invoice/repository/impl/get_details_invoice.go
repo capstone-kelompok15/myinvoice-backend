@@ -10,7 +10,15 @@ import (
 )
 
 func (r *invoiceRepository) GetDetailInvoiceByID(ctx context.Context, req *dto.GetDetailsInvoicesRequest) (*dto.GetInvoiceDetailsByIDResponse, error) {
-	getAllInvoiceSQL, args, err := squirrel.
+	getDetailInvoiceBuilder := squirrel.StatementBuilder
+
+	if req.CustomerID != 0 {
+		getDetailInvoiceBuilder = getDetailInvoiceBuilder.Where(squirrel.Eq{"i.customer_id": req.CustomerID})
+	} else if req.MerchantID != 0 {
+		getDetailInvoiceBuilder = getDetailInvoiceBuilder.Where(squirrel.Eq{"i.merchant_id": req.MerchantID})
+	}
+
+	getAllInvoiceSQL, args, err := getDetailInvoiceBuilder.
 		Select(
 			"i.id AS invoice_id", "i.merchant_id AS merchant_id",
 			"i.customer_id AS customer_id", "cd.full_name AS customer_name", "cd.address AS customer_address",
