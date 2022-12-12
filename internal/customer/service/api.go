@@ -11,4 +11,6 @@ type CustomerService interface {
 	GetAllCustomer(ctx context.Context, req *dto.GetAllCustomerRequest) (*[]dto.GetAllCustomerRespond, error)
 	UpdateProfilePicture(ctx context.Context, userID *int, newProfilePictureURL *string) (*string, error)
 	UpdateCustomer(ctx context.Context, customerID *int, newData *dto.CustomerUpdateRequest) error
+	GetAllNotificationCustomer(ctx context.Context, customerID int, req *dto.NotificationRequest) (*[]dto.NotificationRespond, error)
+	MarkNotifCustomerAsRead(ctx context.Context, NotifID int, CustomerID int) error
 }

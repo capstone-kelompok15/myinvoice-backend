@@ -27,4 +27,6 @@ func InitMerchantRouter(params *MerchantRouterParams) {
 
 	merchantV1Group := params.E.Group(apiversioning.APIVersionOne + "/merchants")
 	merchantV1Group.GET("/dashboard", merchantHandler.GetDashboard(), params.Middleware.AdminMustAuthorized())
+	merchantV1Group.GET("/notifications", merchantHandler.GetAllNotificationMerchant(), params.Middleware.AdminMustAuthorized())
+	merchantV1Group.PUT("/notifications/:id", merchantHandler.MarkNotifMerchantAsRead(), params.Middleware.AdminMustAuthorized())
 }

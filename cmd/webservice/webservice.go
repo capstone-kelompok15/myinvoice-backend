@@ -17,6 +17,7 @@ import (
 	customerservice "github.com/capstone-kelompok15/myinvoice-backend/internal/customer/service/impl"
 	merchantrepository "github.com/capstone-kelompok15/myinvoice-backend/internal/merchant/repository/impl"
 	merchantservice "github.com/capstone-kelompok15/myinvoice-backend/internal/merchant/service/impl"
+	notificationrepository "github.com/capstone-kelompok15/myinvoice-backend/internal/notification/repository/impl"
 	pingservice "github.com/capstone-kelompok15/myinvoice-backend/internal/ping/service/impl"
 	customrepositorymiddleware "github.com/capstone-kelompok15/myinvoice-backend/pkg/middleware/repository/impl"
 	customservicemiddleware "github.com/capstone-kelompok15/myinvoice-backend/pkg/middleware/service/impl"
@@ -104,6 +105,15 @@ func InitWebService(params *WebServiceParams) error {
 		PingService: pingService,
 	})
 
+	// Notification
+	notificationRepository := notificationrepository.NewNotificationRepository(&notificationrepository.NotificationRepositoryParams{
+		DB: db,
+		Log: params.Log.WithFields(logrus.Fields{
+			"domain": "notification",
+			"layer":  "repository",
+		}),
+	})
+
 	// Auth
 	authRepository := authrepository.NewAuthRepository(&authrepository.AuthRepositoryParams{
 		DB: db,
@@ -144,6 +154,7 @@ func InitWebService(params *WebServiceParams) error {
 	})
 
 	customerService := customerservice.NewCustomerService(&customerservice.CustomerServiceParams{
+		RepoNotif:  notificationRepository,
 		Repo:       customerRepository,
 		Redis:      redis,
 		Mailgun:    mailgunClient,
@@ -204,8 +215,9 @@ func InitWebService(params *WebServiceParams) error {
 	})
 
 	merchantService := merchantservice.NewMerchantService(&merchantservice.MerchantServiceParams{
-		Repo:   merchantRepository,
-		Config: params.Config,
+		RepoNotif: notificationRepository,
+		Repo:      merchantRepository,
+		Config:    params.Config,
 		Log: params.Log.WithFields(logrus.Fields{
 			"domain": "bank",
 			"layer":  "service",
