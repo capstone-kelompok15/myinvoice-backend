@@ -24,7 +24,7 @@ paths:
     post:
       tags:
         - Auth Admin
-      summary: "[In Progress] Login admin"
+      summary: "Login admin"
       requestBody:
         content:
           application/json:
@@ -156,7 +156,7 @@ paths:
     post:
       tags:
         - Auth Admin
-      summary: "[In Progress] Refresh token for admin"
+      summary: "Refresh token for admin"
       requestBody:
         content:
           application/json:
@@ -440,41 +440,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /auth/reset/password/request/admin:
-    post:
-      tags:
-        - Auth Admin
-      summary: "[In Progress] Customer Reset Password (Request Forgot password By Email)"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/request_admin_body"
-        required: true
-      responses:
-        "200":
-          description: Send Email success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_200_4"
-        "400":
-          description: bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_400"
-        "500":
-          description: internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_500"
+
   /customers/notifications:
     get:
       tags:
         - Customer
-      summary: "[In Progress] Get customer notification"
+      summary: "Get customer notification"
       description: Get all notifications customer
       parameters:
         - name: page
@@ -520,14 +491,14 @@ paths:
                 $ref: "#/components/schemas/inline_response_500"
       security:
         - customerBearerAuth: []
-  /customers/notifications/{id}:
+  /customers/notifications/{notification_id}:
     put:
       tags:
         - Customer
-      summary: "[In Progress] Update notification is_read to true"
+      summary: "Mark notif customer as read"
       description: Update Notification status is_read to true
       parameters:
-        - name: id
+        - name: notification_id
           in: path
           description: notification id
           required: true
@@ -598,7 +569,7 @@ paths:
     put:
       tags:
         - Customer
-      summary: "[In Progress] update customer"
+      summary: "update customer"
       requestBody:
         content:
           application/json:
@@ -636,7 +607,7 @@ paths:
     get:
       tags:
         - Customer
-      summary: "[In Progress] Get all customer"
+      summary: "Get all customer"
       parameters:
         - name: page
           in: query
@@ -833,7 +804,7 @@ paths:
     get:
       tags:
         - Merchant
-      summary: "[In Progress] Get merchant notification"
+      summary: "Get merchant notification"
       description: Get all notifications merchant
       parameters:
         - name: page
@@ -879,14 +850,14 @@ paths:
                 $ref: "#/components/schemas/inline_response_500"
       security:
         - merchantBearerAuth: []
-  /merchants/notifications/{id}:
+  /merchants/notifications/{notification_id}:
     put:
       tags:
         - Merchant
-      summary: "[In Progress] Update notification is_read to true"
+      summary: "Mark notif merchant as read"
       description: Update Notification status is_read to true
       parameters:
-        - name: id
+        - name: notification_id
           in: path
           description: notification id
           required: true
@@ -1052,27 +1023,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /merchants/{id}:
+  /merchants/me:
     get:
+      security:
+        - merchantBearerAuth: []
       tags:
         - Merchant
-      summary: "[In Progress] Get merchant by id"
-      parameters:
-        - name: id
-          in: path
-          description: id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
+      summary: "[In Progress] Get merchant profile"
       responses:
         "200":
-          description: Get merchant by id
+          description: Get merchant profile success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/inline_response_200_14"
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  display_profile_url:
+                    type: string
+                  email:
+                    type: string
+                  username:
+                    type: string
+                  merchant_name:
+                    type: string
+                  merchant_address:
+                    type: string
+                  merchant_phone_number:
+                    type: string
         "400":
           description: bad request
           content:
@@ -1092,27 +1071,30 @@ paths:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
     put:
+      security:
+        - merchantBearerAuth: []
       tags:
         - Merchant
-      summary: "[In Progress] Update merchant by id"
-      parameters:
-        - name: id
-          in: path
-          description: id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
+      summary: "[In Progress] Update merchant profile"
       requestBody:
         description: payload
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/merchants_id_body"
+              type: object
+              properties:
+                username:
+                  type: string
+                merchant_name:
+                  type: string
+                merchant_phone_number:
+                  type: string
+                merchant_address:
+                  type: string
+
       responses:
         "200":
-          description: Update merchant by id success
+          description: Update merchant profile success
           content:
             application/json:
               schema:
@@ -1137,6 +1119,8 @@ paths:
                 $ref: "#/components/schemas/inline_response_500"
   /merchant/display_profile:
     put:
+      security:
+        - merchantBearerAuth: []
       tags:
         - Merchant
       summary: "[In Progress] Update display profile"
@@ -1204,9 +1188,9 @@ paths:
           explode: true
           schema:
             type: integer
-        - name: admin_id
+        - name: merchant_id
           in: query
-          description: filter by admin_id
+          description: filter by merchant_id
           required: false
           style: form
           explode: true
@@ -1241,7 +1225,7 @@ paths:
     get:
       tags:
         - Invoice
-      summary: "[In Progress] Get total payment"
+      summary: "[Deleted] Get total payment [This api will be deleted]"
       parameters:
         - name: payment_status
           in: query
@@ -1318,7 +1302,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/inline_response_200_19"
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    $ref: "#/components/schemas/inline_response_200_19_data"
         "400":
           description: bad request
           content:
@@ -1331,6 +1321,112 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_404"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /invoices/reports:
+    get:
+      tags:
+        - Invoice
+      summary: "[New] [In Progress] Get all invoices report"
+      parameters:
+        - name: payment_status
+          in: query
+          description: filter by payment status
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            enum:
+              - unpaid
+              - paid
+              - all
+        - name: range_time
+          in: query
+          description: filter by range time
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            enum:
+              - 1 weeks
+              - 1 months
+              - 3 months
+              - 1 years
+      responses:
+        "200":
+          description: Get all invoice reports
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total_invoice:
+                        type: integer
+                      total_bilss:
+                        type: integer
+                      total_paid:
+                        type: integer
+                      total_unpaid:
+                        type: integer
+                      invoices:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            invoice_id:
+                              type: integer
+                            payment_status:
+                              type: string
+                              enum:
+                                - unpaid
+                                - paid
+                            total_price:
+                              type: integer
+                            created_at:
+                              type: string
+                            updated_at:
+                              type: string
+                            merchant:
+                              $ref: "#/components/schemas/inline_response_200_19_merchant"
+                      grafik:
+                        type: object
+                        properties:
+                          paid:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                datetime:
+                                  type: string
+                                count:
+                                  type: integer
+                          unpaid:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                datetime:
+                                  type: string
+                                count:
+                                  type: integer
+
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
         "500":
           description: internal server error
           content:
@@ -1528,7 +1624,93 @@ paths:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
   /invoices:
+    # get:
+    #   tags:
+    #     - Invoice
+    #   summary: "[In Progress] Get all invoices "
+    #   parameters:
+    #     - name: page
+    #       in: query
+    #       description: page
+    #       required: true
+    #       style: form
+    #       explode: true
+    #       schema:
+    #         type: integer
+    #     - name: limit
+    #       in: query
+    #       description: page
+    #       required: true
+    #       style: form
+    #       explode: true
+    #       schema:
+    #         type: integer
+    #     - name: payment_status
+    #       in: query
+    #       description: filter by payment status
+    #       required: false
+    #       style: form
+    #       explode: true
+    #       schema:
+    #         type: string
+    #         enum:
+    #           - unpaid
+    #           - paid
+    #           - pending
+    #     - name: invoice_id
+    #       in: query
+    #       description: search by invoice_id
+    #       required: false
+    #       style: form
+    #       explode: true
+    #       schema:
+    #         type: integer
+    #     - name: merchant_id
+    #       in: query
+    #       description: filter by merchant_id
+    #       required: false
+    #       style: form
+    #       explode: true
+    #       schema:
+    #         type: integer
+    #     - name: customer_id
+    #       in: query
+    #       description: filter by customer_id
+    #       required: false
+    #       style: form
+    #       explode: true
+    #       schema:
+    #         type: integer
+    #     - name: range_time
+    #       in: query
+    #       description: filter by last ... days
+    #       required: false
+    #       style: form
+    #       explode: true
+    #       schema:
+    #         type: integer
+    #   responses:
+    #     "200":
+    #       description: Get all invoice success
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: "#/components/schemas/inline_response_200_19"
+    #     "400":
+    #       description: bad request
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: "#/components/schemas/inline_response_400"
+    #     "500":
+    #       description: internal server error
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: "#/components/schemas/inline_response_500"
     post:
+      security:
+        - merchantBearerAuth: []
       tags:
         - Invoice
       summary: "Create invoices"
@@ -1557,11 +1739,167 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
+  /invoices/{id}/confirm:
+    put:
+      tags:
+        - Invoice
+      summary: "[New] [In Progress] Confirm payment (for customer)"
+      description: "Confirm payment and send notif 'payment done' to merchant"
+      security:
+        - customerBearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: invoice id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Confirm payment success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: Confirm payment success
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "404":
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /invoices/{id}/reject:
+    put:
+      tags:
+        - Invoice
+      security:
+        - merchantBearerAuth: []
+      summary: "[New] [In Progress] Reject payment (for merchant)"
+      description: "Reject payment and send notif 'payment failed' to customer"
+      parameters:
+        - name: id
+          in: path
+          description: invoice id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+
+      responses:
+        "200":
+          description: Reject payment success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: Reject payment success
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "404":
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /invoices/{id}/accept:
+    put:
+      tags:
+        - Invoice
+      security:
+        - merchantBearerAuth: []
+      summary: "[New] [In Progress] Accept payment (for merchant)"
+      description: "Accept payment and send notif 'payment success' to customer"
+      parameters:
+        - name: id
+          in: path
+          description: invoice id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Accept payment success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: string
+                    default: Accept payment success
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "404":
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /invoices/{id}/status:
     put:
       tags:
         - Invoice
-      summary: "[In Progress] Update invoices status"
+      summary: "[Deleted] Update invoices status (this api will be deleted)"
       parameters:
         - name: id
           in: path
@@ -1762,7 +2100,7 @@ components:
     customers_me_body:
       type: object
       properties:
-        name:
+        full_name:
           type: string
         address:
           type: string
@@ -1815,7 +2153,7 @@ components:
           type: string
         data:
           type: string
-          default: Update notification success
+          default: Mark notif customer as read success
     inline_response_200_20:
       type: object
       properties:
@@ -1852,6 +2190,8 @@ components:
       type: object
       properties:
         id:
+          type: integer
+        invoice_id:
           type: integer
         notification_type:
           type: string
@@ -1891,8 +2231,6 @@ components:
         email:
           type: string
         display_profile_url:
-          type: string
-        phone_number:
           type: string
         address:
           type: string
@@ -1993,9 +2331,32 @@ components:
     inline_response_200_19_data:
       type: object
       properties:
-        data:
+        id:
+          type: integer
+        payment_status:
           type: string
-          default: "New invoice created!"
+          enum:
+            - unpaid
+            - paid
+            - pending
+        total_price:
+          type: integer
+        due_at:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        merchant:
+          $ref: "#/components/schemas/inline_response_200_19_merchant"
+        customer:
+          $ref: "#/components/schemas/inline_response_200_19_customer"
+        payment_method:
+          $ref: "#/components/schemas/inline_response_200_19_payment_method"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/inline_response_200_19_items"
     inline_response_200_19:
       type: object
       properties:
