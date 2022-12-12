@@ -33,3 +33,16 @@ type AdminRefreshToken struct {
 type AdminRefreshTokenRequest struct {
 	RefreshToken string `json:"refresh_token" validate:"required"`
 }
+
+type AdminEmailVerification struct {
+	Email string `json:"email" validate:"required,email"`
+	Code  string `json:"code" validate:"required,min=32,max=32"`
+}
+
+type AdminRefreshEmailVerificationCode struct {
+	Email string `json:"email" validate:"required,email"`
+}
+
+type AdminResetPasswordRequest struct {
+	Email string `json:"email"`
+}

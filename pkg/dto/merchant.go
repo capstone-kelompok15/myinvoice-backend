@@ -35,8 +35,37 @@ type RecentPaymentMerchantDashboard struct {
 	PaymentType string `json:"payment_type" db:"payment_type"`
 }
 
-type MerchantDashbaord struct {
+type MerchantDashboard struct {
 	OverviewMerchantDashboard      `json:"overview"`
 	RecentInvoiceMerchantDashboard []RecentInvoiceMerchantDashboard `json:"recent_invoice"`
 	RecentPaymentMerchantDashboard []RecentPaymentMerchantDashboard `json:"recent_payment"`
+}
+
+type AdminResetPassword struct {
+	Email    string `json:"email" validate:"required"`
+	Password string `json:"password" validate:"required,min=8"`
+	Code     string `json:"code" validate:"required"`
+}
+
+type GetMerchantBankRequest struct {
+	MerchantID int `param:"merchant_id"`
+}
+
+type GetMerchantBankResponse struct {
+	BankName   string `json:"bank_name" db:"bank_name"`
+	BankCode   string `json:"bank_code" db:"bank_code"`
+	OnBehalfOf string `json:"on_behalf_of" db:"on_behalf_of"`
+	BankNumber string `json:"bank_number" db:"bank_number"`
+}
+
+type MerchantBankData struct {
+	BankID     int    `json:"bank_id" validate:"required"`
+	OnBehalfOf string `json:"on_behalf_of" validate:"required"`
+	BankNumber string `json:"bank_number" validate:"required"`
+}
+
+type UpdateMerchantBankDataRequest struct {
+	MerchantBankData
+	MerchantBankID int `param:"merchant_bank_id" validate:"required"`
+	MerchantID     int
 }

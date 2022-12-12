@@ -6,9 +6,9 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 )
 
-func (s *merchantService) GetDashboard(ctx context.Context, merchantID int) (*dto.MerchantDashbaord, error) {
+func (s *merchantService) GetDashboard(ctx context.Context, merchantID int) (*dto.MerchantDashboard, error) {
 	errChan := make(chan error, 3)
-	var merchantDashboard dto.MerchantDashbaord
+	var merchantDashboard dto.MerchantDashboard
 
 	go func() {
 		overviewMerchantDashboard, err := s.repo.GetDashboardInvoiceOverview(ctx, merchantID)

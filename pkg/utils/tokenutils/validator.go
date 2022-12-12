@@ -27,7 +27,9 @@ func ValidateAccessToken(conf *config.JWTConfig, accessToken string) (*dto.Admin
 		return nil, customerrors.ErrUnauthorized
 	}
 	user := dto.AdminContext{
-		ID: int(mapClaims["id"].(float64)),
+		ID:           int(mapClaims["id"].(float64)),
+		MerchantID:   int(mapClaims["merchant_id"].(float64)),
+		MerchantName: mapClaims["merchant_name"].(string),
 	}
 
 	return &user, nil

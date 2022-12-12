@@ -6,6 +6,7 @@ import (
 	authrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/auth/router"
 	bankrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/bank/router"
 	customerrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/customer/router"
+	invoicerouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/invoice/router"
 	merchantrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/merchant/router"
 	pingrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/ping/router"
 	"github.com/capstone-kelompok15/myinvoice-backend/config"
@@ -15,6 +16,8 @@ import (
 	bankservice "github.com/capstone-kelompok15/myinvoice-backend/internal/bank/service/impl"
 	customerrepository "github.com/capstone-kelompok15/myinvoice-backend/internal/customer/repository/impl"
 	customerservice "github.com/capstone-kelompok15/myinvoice-backend/internal/customer/service/impl"
+	invoicerepository "github.com/capstone-kelompok15/myinvoice-backend/internal/invoice/repository/impl"
+	invoiceservice "github.com/capstone-kelompok15/myinvoice-backend/internal/invoice/service/impl"
 	merchantrepository "github.com/capstone-kelompok15/myinvoice-backend/internal/merchant/repository/impl"
 	merchantservice "github.com/capstone-kelompok15/myinvoice-backend/internal/merchant/service/impl"
 	notificationrepository "github.com/capstone-kelompok15/myinvoice-backend/internal/notification/repository/impl"
@@ -231,6 +234,35 @@ func InitWebService(params *WebServiceParams) error {
 		Middleware: middleware,
 		Log: params.Log.WithFields(logrus.Fields{
 			"domain": "merchant",
+			"layer":  "handler",
+		}),
+	})
+
+	// Invoices
+	invoiceRepository := invoicerepository.NewInvoiceRepository(&invoicerepository.InvoiceRepositoryParams{
+		DB: db,
+		Log: params.Log.WithFields(logrus.Fields{
+			"domain": "invoice",
+			"layer":  "repository",
+		}),
+	})
+
+	invoiceService := invoiceservice.NewInvoiceService(&invoiceservice.InvoiceService{
+		Repo:   invoiceRepository,
+		Config: params.Config,
+		Log: params.Log.WithFields(logrus.Fields{
+			"domain": "invoice",
+			"layer":  "service",
+		}),
+	})
+
+	invoicerouter.InitInvoiceRouter(&invoicerouter.InvoiceRouterParams{
+		E:          e,
+		Validator:  validator,
+		Service:    invoiceService,
+		Middleware: middleware,
+		Log: params.Log.WithFields(logrus.Fields{
+			"domain": "invoice",
 			"layer":  "handler",
 		}),
 	})

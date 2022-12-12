@@ -186,7 +186,7 @@ paths:
     post:
       tags:
         - Auth Admin
-      summary: "[In Progress] Admin Email Verification"
+      summary: "Admin Email Verification"
       requestBody:
         content:
           application/json:
@@ -242,10 +242,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /auth/verification/refresh:
+  /auth/verification/customer/refresh:
     post:
       tags:
-        - Auth
+        - Auth Customer
       summary: Refresh Email Verification Code
       requestBody:
         content:
@@ -278,7 +278,79 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /auth/reset/password/request/customer:
+  /auth/verification/admin/refresh:
+    post:
+      tags:
+        - Auth Admin
+      summary: Refresh Email Verification Code
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/verification_refresh_body"
+        required: true
+      responses:
+        "201":
+          description: Refresh Email Verification Code success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  data:
+                    type: string
+                    default: New code sent!
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "404":
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /auth/reset/password/admin/request:
+    post:
+      tags:
+        - Auth Admin
+      summary: Admin Reset Password (Request Forgot password By Email)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/request_customer_body"
+        required: true
+      responses:
+        "200":
+          description: Send Email success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_200_4"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /auth/reset/password/customer/request:
     post:
       tags:
         - Auth Customer
@@ -296,6 +368,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_200_4"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /auth/reset/password/admin:
+    post:
+      tags:
+        - Auth Admin
+      summary: Admin Reset Password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/password_customer_body"
+        required: true
+      responses:
+        "200":
+          description: Customer Reset Password success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_200_5"
         "400":
           description: bad request
           content:
@@ -356,36 +458,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_200_4"
-        "400":
-          description: bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_400"
-        "500":
-          description: internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_500"
-  /auth/reset/password/admin:
-    post:
-      tags:
-        - Auth Admin
-      summary: "[In Progress] Admin Reset Password (When Forgot Password)"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/password_admin_body"
-        required: true
-      responses:
-        "200":
-          description: Admin Reset Password success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_200_5"
         "400":
           description: bad request
           content:
@@ -849,17 +921,109 @@ paths:
                 $ref: "#/components/schemas/inline_response_500"
       security:
         - merchantBearerAuth: []
+  /merchants/banks/{merchant_bank_id}:
+    put:
+      tags:
+        - Merchant
+      summary: "Update merchant bank"
+      parameters:
+        - name: merchant_bank_id
+          in: path
+          description: filter by merchant_id
+          required: true
+          explode: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success change the bank
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        nullable: true
+                        default: null
+                  data:
+                    type: string
+                    default: Update Merchant Bank Success!
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "404":
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        default: record not found
+                  data:
+                    type: string
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /merchants/banks:
+    post:
+      tags:
+        - Merchant
+      summary: "Create new merchant bank"
+      responses:
+        "201":
+          description: Success to create new bank
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        nullable: true
+                        default: null
+                  data:
+                    type: string
+                    default: New Merchant Bank Created!
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /merchants/{merchant_id}/banks:
     get:
       tags:
         - Merchant
-      summary: "[In Progress] Get list of merchant bank"
+      summary: "Get list of merchant bank"
       parameters:
         - name: merchant_id
-          in: query
+          in: path
           description: filter by merchant_id
           required: true
-          style: form
           explode: true
           schema:
             type: string
@@ -1253,7 +1417,7 @@ paths:
     post:
       tags:
         - Invoice
-      summary: "[In Progress] Create invoices"
+      summary: "Create invoices"
       requestBody:
         content:
           application/json:

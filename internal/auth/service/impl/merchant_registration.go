@@ -14,7 +14,7 @@ import (
 )
 
 func (s *authService) MerchantRegistration(ctx context.Context, req *dto.MerchantRegisterRequest) error {
-	exist, valid, err := s.repo.CheckAdminEmailExistAndValid(ctx, req)
+	exist, valid, err := s.repo.CheckAdminEmailExistAndValid(ctx, req.Email)
 	if err != nil && err != sql.ErrNoRows {
 		s.log.Warningln("[CustomerRegistration] Error while checking the existence of the email", err.Error())
 		return err
@@ -54,7 +54,7 @@ func (s *authService) MerchantRegistration(ctx context.Context, req *dto.Merchan
 		return err
 	}
 
-	err = s.redis.Set(ctx, fmt.Sprintf("merchant-regis:%s", req.Email), code, 10*time.Minute).Err()
+	err = s.redis.Set(ctx, fmt.Sprintf(dto.MerchantEmailVerifRedisKey, req.Email), code, 10*time.Minute).Err()
 	if err != nil {
 		s.log.Warningln("[CustomerRegistration] Error while setting code to the redis:", err.Error())
 		return err

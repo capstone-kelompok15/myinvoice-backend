@@ -4,14 +4,13 @@ import (
 	"context"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 )
 
-func (r *authRepository) CheckAdminEmailExistAndValid(ctx context.Context, params *dto.MerchantRegisterRequest) (exists, valid bool, err error) {
+func (r *authRepository) CheckAdminEmailExistAndValid(ctx context.Context, email string) (exists, valid bool, err error) {
 	getCustomerVerifyStatusSQL, args, err := squirrel.
 		Select("is_verified").
 		From("admins").
-		Where(squirrel.Eq{"email": params.Email}).
+		Where(squirrel.Eq{"email": email}).
 		ToSql()
 	if err != nil {
 		return false, false, err
