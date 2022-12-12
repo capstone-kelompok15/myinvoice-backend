@@ -1,0 +1,1 @@
+ALTER TABLE customer_details ADD COLUMN phone_number text;

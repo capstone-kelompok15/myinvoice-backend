@@ -19,11 +19,11 @@ func (r *invoiceRepository) CreateInvoice(ctx context.Context, merchantID int, r
 		Insert("invoices").
 		Columns(
 			"merchant_id", "customer_id",
-			"payment_status_id", "due_at",
+			"payment_status_id", "due_at", "note",
 		).
 		Values(
 			merchantID, req.CustomerID,
-			1, req.DueAt,
+			1, req.DueAt, req.Note,
 		).
 		ToSql()
 	if err != nil {

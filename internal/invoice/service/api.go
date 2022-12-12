@@ -9,4 +9,5 @@ import (
 type InvoiceService interface {
 	CreateInvoice(ctx context.Context, merchantID int, req *dto.CreateInvoiceRequest) error
 	GetAllInvoice(ctx context.Context, req *dto.GetAllInvoicesParam) (*[]dto.GetInvoiceResponse, int, error)
+	GetDetailInvoiceByID(ctx context.Context, req *dto.GetDetailsInvoicesRequest) (*dto.GetInvoiceDetailsByIDResponse, error)
 }
