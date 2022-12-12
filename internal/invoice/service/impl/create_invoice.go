@@ -27,7 +27,7 @@ func (s *invoiceService) CreateInvoice(ctx context.Context, merchantID int, req 
 
 	mg := s.mailgun.NewMessage(
 		s.config.Mailgun.SenderEmail,
-		"myInvoice - Your Email Verification Code",
+		"myInvoice - You Have New Invoice",
 		// TODO: Need to change to the html template
 		content,
 		*email,
