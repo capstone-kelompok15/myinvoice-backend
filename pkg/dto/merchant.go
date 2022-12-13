@@ -45,10 +45,16 @@ type MerchantProfileResponse struct {
 	ID                  int     `json:"id" db:"id"`
 	Username            string  `json:"username" db:"username"`
 	Email               string  `json:"email" db:"email"`
-	DisplayProfileURL   *string `json:"display_profile_url" db:"display_profile_url"`
 	MerchantName        string  `json:"merchant_name" db:"merchant_name"`
+	DisplayProfileURL   *string `json:"display_profile_url" db:"display_profile_url"`
 	MerchantPhoneNumber *string `json:"merchant_phone_number" db:"merchant_phone_number"`
 	MerchantAddress     *string `json:"merchant_address" db:"merchant_address"`
+}
+
+type MerchantBriefDate struct {
+	Username     string `db:"username"`
+	Email        string `db:"email"`
+	MerchantName string `db:"merchant_name"`
 }
 
 type AdminResetPassword struct {
