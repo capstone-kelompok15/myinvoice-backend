@@ -1,30 +1,25 @@
 package handler
 
 import (
-	"strconv"
-
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/httputils"
 	"github.com/labstack/echo/v4"
 )
 
-func (h *invoiceHandler) RejectPayment() echo.HandlerFunc {
+func (h *invoiceHandler) UpdatePaymentMethod() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		invoiceID, err := strconv.Atoi(c.Param("invoice_id"))
-		if err != nil || invoiceID == 0 {
-			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
-				Err: customerrors.ErrBadRequest,
-			})
-		}
+
 		req := struct {
-			Message string `json:"message" validate:"required"`
+			InvoiceID      int `param:"invoice_id" validate:"required"`
+			MerchantBankID int `json:"merchant_bank_id" validate:"required"`
 		}{}
-		err = c.Bind(&req)
+		err := c.Bind(&req)
 		if err != nil {
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: customerrors.ErrBadRequest,
 			})
 		}
+
 		err = h.validator.StructCtx(c.Request().Context(), req)
 		if err != nil {
 			errStr := h.validator.TranslateValidatorError(err)
@@ -33,7 +28,7 @@ func (h *invoiceHandler) RejectPayment() echo.HandlerFunc {
 				Detail: errStr,
 			})
 		}
-		err = h.service.RejectPayment(c.Request().Context(), invoiceID, req.Message)
+		err = h.service.UpdatePaymentMethod(c.Request().Context(), req.InvoiceID, req.MerchantBankID)
 		if err != nil {
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: err,
@@ -42,7 +37,7 @@ func (h *invoiceHandler) RejectPayment() echo.HandlerFunc {
 
 		return httputils.WriteResponse(c, httputils.SuccessResponseParams{
 			Code: 200,
-			Data: "Reject payment success",
+			Data: "Update payment method success",
 		})
 	}
 }

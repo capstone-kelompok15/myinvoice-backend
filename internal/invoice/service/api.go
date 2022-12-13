@@ -16,4 +16,5 @@ type InvoiceService interface {
 	AcceptPayment(ctx context.Context, invoiceID int) error
 	RejectPayment(ctx context.Context, invoiceID int, message string) error
 	GetReport(ctx context.Context, params *dto.ReportParams) (*dto.ReportResponse, error)
+	UpdatePaymentMethod(ctx context.Context, invoiceID int, merchantBankID int) error
 }
