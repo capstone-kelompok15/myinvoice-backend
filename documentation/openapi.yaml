@@ -1282,6 +1282,79 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
+  /invoices/merchants/customers:
+    get:
+      security:
+        - merchantBearerAuth: []
+      tags:
+        - Invoice
+      summary: "Get customer list that have invoice to specific merchant"
+      parameters:
+        - name: limit
+          in: query
+          description: limit
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: offset
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Get customer list success
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                    nullable: true
+                    default: null
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        full_name:
+                          type: string
+                        email:
+                          type: string
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "404":
+          description: not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        default: record not found
+                  data:
+                    type: object
+                    default: null
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /invoices/{invoice_id}/merchants:
     get:
       security:
