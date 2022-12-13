@@ -1029,7 +1029,7 @@ paths:
         - merchantBearerAuth: []
       tags:
         - Merchant
-      summary: "[In Progress] Get merchant profile"
+      summary: "Get merchant profile"
       responses:
         "200":
           description: Get merchant profile success

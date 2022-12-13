@@ -1,0 +1,1 @@
+ALTER TABLE merchant_details DROP COLUMN merchant_phone_number;
