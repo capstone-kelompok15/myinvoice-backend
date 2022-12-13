@@ -1,1 +1,0 @@
-ALTER TABLE invoices MODIFY COLUMN payment_type_id int NOT NULL;
