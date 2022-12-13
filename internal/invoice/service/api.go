@@ -14,5 +14,6 @@ type InvoiceService interface {
 	UploadPayment(ctx context.Context, customerID int, invoiceID int, filePath string) error
 	ConfirmPayment(ctx context.Context, invoiceID int) error
 	AcceptPayment(ctx context.Context, invoiceID int) error
+	RejectPayment(ctx context.Context, invoiceID int, message string) error
 	GetReport(ctx context.Context, params *dto.ReportParams) (*dto.ReportResponse, error)
 }
