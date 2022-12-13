@@ -78,3 +78,8 @@ type GetInvoiceDetail struct {
 	CreatedAt       string `json:"created_at" db:"created_at"`
 	UpdatedAt       string `json:"updated_at" db:"updated_at"`
 }
+
+type GetMerchantCustomerList struct {
+	*PaginationFilter
+	MerchantID int
+}

@@ -21,6 +21,7 @@ type GetAllCustomerRequest struct {
 	Name  string `query:"name"`
 	Email string `query:"email"`
 }
+
 type GetAllCustomerRespond struct {
 	ID                int     `json:"id" db:"id"`
 	FullName          string  `json:"full_name" db:"full_name"`
@@ -91,4 +92,10 @@ type PayloadCustomerTokenPart struct {
 
 type UpdateProfilePictureResponse struct {
 	ImageURL string `json:"image_url"`
+}
+
+type BriefCustomer struct {
+	ID       int    `json:"id" db:"id"`
+	FullName string `json:"full_name" db:"full_name"`
+	Email    string `json:"email" db:"email"`
 }
