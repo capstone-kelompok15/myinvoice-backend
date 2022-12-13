@@ -249,9 +249,10 @@ func InitWebService(params *WebServiceParams) error {
 	})
 
 	invoiceService := invoiceservice.NewInvoiceService(&invoiceservice.InvoiceService{
-		Repo:    invoiceRepository,
-		Config:  params.Config,
-		Mailgun: mailgunClient,
+		RepoNotif: notificationRepository,
+		Repo:      invoiceRepository,
+		Config:    params.Config,
+		Mailgun:   mailgunClient,
 		Log: params.Log.WithFields(logrus.Fields{
 			"domain": "invoice",
 			"layer":  "service",
