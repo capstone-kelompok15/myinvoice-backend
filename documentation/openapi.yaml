@@ -1221,67 +1221,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /invoices/payment:
-    get:
-      tags:
-        - Invoice
-      summary: "[Deleted] Get total payment [This api will be deleted]"
-      parameters:
-        - name: payment_status
-          in: query
-          description: filter by payment status
-          required: false
-          style: form
-          explode: true
-          schema:
-            type: string
-            enum:
-              - unpaid
-              - paid
-              - pending
-        - name: range_time
-          in: query
-          description: filter by last ... days
-          required: false
-          style: form
-          explode: true
-          schema:
-            type: integer
-        - name: customer_id
-          in: query
-          description: filter by customer_id
-          required: false
-          style: form
-          explode: true
-          schema:
-            type: integer
-        - name: admin_id
-          in: query
-          description: filter by admin_id
-          required: false
-          style: form
-          explode: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Get total payment success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_200_18"
-        "400":
-          description: bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_400"
-        "500":
-          description: internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_500"
   /invoices/merchants/customers:
     get:
       security:
@@ -2040,7 +1979,7 @@ paths:
     put:
       tags:
         - Invoice
-      summary: "[New] [In Progress] Confirm payment (for customer)"
+      summary: "Confirm payment (for customer)"
       description: "Confirm payment and send notif 'payment done' to merchant"
       security:
         - customerBearerAuth: []
@@ -2174,51 +2113,6 @@ paths:
                   data:
                     type: string
                     default: Accept payment success
-        "400":
-          description: bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_400"
-        "404":
-          description: not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_404"
-        "500":
-          description: internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_500"
-  /invoices/{id}/status:
-    put:
-      tags:
-        - Invoice
-      summary: "[Deleted] Update invoices status (this api will be deleted)"
-      parameters:
-        - name: id
-          in: path
-          description: invoice id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/id_status_body"
-        required: true
-      responses:
-        "200":
-          description: Create invoice success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_200_20"
         "400":
           description: bad request
           content:
