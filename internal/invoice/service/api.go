@@ -12,4 +12,5 @@ type InvoiceService interface {
 	GetDetailInvoiceByID(ctx context.Context, req *dto.GetDetailsInvoicesRequest) (*dto.GetInvoiceDetailsByIDResponse, error)
 	GetCustomers(ctx context.Context, req *dto.GetMerchantCustomerList) (*[]dto.BriefCustomer, int, error)
 	UploadPayment(ctx context.Context, customerID int, invoiceID int, filePath string) error
+	ConfirmPayment(ctx context.Context, invoiceID int) error
 }

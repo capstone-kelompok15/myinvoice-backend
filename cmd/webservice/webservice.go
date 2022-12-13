@@ -249,6 +249,7 @@ func InitWebService(params *WebServiceParams) error {
 	})
 
 	invoiceService := invoiceservice.NewInvoiceService(&invoiceservice.InvoiceService{
+		RepoNotif:  notificationRepository,
 		Repo:       invoiceRepository,
 		Config:     params.Config,
 		Mailgun:    mailgunClient,

@@ -84,3 +84,7 @@ type GetMerchantCustomerList struct {
 	*PaginationFilter
 	MerchantID int
 }
+type GetInvoiceByID struct {
+	CustomerID int `db:"customer_id"`
+	MerchantID int `db:"merchant_id"`
+}
