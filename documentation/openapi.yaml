@@ -1517,6 +1517,8 @@ paths:
                         type: string
                         nullable: true
                         default: null
+                      approval_document_url:
+                        type: string
                       payment_status_id:
                         type: integer
                       payment_status_name:
