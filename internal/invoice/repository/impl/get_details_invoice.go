@@ -20,7 +20,7 @@ func (r *invoiceRepository) GetDetailInvoiceByID(ctx context.Context, req *dto.G
 
 	getAllInvoiceSQL, args, err := getDetailInvoiceBuilder.
 		Select(
-			"i.id AS invoice_id", "i.merchant_id AS merchant_id",
+			"i.id AS invoice_id", "i.merchant_id AS merchant_id", "i.approval_document_url AS approval_document_url",
 			"i.customer_id AS customer_id", "cd.full_name AS customer_name", "cd.address AS customer_address",
 			"i.payment_status_id AS payment_status_id", "ps.status_name AS payment_status_name",
 			"i.payment_type_id AS payment_type_id", "pt.payment_type_name AS payment_type_name",

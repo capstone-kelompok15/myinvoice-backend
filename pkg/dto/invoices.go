@@ -50,24 +50,25 @@ type GetInvoiceResponse struct {
 }
 
 type GetInvoiceDetailsByIDResponse struct {
-	InvoiceID         int                `json:"invoice_id" db:"invoice_id"`
-	MerchantID        int                `json:"merchant_id" db:"merchant_id"`
-	CustomerID        int                `json:"customer_id" db:"customer_id"`
-	CustomerName      string             `json:"customer_name" db:"customer_name"`
-	CustomerAddress   *string            `json:"customer_address" db:"customer_address"`
-	PaymentStatusID   int                `json:"payment_status_id" db:"payment_status_id"`
-	PaymentStatusName string             `json:"payment_status_name" db:"payment_status_name"`
-	PaymentTypeID     *int               `json:"payment_type_id" db:"payment_type_id"`
-	PaymentTypeName   *string            `json:"payment_type_name" db:"payment_type_name"`
-	MerchantBankID    *int               `json:"merchant_bank_id" db:"merchant_bank_id"`
-	TotalPrice        int64              `json:"total_price" db:"total_price"`
-	ProductQuantity   int                `json:"product_quantity" db:"product_quantity"`
-	Note              *string            `json:"note" db:"note"`
-	Message           *string            `json:"message" db:"message"`
-	DueAt             string             `json:"due_at" db:"due_at"`
-	CreatedAt         string             `json:"created_at" db:"created_at"`
-	UpdatedAt         string             `json:"updated_at" db:"updated_at"`
-	InvoiceDetail     []GetInvoiceDetail `json:"invoice_detail"`
+	InvoiceID           int                `json:"invoice_id" db:"invoice_id"`
+	MerchantID          int                `json:"merchant_id" db:"merchant_id"`
+	CustomerID          int                `json:"customer_id" db:"customer_id"`
+	CustomerName        string             `json:"customer_name" db:"customer_name"`
+	CustomerAddress     *string            `json:"customer_address" db:"customer_address"`
+	ApprovalDocumentURL *string            `json:"approval_document_url" db:"approval_document_url"`
+	PaymentStatusID     int                `json:"payment_status_id" db:"payment_status_id"`
+	PaymentStatusName   string             `json:"payment_status_name" db:"payment_status_name"`
+	PaymentTypeID       *int               `json:"payment_type_id" db:"payment_type_id"`
+	PaymentTypeName     *string            `json:"payment_type_name" db:"payment_type_name"`
+	MerchantBankID      *int               `json:"merchant_bank_id" db:"merchant_bank_id"`
+	TotalPrice          int64              `json:"total_price" db:"total_price"`
+	ProductQuantity     int                `json:"product_quantity" db:"product_quantity"`
+	Note                *string            `json:"note" db:"note"`
+	Message             *string            `json:"message" db:"message"`
+	DueAt               string             `json:"due_at" db:"due_at"`
+	CreatedAt           string             `json:"created_at" db:"created_at"`
+	UpdatedAt           string             `json:"updated_at" db:"updated_at"`
+	InvoiceDetail       []GetInvoiceDetail `json:"invoice_detail"`
 }
 
 type GetInvoiceDetail struct {

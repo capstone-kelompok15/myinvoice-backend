@@ -1414,6 +1414,90 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
+  /invoices/{invoice_id}/payments/upload:
+    patch:
+      security:
+        - customerBearerAuth: []
+      tags:
+        - Invoice
+      summary: "Upload payment for customer"
+      parameters:
+        - name: invoice_id
+          in: path
+          description: id invoice
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                payment:
+                  type: string
+                  format: binary
+              required:
+                - payment
+      responses:
+        "200":
+          description: Upload success
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: object
+                    nullable: true
+                    default: null
+                  data:
+                    type: string
+                    nullable: true
+                    default: "Upload Successful!"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: object
+                    nullable: true
+                    default: null
+                    properties:
+                      message:
+                        type: string
+                        default: "bad request"
+                  data:
+                    type: string
+                    nullable: true
+                    default: null
+        "404":
+          description: Invoice ID not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: object
+                    nullable: true
+                    default: null
+                    properties:
+                      message:
+                        type: string
+                        default: "record not found"
+                  data:
+                    type: string
+                    nullable: true
+                    default: null
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /invoices/{invoice_id}/customers:
     get:
       security:
@@ -1456,6 +1540,8 @@ paths:
                         type: string
                         nullable: true
                         default: null
+                      approval_document_url:
+                        type: string
                       payment_status_id:
                         type: integer
                       payment_status_name:
@@ -1683,7 +1769,7 @@ paths:
             type: integer
         - name: start_date
           in: query
-          description: filter by start date
+          description: "filter by start date please use `YYYY-MM-DD` format, <br> Example: 14 December 2022 is `2022-12-14`"
           required: false
           style: form
           explode: true
@@ -1691,7 +1777,7 @@ paths:
             type: integer
         - name: end_date
           in: query
-          description: filter by end date
+          description: "filter by end date please use `YYYY-MM-DD` format, <br> Example: 14 December 2022 is `2022-12-14`"
           required: false
           style: form
           explode: true
@@ -1788,7 +1874,7 @@ paths:
             type: integer
         - name: start_date
           in: query
-          description: filter by start date
+          description: "filter by start date please use `YYYY-MM-DD` format, <br> Example: 14 December 2022 is `2022-12-14`"
           required: false
           style: form
           explode: true
@@ -1796,7 +1882,7 @@ paths:
             type: integer
         - name: end_date
           in: query
-          description: filter by end date
+          description: "filter by end date please use `YYYY-MM-DD` format, <br> Example: 14 December 2022 is `2022-12-14`"
           required: false
           style: form
           explode: true

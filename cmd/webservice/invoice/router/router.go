@@ -32,6 +32,7 @@ func InitInvoiceRouter(params *InvoiceRouterParams) {
 	invoiceV1Group.GET("/:invoice_id/merchants", invoiceHandler.MerchantGetDetailInvoiceByID(), params.Middleware.AdminMustAuthorized())
 	invoiceV1Group.GET("/:invoice_id/customers", invoiceHandler.CustomerGetDetailInvoiceByID(), params.Middleware.CustomerMustAuthorized())
 	invoiceV1Group.GET("/merchants/customers", invoiceHandler.GetCustomers(), params.Middleware.AdminMustAuthorized())
+	invoiceV1Group.PATCH("/:invoice_id/payments/upload", invoiceHandler.UploadPayment(), params.Middleware.CustomerMustAuthorized())
 	invoiceV1Group.PUT("/:invoice_id/confirm", invoiceHandler.ConfirmPayment(), params.Middleware.CustomerMustAuthorized())
 	invoiceV1Group.PUT("/:invoice_id/accept", invoiceHandler.AcceptPayment(), params.Middleware.AdminMustAuthorized())
 }
