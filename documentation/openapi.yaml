@@ -2088,7 +2088,7 @@ paths:
         - Invoice
       security:
         - merchantBearerAuth: []
-      summary: "[New] [In Progress] Accept payment (for merchant)"
+      summary: "Accept payment (for merchant)"
       description: "Accept payment and send notif 'payment success' to customer"
       parameters:
         - name: id
