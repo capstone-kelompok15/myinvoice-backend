@@ -2309,7 +2309,7 @@ paths:
     put:
       tags:
         - Invoice
-      summary: "[In Progress] Update payment method"
+      summary: "Update payment method"
       parameters:
         - name: id
           in: path
