@@ -7,11 +7,11 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 )
 
-func (r *invoiceRepository) CreateInvoice(ctx context.Context, merchantID int, req *dto.CreateInvoiceRequest) error {
+func (r *invoiceRepository) CreateInvoice(ctx context.Context, merchantID int, req *dto.CreateInvoiceRequest) (int, error) {
 	tx, err := r.db.BeginTxx(ctx, nil)
 	if err != nil {
 		r.log.Warningln("[CreateInvoice] Error on creating database transaction:", err.Error())
-		return err
+		return 0, err
 	}
 	defer tx.Rollback()
 
@@ -28,19 +28,19 @@ func (r *invoiceRepository) CreateInvoice(ctx context.Context, merchantID int, r
 		ToSql()
 	if err != nil {
 		r.log.Warningln("[CreateInvoice] Error on build sql on create invoice:", err.Error())
-		return err
+		return 0, err
 	}
 
 	res, err := tx.ExecContext(ctx, createInvoiceSQL, args1...)
 	if err != nil {
 		r.log.Warningln("[CreateInvoice] Error on create invoice:", err.Error())
-		return err
+		return 0, err
 	}
 
 	invoiceID, err := res.LastInsertId()
 	if err != nil {
 		r.log.Warningln("[CreateInvoice] Error on get last insert ID:", err.Error())
-		return err
+		return 0, err
 	}
 
 	createInvoiceDetails := squirrel.
@@ -54,20 +54,20 @@ func (r *invoiceRepository) CreateInvoice(ctx context.Context, merchantID int, r
 	createInvoiceDetailsSQL, args2, err := createInvoiceDetails.ToSql()
 	if err != nil {
 		r.log.Warningln("[CreateInvoice] Error on build sql on create invoice detail:", err.Error())
-		return err
+		return 0, err
 	}
 
 	_, err = tx.ExecContext(ctx, createInvoiceDetailsSQL, args2...)
 	if err != nil {
 		r.log.Warningln("[CreateInvoice] Error executing invoice detail:", err.Error())
-		return err
+		return 0, err
 	}
 
 	err = tx.Commit()
 	if err != nil {
 		r.log.Warningln("[CreateInvoice] Error on commit the transaction:", err.Error())
-		return err
+		return 0, err
 	}
 
-	return nil
+	return int(invoiceID), nil
 }
