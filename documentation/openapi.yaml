@@ -440,7 +440,49 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
+  /customers/notifications/unread_count:
+    get:
+      tags:
+        - Customer
+      summary: "[In Progress] Get unread notification count"
 
+      responses:
+        "200":
+          description: Get notifications success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: object
+                    properties:
+                      unread_count:
+                        type: integer
+
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "404":
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+      security:
+        - merchantBearerAuth: []
   /customers/notifications:
     get:
       tags:
@@ -850,6 +892,49 @@ paths:
                 $ref: "#/components/schemas/inline_response_500"
       security:
         - merchantBearerAuth: []
+  /merchants/notifications/unread_count:
+    get:
+      tags:
+        - Merchant
+      summary: "[In Progress] Get unread notification count"
+
+      responses:
+        "200":
+          description: Get notifications success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    default: null
+                  data:
+                    type: object
+                    properties:
+                      unread_count:
+                        type: integer
+
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "404":
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_404"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+      security:
+        - merchantBearerAuth: []
   /merchants/notifications/{notification_id}:
     put:
       tags:
@@ -1154,73 +1239,73 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /invoices/count:
-    get:
-      tags:
-        - Invoice
-      summary: "[In Progress] Get invoices count"
-      parameters:
-        - name: payment_status
-          in: query
-          description: filter by payment status
-          required: false
-          style: form
-          explode: true
-          schema:
-            type: string
-            enum:
-              - unpaid
-              - paid
-              - pending
-        - name: range_time
-          in: query
-          description: filter by last ... days
-          required: false
-          style: form
-          explode: true
-          schema:
-            type: integer
-        - name: customer_id
-          in: query
-          description: filter by customer_id
-          required: false
-          style: form
-          explode: true
-          schema:
-            type: integer
-        - name: merchant_id
-          in: query
-          description: filter by merchant_id
-          required: false
-          style: form
-          explode: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Get invoices count success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_200_17"
-        "400":
-          description: bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_400"
-        "404":
-          description: not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_404"
-        "500":
-          description: internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_500"
+  # /invoices/count:
+  #   get:
+  #     tags:
+  #       - Invoice
+  #     summary: "[In Progress] Get invoices count"
+  #     parameters:
+  #       - name: payment_status
+  #         in: query
+  #         description: filter by payment status
+  #         required: false
+  #         style: form
+  #         explode: true
+  #         schema:
+  #           type: string
+  #           enum:
+  #             - unpaid
+  #             - paid
+  #             - pending
+  #       - name: range_time
+  #         in: query
+  #         description: filter by last ... days
+  #         required: false
+  #         style: form
+  #         explode: true
+  #         schema:
+  #           type: integer
+  #       - name: customer_id
+  #         in: query
+  #         description: filter by customer_id
+  #         required: false
+  #         style: form
+  #         explode: true
+  #         schema:
+  #           type: integer
+  #       - name: merchant_id
+  #         in: query
+  #         description: filter by merchant_id
+  #         required: false
+  #         style: form
+  #         explode: true
+  #         schema:
+  #           type: integer
+  #     responses:
+  #       "200":
+  #         description: Get invoices count success
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/inline_response_200_17"
+  #       "400":
+  #         description: bad request
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/inline_response_400"
+  #       "404":
+  #         description: not found
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/inline_response_404"
+  #       "500":
+  #         description: internal server error
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/inline_response_500"
   /invoices/merchants/customers:
     get:
       security:
@@ -2174,7 +2259,7 @@ paths:
         - Invoice
       security:
         - merchantBearerAuth: []
-      summary: "[New] [In Progress] Accept payment (for merchant)"
+      summary: "Accept payment (for merchant)"
       description: "Accept payment and send notif 'payment success' to customer"
       parameters:
         - name: id
@@ -2217,50 +2302,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /invoices/{id}/approval_document:
-    put:
-      tags:
-        - Invoice
-      summary: "[In Progress] Update/Upload invoices approval document"
-      parameters:
-        - name: id
-          in: path
-          description: invoice id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/id_approval_document_body"
-      responses:
-        "200":
-          description: Update/Upload invoice approval document success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_200_20"
-        "400":
-          description: bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_400"
-        "404":
-          description: not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_404"
-        "500":
-          description: internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_500"
+
   /invoices/{id}/payment_method:
     put:
       tags:
