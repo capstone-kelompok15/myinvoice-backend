@@ -9,7 +9,10 @@ import (
 func (r *invoiceRepository) UploadPayment(ctx context.Context, invoiceID int, uploadedURL string) error {
 	insertPaymentURLSQL, args, err := squirrel.
 		Update("invoices").
-		Set("approval_document_url", uploadedURL).
+		SetMap(map[string]interface{}{
+			"approval_document_url": uploadedURL,
+			"payment_status_id":     2,
+		}).
 		Where(squirrel.Eq{"id": invoiceID}).
 		ToSql()
 	if err != nil {

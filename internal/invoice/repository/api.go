@@ -14,4 +14,5 @@ type InvoiceRepository interface {
 	GetCustomers(ctx context.Context, req *dto.GetMerchantCustomerList) (*[]dto.BriefCustomer, int, error)
 	ValidateInvoiceID(ctx context.Context, customerID int, invoiceID int) error
 	UploadPayment(ctx context.Context, invoiceID int, uploadedURL string) error
+	GetMerchantProfile(ctx context.Context, invoiceID int) (*dto.MerchantBriefDate, error)
 }
