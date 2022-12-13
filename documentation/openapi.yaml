@@ -603,6 +603,45 @@ paths:
                 $ref: "#/components/schemas/inline_response_500"
       security:
         - customerBearerAuth: []
+  /customers/summaries:
+    get:
+      tags:
+        - Customer
+      summary: "Get customer invoice summaries for home"
+      responses:
+        "200":
+          description: Get summaries success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    nullable: true
+                    default: null
+                  data:
+                    type: object
+                    nullable: true
+                    properties:
+                      total_paid:
+                        type: integer
+                      total_unpaid:
+                        type: integer
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+      security:
+        - merchantBearerAuth: []
   /customers:
     get:
       tags:
