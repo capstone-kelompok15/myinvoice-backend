@@ -14,4 +14,5 @@ type MerchantService interface {
 	UpdateMerchantBank(ctx context.Context, req *dto.UpdateMerchantBankDataRequest) error
 	CreateMerchantBank(ctx context.Context, merchantID int, req *dto.MerchantBankData) error
 	UpdateProfilePicture(ctx context.Context, userID *int, newProfilePictureURL *string) (*string, error)
+	GetMerchantProfile(ctx context.Context, merchantID int) (*dto.MerchantProfileResponse, error)
 }
