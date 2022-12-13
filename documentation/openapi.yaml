@@ -2203,7 +2203,7 @@ paths:
         - Invoice
       security:
         - merchantBearerAuth: []
-      summary: "[New] [In Progress] Reject payment (for merchant)"
+      summary: "Reject payment (for merchant)"
       description: "Reject payment and send notif 'payment failed' to customer"
       parameters:
         - name: id

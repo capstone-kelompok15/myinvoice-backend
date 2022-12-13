@@ -18,4 +18,5 @@ type InvoiceRepository interface {
 	GetMerchantProfile(ctx context.Context, invoiceID int) (*dto.MerchantBriefDate, error)
 	GetInvoiceByID(ctx context.Context, invoiceID int) (*dto.GetInvoiceByID, error)
 	GetReport(ctx context.Context, params *dto.ReportParams) (*dto.ReportResponse, error)
+	UpdateMessage(ctx context.Context, invoiceID int, message string) error
 }
