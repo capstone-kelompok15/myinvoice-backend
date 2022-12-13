@@ -88,3 +88,37 @@ type GetInvoiceByID struct {
 	CustomerID int `db:"customer_id"`
 	MerchantID int `db:"merchant_id"`
 }
+
+type ReportDateInt struct {
+	StartDate int
+	EndDate   int
+}
+
+type ReportDateStr struct {
+	StartDate string
+	EndDate   string
+}
+
+type ReportParams struct {
+	ReportDaysInt []ReportDateInt
+	ReportDaysStr []ReportDateStr
+	CustomerID    int
+
+	PaymentStatus int    `query:"payment_status" validate:"required"`
+	DateFilter    string `query:"date_filter" validate:"required,oneof='1 Week' '1 Month' '3 Month' '1 Year'"`
+}
+
+type ReportTransaction struct {
+	TransactionQuantity int   `json:"transaction_quantity" db:"transaction_quantity"`
+	TransactionTotal    int64 `json:"transaction_total" db:"transaction_total"`
+}
+
+type ReportDate struct {
+	Date  string `json:"date"`
+	Value int    `json:"value"`
+}
+
+type ReportResponse struct {
+	Reports []ReportDate `json:"reports"`
+	ReportTransaction
+}

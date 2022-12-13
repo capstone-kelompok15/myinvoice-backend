@@ -1747,35 +1747,33 @@ paths:
 
   /invoices/reports:
     get:
+      security:
+        - customerBearerAuth: []
       tags:
         - Invoice
-      summary: "[New] [In Progress] Get all invoices report"
+      summary: "Get all invoices report"
       parameters:
         - name: payment_status
           in: query
-          description: filter by payment status
-          required: false
+          description: filter by range time
+          required: true
           style: form
           explode: true
           schema:
-            type: string
-            enum:
-              - unpaid
-              - paid
-              - all
-        - name: range_time
+            type: integer
+        - name: date_filter
           in: query
           description: filter by range time
-          required: false
+          required: true
           style: form
           explode: true
           schema:
             type: string
             enum:
-              - 1 weeks
-              - 1 months
-              - 3 months
-              - 1 years
+              - 1 Week
+              - 1 Month
+              - 3 Month
+              - 1 Year
       responses:
         "200":
           description: Get all invoice reports
@@ -1785,60 +1783,25 @@ paths:
                 type: object
                 properties:
                   error:
-                    type: string
+                    type: object
+                    nullable: true
+                    default: null
                   data:
                     type: object
                     properties:
-                      total_invoice:
-                        type: integer
-                      total_bilss:
-                        type: integer
-                      total_paid:
-                        type: integer
-                      total_unpaid:
-                        type: integer
-                      invoices:
+                      reports:
                         type: array
                         items:
                           type: object
                           properties:
-                            invoice_id:
+                            date:
+                              type: string
+                            value:
                               type: integer
-                            payment_status:
-                              type: string
-                              enum:
-                                - unpaid
-                                - paid
-                            total_price:
-                              type: integer
-                            created_at:
-                              type: string
-                            updated_at:
-                              type: string
-                            merchant:
-                              $ref: "#/components/schemas/inline_response_200_19_merchant"
-                      grafik:
-                        type: object
-                        properties:
-                          paid:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                datetime:
-                                  type: string
-                                count:
-                                  type: integer
-                          unpaid:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                datetime:
-                                  type: string
-                                count:
-                                  type: integer
-
+                      transaction_quantity:
+                        type: integer
+                      transaction_total:
+                        type: integer
         "400":
           description: bad request
           content:
@@ -2863,6 +2826,7 @@ components:
           $ref: "#/components/schemas/inline_response_400_error"
         data:
           type: string
+          default: null
     inline_response_400_error:
       type: object
       properties:
