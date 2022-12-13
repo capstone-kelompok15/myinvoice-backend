@@ -22,8 +22,8 @@ func (r *invoiceRepository) GetAllInvoice(ctx context.Context, req *dto.GetAllIn
 	}
 
 	if req.DateFilter != nil {
-		getAllInvoiceBuilder = getAllInvoiceBuilder.Where(squirrel.GtOrEq{"i.created_at": dateutils.TimeToDateStr(req.DateFilter.StartDate)})
-		getAllInvoiceBuilder = getAllInvoiceBuilder.Where(squirrel.LtOrEq{"i.created_at": dateutils.TimeToDateStr(req.DateFilter.EndDate)})
+		getAllInvoiceBuilder = getAllInvoiceBuilder.Where(squirrel.GtOrEq{"i.due_at": dateutils.TimeToDateStr(req.DateFilter.StartDate)})
+		getAllInvoiceBuilder = getAllInvoiceBuilder.Where(squirrel.LtOrEq{"i.due_at": dateutils.TimeToDateStr(req.DateFilter.EndDate)})
 	}
 
 	if req.PaymentStatusID != 0 {
@@ -43,7 +43,7 @@ func (r *invoiceRepository) GetAllInvoice(ctx context.Context, req *dto.GetAllIn
 		InnerJoin("customer_details AS cd ON cd.customer_id = i.customer_id").
 		LeftJoin("payment_types AS pt ON pt.id = i.payment_type_id").
 		GroupBy("id.invoice_id").
-		OrderBy("created_at DESC").
+		OrderBy("i.due_at DESC").
 		Limit(uint64(req.PaginationFilter.Limit)).
 		Offset(uint64(req.PaginationFilter.Offset)).
 		ToSql()
