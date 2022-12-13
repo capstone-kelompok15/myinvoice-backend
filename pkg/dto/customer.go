@@ -99,3 +99,8 @@ type BriefCustomer struct {
 	FullName string `json:"full_name" db:"full_name"`
 	Email    string `json:"email" db:"email"`
 }
+
+type CustomerSummary struct {
+	TotalPaid   int64 `json:"total_paid" db:"total_paid"`
+	TotalUnpaid int64 `json:"total_unpaid" db:"total_unpaid"`
+}

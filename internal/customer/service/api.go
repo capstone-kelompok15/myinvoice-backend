@@ -13,4 +13,5 @@ type CustomerService interface {
 	UpdateCustomer(ctx context.Context, customerID *int, newData *dto.CustomerUpdateRequest) error
 	GetAllNotificationCustomer(ctx context.Context, customerID int, req *dto.NotificationRequest) (*[]dto.NotificationRespond, error)
 	MarkNotifCustomerAsRead(ctx context.Context, NotifID int, CustomerID int) error
+	GetSummary(ctx context.Context, customerID int) (*dto.CustomerSummary, error)
 }
