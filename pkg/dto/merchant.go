@@ -41,6 +41,16 @@ type MerchantDashboard struct {
 	RecentPaymentMerchantDashboard []RecentPaymentMerchantDashboard `json:"recent_payment"`
 }
 
+type MerchantProfileResponse struct {
+	ID                  int     `json:"id" db:"id"`
+	Username            string  `json:"username" db:"username"`
+	Email               string  `json:"email" db:"email"`
+	DisplayProfileURL   *string `json:"display_profile_url" db:"display_profile_url"`
+	MerchantName        string  `json:"merchant_name" db:"merchant_name"`
+	MerchantPhoneNumber *string `json:"merchant_phone_number" db:"merchant_phone_number"`
+	MerchantAddress     *string `json:"merchant_address" db:"merchant_address"`
+}
+
 type AdminResetPassword struct {
 	Email    string `json:"email" validate:"required"`
 	Password string `json:"password" validate:"required,min=8"`
