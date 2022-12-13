@@ -6,6 +6,7 @@ import (
 
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
+	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/notifications"
 )
 
 func (s *invoiceService) CreateInvoice(ctx context.Context, merchantID int, req *dto.CreateInvoiceRequest) error {
@@ -17,7 +18,7 @@ func (s *invoiceService) CreateInvoice(ctx context.Context, merchantID int, req 
 		return err
 	}
 
-	err = s.repo.CreateInvoice(ctx, merchantID, req)
+	invoiceID, err := s.repo.CreateInvoice(ctx, merchantID, req)
 	if err != nil {
 		s.log.Warningln("[CreateInvoice] error on service:", err.Error())
 		return err
@@ -36,6 +37,11 @@ func (s *invoiceService) CreateInvoice(ctx context.Context, merchantID int, req 
 	_, _, err = s.mailgun.Send(ctx, mg)
 	if err != nil {
 		s.log.Warningln("[CreateInvoice] Error while send the email:", err.Error())
+		return err
+	}
+	// send notif to customer
+	err = s.repoNotif.CreateNotificationCustomer(ctx, &dto.CreateNotification{CustomerID: req.CustomerID, MerchantID: merchantID, InvoiceID: invoiceID, NotificationTitleID: notifications.NewBillIssued})
+	if err != nil {
 		return err
 	}
 
