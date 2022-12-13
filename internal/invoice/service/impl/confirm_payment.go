@@ -5,6 +5,7 @@ import (
 
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/notifications"
+	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/paymentstatusutils"
 )
 
 func (s *invoiceService) ConfirmPayment(ctx context.Context, invoiceID int) error {
@@ -12,7 +13,7 @@ func (s *invoiceService) ConfirmPayment(ctx context.Context, invoiceID int) erro
 	if err != nil {
 		return err
 	}
-	err = s.repo.ConfirmPayment(ctx, invoiceID)
+	err = s.repo.UpdatePaymentStatus(ctx, invoiceID, paymentstatusutils.Pending)
 	if err != nil {
 		return err
 	}
