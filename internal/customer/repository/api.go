@@ -11,4 +11,5 @@ type CustomerRepository interface {
 	GetAllCustomer(ctx context.Context, req *dto.GetAllCustomerRequest) (*[]dto.GetAllCustomerRespond, error)
 	UpdateProfilePicture(ctx context.Context, userID *int, newProfilePictureURL *string) error
 	UpdateCustomer(ctx context.Context, customerID *int, newData *dto.CustomerUpdateRequest) error
+	GetSummary(ctx context.Context, customerID int) (*dto.CustomerSummary, error)
 }

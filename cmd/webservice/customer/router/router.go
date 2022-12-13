@@ -32,4 +32,5 @@ func InitCustomerRouter(params *RouterParams) {
 	customerV1Group.PATCH("/me/picture", customerHandler.UpdateCustomerProfilePicture(), params.Middleware.CustomerMustAuthorized())
 	customerV1Group.PUT("/me", customerHandler.UpdateCustomer(), params.Middleware.CustomerMustAuthorized())
 	customerV1Group.PUT("/notifications/:id", customerHandler.MarkNotifCustomerAsRead(), params.Middleware.CustomerMustAuthorized())
+	customerV1Group.GET("/summaries", customerHandler.GetSummary(), params.Middleware.CustomerMustAuthorized())
 }
