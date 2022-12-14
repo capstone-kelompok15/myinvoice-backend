@@ -38,6 +38,8 @@ type GetDetailsInvoicesRequest struct {
 
 type GetInvoiceResponse struct {
 	InvoiceID         int     `json:"invoice_id" db:"invoice_id"`
+	MerchantID        int     `json:"merchant_id" db:"merchant_id"`
+	MerchantName      string  `json:"merchant_name" db:"merchant_name"`
 	CustomerName      string  `json:"customer_name" db:"customer_name"`
 	PaymentStatusID   int     `json:"payment_status_id" db:"payment_status_id"`
 	PaymentStatusName string  `json:"payment_status_name" db:"payment_status_name"`
@@ -52,6 +54,7 @@ type GetInvoiceResponse struct {
 type GetInvoiceDetailsByIDResponse struct {
 	InvoiceID           int                `json:"invoice_id" db:"invoice_id"`
 	MerchantID          int                `json:"merchant_id" db:"merchant_id"`
+	MerchantName        string             `json:"merchant_name" db:"merchant_name"`
 	CustomerID          int                `json:"customer_id" db:"customer_id"`
 	CustomerName        string             `json:"customer_name" db:"customer_name"`
 	CustomerAddress     *string            `json:"customer_address" db:"customer_address"`

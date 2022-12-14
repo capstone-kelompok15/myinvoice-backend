@@ -32,7 +32,8 @@ func (r *invoiceRepository) GetAllInvoice(ctx context.Context, req *dto.GetAllIn
 
 	getAllInvoiceSQL, args, err := getAllInvoiceBuilder.
 		Select(
-			"i.id AS invoice_id", "cd.full_name AS customer_name", "ps.status_name AS payment_status_name",
+			"i.id AS invoice_id", "i.merchant_id AS merchant_id", "m.merchant_name AS merchant_name",
+			"cd.full_name AS customer_name", "ps.status_name AS payment_status_name",
 			"i.payment_status_id AS payment_status_id", "pt.payment_type_name AS payment_type_name",
 			"i.due_at AS due_at", "i.created_at AS created_at", "i.updated_at AS updated_at",
 			"SUM(id.price * id.quantity) AS total_price",
@@ -41,6 +42,7 @@ func (r *invoiceRepository) GetAllInvoice(ctx context.Context, req *dto.GetAllIn
 		InnerJoin("invoice_details AS id ON id.invoice_id = i.id").
 		InnerJoin("payment_statuses AS ps ON ps.id = i.payment_status_id").
 		InnerJoin("customer_details AS cd ON cd.customer_id = i.customer_id").
+		InnerJoin("merchants AS m ON m.id = i.merchant_id").
 		LeftJoin("payment_types AS pt ON pt.id = i.payment_type_id").
 		GroupBy("id.invoice_id").
 		OrderBy("i.due_at DESC").

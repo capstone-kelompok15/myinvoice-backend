@@ -20,7 +20,8 @@ func (r *invoiceRepository) GetDetailInvoiceByID(ctx context.Context, req *dto.G
 
 	getAllInvoiceSQL, args, err := getDetailInvoiceBuilder.
 		Select(
-			"i.id AS invoice_id", "i.merchant_id AS merchant_id", "i.approval_document_url AS approval_document_url",
+			"i.id AS invoice_id", "i.merchant_id AS merchant_id", "i.merchant_id AS merchant_id", "m.merchant_name AS merchant_name",
+			"i.approval_document_url AS approval_document_url",
 			"i.customer_id AS customer_id", "cd.full_name AS customer_name", "cd.address AS customer_address",
 			"i.payment_status_id AS payment_status_id", "ps.status_name AS payment_status_name",
 			"i.payment_type_id AS payment_type_id", "pt.payment_type_name AS payment_type_name",
@@ -32,6 +33,7 @@ func (r *invoiceRepository) GetDetailInvoiceByID(ctx context.Context, req *dto.G
 		InnerJoin("invoice_details AS id ON id.invoice_id = i.id").
 		InnerJoin("payment_statuses AS ps ON ps.id = i.payment_status_id").
 		InnerJoin("customer_details AS cd ON cd.customer_id = i.customer_id").
+		InnerJoin("merchants AS m ON m.id = i.merchant_id").
 		LeftJoin("payment_types AS pt ON pt.id = i.payment_type_id").
 		Where(squirrel.Eq{"i.id": req.InvoiceID}).
 		GroupBy("id.invoice_id").
