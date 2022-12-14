@@ -5,6 +5,8 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
+	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
+	"github.com/go-sql-driver/mysql"
 )
 
 func (r *authRepository) MerchantRegistration(ctx context.Context, req *dto.MerchantRegisterRequest) error {
@@ -29,6 +31,11 @@ func (r *authRepository) MerchantRegistration(ctx context.Context, req *dto.Merc
 
 	res, err := tx.ExecContext(ctx, insertMerchantSQL, arg1...)
 	if err != nil {
+		if errCode, ok := err.(*mysql.MySQLError); ok {
+			if errCode.Number == 1062 {
+				return customerrors.ErrUniqueRecord
+			}
+		}
 		r.log.Warningln("[AdminRegistration] Error while insert merchant:", err.Error())
 		return err
 	}
@@ -91,6 +98,11 @@ func (r *authRepository) MerchantRegistration(ctx context.Context, req *dto.Merc
 
 	_, err = tx.ExecContext(ctx, insertMerchantAdmin, arg4...)
 	if err != nil {
+		if errCode, ok := err.(*mysql.MySQLError); ok {
+			if errCode.Number == 1062 {
+				return customerrors.ErrMerchantNameDuplicated
+			}
+		}
 		r.log.Warningln("[AdminRegistration] Error while insert merchant admin:", err.Error())
 		return err
 	}
