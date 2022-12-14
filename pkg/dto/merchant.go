@@ -6,7 +6,7 @@ type MerchantRegisterRequest struct {
 	Username            string                        `json:"username" validate:"required"`
 	MerchantName        string                        `json:"merchant_name" validate:"required"`
 	MerchantAddress     string                        `json:"merchant_address" validate:"required"`
-	MerchantPhoneNumber string                        `json:"merchant_phone_number" validate:"required"`
+	MerchantPhoneNumber string                        `json:"merchant_phone_number"`
 	MerchantBank        []MerchantBankRegisterRequest `json:"merchant_banks" validate:"required,min=1"`
 }
 
