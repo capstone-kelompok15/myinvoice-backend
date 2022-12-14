@@ -30,6 +30,7 @@ func InitMerchantRouter(params *MerchantRouterParams) {
 	merchantV1Group.GET("/me", merchantHandler.GetMerchantProfile(), params.Middleware.AdminMustAuthorized())
 	merchantV1Group.PATCH("/me/picture", merchantHandler.UpdateMerchantProfilePicture(), params.Middleware.AdminMustAuthorized())
 	merchantV1Group.GET("/notifications", merchantHandler.GetAllNotificationMerchant(), params.Middleware.AdminMustAuthorized())
+	merchantV1Group.GET("/notifications/unread_count", merchantHandler.GetUnreadNotifCount(), params.Middleware.AdminMustAuthorized())
 	merchantV1Group.PUT("/notifications/:id", merchantHandler.MarkNotifMerchantAsRead(), params.Middleware.AdminMustAuthorized())
 	merchantV1Group.GET("/:merchant_id/banks", merchantHandler.GetMerchantBank())
 	merchantV1Group.PUT("/banks/:merchant_bank_id", merchantHandler.UpdateMerchantBank(), params.Middleware.AdminMustAuthorized())
