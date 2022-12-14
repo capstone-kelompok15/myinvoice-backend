@@ -1,7 +1,6 @@
 package config
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"os"
@@ -27,7 +26,6 @@ func StartServer(param Server) error {
 	}
 
 	errChan := make(chan error, 1)
-	defer param.E.Shutdown(context.Background())
 
 	go func() {
 		if err := param.E.Start(fmt.Sprintf(":%d", port)); err != nil {
@@ -44,7 +42,6 @@ func StartServer(param Server) error {
 		log.Println("[INFO] Server closed gracefully")
 		return err
 	case <-signalChan:
-		log.Println("[INFO] Server closed gracefully")
 		return nil
 	}
 }

@@ -6,23 +6,26 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/internal/invoice/service"
 	custommiddleware "github.com/capstone-kelompok15/myinvoice-backend/pkg/middleware/service"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/validatorutils"
+	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/websocketutils"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
 )
 
 type InvoiceRouterParams struct {
-	E          *echo.Echo
-	Log        *logrus.Entry
-	Validator  *validatorutils.Validator
-	Service    service.InvoiceService
-	Middleware custommiddleware.Middleware
+	E             *echo.Echo
+	Log           *logrus.Entry
+	Validator     *validatorutils.Validator
+	Service       service.InvoiceService
+	Middleware    custommiddleware.Middleware
+	WebsocketPool *websocketutils.Pool
 }
 
 func InitInvoiceRouter(params *InvoiceRouterParams) {
 	invoiceHandler := handler.NewInvoiceHandler(&handler.InvoiceHandlerParams{
-		Service:   params.Service,
-		Log:       params.Log,
-		Validator: params.Validator,
+		Service:       params.Service,
+		Log:           params.Log,
+		Validator:     params.Validator,
+		WebsocketPool: params.WebsocketPool,
 	})
 
 	invoiceV1Group := params.E.Group(apiversioning.APIVersionOne + "/invoices")

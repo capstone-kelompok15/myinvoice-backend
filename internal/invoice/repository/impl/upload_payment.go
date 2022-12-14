@@ -11,7 +11,6 @@ func (r *invoiceRepository) UploadPayment(ctx context.Context, invoiceID int, up
 		Update("invoices").
 		SetMap(map[string]interface{}{
 			"approval_document_url": uploadedURL,
-			"payment_status_id":     2,
 		}).
 		Where(squirrel.Eq{"id": invoiceID}).
 		ToSql()

@@ -62,7 +62,7 @@ func (h *invoiceHandler) UploadPayment() echo.HandlerFunc {
 		}
 		defer os.Remove(*profilePictureFileName)
 
-		err = h.service.UploadPayment(c.Request().Context(), customerCtx.ID, req.InvoiceID, *profilePictureFileName)
+		message, err := h.service.UploadPayment(c.Request().Context(), customerCtx.ID, req.InvoiceID, *profilePictureFileName)
 		if err != nil {
 			if err == customerrors.ErrRecordNotFound {
 				return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
@@ -74,6 +74,8 @@ func (h *invoiceHandler) UploadPayment() echo.HandlerFunc {
 				Err: customerrors.ErrInternalServer,
 			})
 		}
+
+		h.websocketPool.Message <- message
 
 		return httputils.WriteResponse(c, httputils.SuccessResponseParams{
 			Data: "Upload Successful!",
