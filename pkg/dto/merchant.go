@@ -68,6 +68,7 @@ type GetMerchantBankRequest struct {
 }
 
 type GetMerchantBankResponse struct {
+	ID         int    `json:"id" db:"id"`
 	BankName   string `json:"bank_name" db:"bank_name"`
 	BankCode   string `json:"bank_code" db:"bank_code"`
 	OnBehalfOf string `json:"on_behalf_of" db:"on_behalf_of"`
