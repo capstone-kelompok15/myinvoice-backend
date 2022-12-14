@@ -12,6 +12,7 @@ import (
 func (r *merchantRepository) GetMerchantBank(ctx context.Context, req *dto.GetMerchantBankRequest) (*[]dto.GetMerchantBankResponse, error) {
 	getMerchantBankSQL, args, err := squirrel.
 		Select(
+			"mb.id as id",
 			"mb.on_behalf_of AS on_behalf_of",
 			"mb.bank_number AS bank_number",
 			"b.bank_name AS bank_name",
