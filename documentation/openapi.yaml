@@ -1199,7 +1199,7 @@ paths:
         - merchantBearerAuth: []
       tags:
         - Merchant
-      summary: "[In Progress] Update merchant profile"
+      summary: "Update merchant profile"
       requestBody:
         description: payload
         content:
