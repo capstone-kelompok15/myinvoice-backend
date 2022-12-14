@@ -86,3 +86,9 @@ type UpdateMerchantBankDataRequest struct {
 	MerchantBankID int `param:"merchant_bank_id" validate:"required"`
 	MerchantID     int
 }
+type UpdateMerchantProfileRequest struct {
+	Username            string `json:"username" validate:"required"`
+	MerchantName        string `json:"merchant_name" validate:"required"`
+	MerchantPhoneNumber string `json:"merchant_phone_number" validate:"required"`
+	MerchantAddress     string `json:"merchant_address" validate:"required"`
+}

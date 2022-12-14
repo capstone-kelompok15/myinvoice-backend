@@ -16,4 +16,5 @@ type MerchantRepository interface {
 	ValidateMerchantBank(ctx context.Context, merchantID int, merchantBankID int) error
 	CreateMerchantBank(ctx context.Context, merchantID int, req *dto.MerchantBankData) error
 	UpdateProfilePicture(ctx context.Context, merchantID *int, newProfilePictureURL *string) error
+	UpdateMerchantProfile(ctx context.Context, merchantID *int, req *dto.UpdateMerchantProfileRequest) error
 }
