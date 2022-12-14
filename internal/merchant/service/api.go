@@ -16,4 +16,5 @@ type MerchantService interface {
 	UpdateProfilePicture(ctx context.Context, userID *int, newProfilePictureURL *string) (*string, error)
 	GetMerchantProfile(ctx context.Context, merchantID int) (*dto.MerchantProfileResponse, error)
 	GetUnreadNotifCount(ctx context.Context, MerchantID int) (int, error)
+	UpdateMerchantProfile(ctx context.Context, merchantID *int, req *dto.UpdateMerchantProfileRequest) error
 }
