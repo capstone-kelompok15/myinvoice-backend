@@ -1418,6 +1418,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
+  /invoices/statuses:
+    get:
+      tags:
+        - Invoice
+      summary: "Get payment status list"
+      responses:
+        "200":
+          description: Get customer list success
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                    nullable: true
+                    default: null
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        status_name:
+                          type: string
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /invoices/{invoice_id}/merchants:
     get:
       security:
