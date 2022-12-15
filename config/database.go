@@ -70,8 +70,3 @@ func GetDatabaseConn(params *Database) (*sqlx.DB, error) {
 
 	return db, nil
 }
-
-func CloseDatabaseConnection(db *sqlx.DB) error {
-	err := db.Close()
-	return err
-}

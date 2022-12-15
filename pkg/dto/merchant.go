@@ -55,6 +55,7 @@ type MerchantBriefDate struct {
 	Username     string `db:"username"`
 	Email        string `db:"email"`
 	MerchantName string `db:"merchant_name"`
+	MerchantID   int    `db:"merchant_id"`
 }
 
 type AdminResetPassword struct {

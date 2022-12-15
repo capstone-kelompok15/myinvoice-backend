@@ -17,12 +17,14 @@ func (h *invoiceHandler) AcceptPayment() echo.HandlerFunc {
 			})
 		}
 
-		err = h.service.AcceptPayment(c.Request().Context(), invoiceID)
+		message, err := h.service.AcceptPayment(c.Request().Context(), invoiceID)
 		if err != nil {
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: err,
 			})
 		}
+
+		h.websocketPool.Message <- message
 
 		return httputils.WriteResponse(c, httputils.SuccessResponseParams{
 			Code: 200,

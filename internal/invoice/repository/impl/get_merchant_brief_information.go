@@ -15,6 +15,7 @@ func (r *invoiceRepository) GetMerchantProfile(ctx context.Context, invoiceID in
 			"a.username as username",
 			"a.email as email",
 			"m.merchant_name as merchant_name",
+			"m.id as merchant_id",
 		).
 		From("admins AS a").
 		InnerJoin("merchants AS m ON a.merchant_id = m.id").

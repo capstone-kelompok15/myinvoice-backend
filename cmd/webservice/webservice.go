@@ -1,6 +1,7 @@
 package webservice
 
 import (
+	"context"
 	"strings"
 
 	authrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/auth/router"
@@ -9,6 +10,7 @@ import (
 	invoicerouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/invoice/router"
 	merchantrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/merchant/router"
 	pingrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/ping/router"
+	websocketrouter "github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/websocket/router"
 	"github.com/capstone-kelompok15/myinvoice-backend/config"
 	authrepository "github.com/capstone-kelompok15/myinvoice-backend/internal/auth/repository/impl"
 	authservice "github.com/capstone-kelompok15/myinvoice-backend/internal/auth/service/impl"
@@ -25,6 +27,7 @@ import (
 	customrepositorymiddleware "github.com/capstone-kelompok15/myinvoice-backend/pkg/middleware/repository/impl"
 	customservicemiddleware "github.com/capstone-kelompok15/myinvoice-backend/pkg/middleware/service/impl"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/validatorutils"
+	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/websocketutils"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -37,40 +40,61 @@ type WebServiceParams struct {
 }
 
 func InitWebService(params *WebServiceParams) error {
+	// Database Connection
 	db, err := config.GetDatabaseConn(&params.Config.Database)
 	if err != nil {
-		params.Log.Warningln("[ERROR] while get database connection:", err.Error())
+		params.Log.Infoln("[ERROR] while get database connection:", err.Error())
 		return err
 	}
 
 	defer func() error {
-		err := config.CloseDatabaseConnection(db)
+		err := db.Close()
 		if err != nil {
-			params.Log.Warningln("[ERROR] while close database connection:", err.Error())
+			params.Log.Infoln("[ERROR] while close database connection:", err.Error())
 			return err
 		}
-		params.Log.Warningln("[INFO] Database connection closed gracefully:")
+		params.Log.Infoln("[INFO] Database connection closed gracefully")
 		return nil
 	}()
 
 	whiteListAllowOrigin := strings.Split(params.Config.Server.WhiteListAllowOrigin, ",")
 
+	// Echo Web Server
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     whiteListAllowOrigin,
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
 		AllowCredentials: true,
 	}))
+	defer func() error {
+		err := e.Shutdown(context.Background())
+		if err != nil {
+			params.Log.Infoln("[ERROR] while close redis connection:", err.Error())
+			return err
+		}
+		params.Log.Infoln("[INFO] Echo Web Server connection closed gracefully")
+		return nil
+	}()
+
+	// Redis Connection
+	redis, err := config.InitRedis(&params.Config.RedisConfig)
+	if err != nil {
+		params.Log.Warningln("[ERROR] while creating the redis client:", err.Error())
+		return err
+	}
+	defer func() error {
+		err := redis.Close()
+		if err != nil {
+			params.Log.Infoln("[ERROR] while close redis connection:", err.Error())
+			return err
+		}
+		params.Log.Infoln("[INFO] Redis connection closed gracefully")
+		return nil
+	}()
 
 	validator, err := validatorutils.New()
 	if err != nil {
 		params.Log.Warningln("[ERROR] while creating the validator:", err.Error())
-		return err
-	}
-
-	redis, err := config.InitRedis(&params.Config.RedisConfig)
-	if err != nil {
-		params.Log.Warningln("[ERROR] while creating the redis client:", err.Error())
 		return err
 	}
 
@@ -81,6 +105,13 @@ func InitWebService(params *WebServiceParams) error {
 		params.Log.Warningln("[ERROR] while creating the cloudinary client:", err.Error())
 		return err
 	}
+
+	websocketPool := websocketutils.NewPool(&websocketutils.PoolParams{
+		Log: params.Log.WithFields(nil),
+	})
+	go func() {
+		websocketPool.Start()
+	}()
 
 	// Middleware
 	repositoryMiddleware := customrepositorymiddleware.NewRepositoryMiddleware(&customrepositorymiddleware.MiddlewareRepositoryParams{
@@ -261,12 +292,25 @@ func InitWebService(params *WebServiceParams) error {
 	})
 
 	invoicerouter.InitInvoiceRouter(&invoicerouter.InvoiceRouterParams{
-		E:          e,
-		Validator:  validator,
-		Service:    invoiceService,
-		Middleware: middleware,
+		E:             e,
+		Validator:     validator,
+		Service:       invoiceService,
+		Middleware:    middleware,
+		WebsocketPool: websocketPool,
 		Log: params.Log.WithFields(logrus.Fields{
 			"domain": "invoice",
+			"layer":  "handler",
+		}),
+	})
+
+	// Websocket
+	websocketrouter.InitWebSocketRouter(&websocketrouter.WebSocketRouterParams{
+		E:             e,
+		Validator:     validator,
+		Middleware:    middleware,
+		WebSocketPool: websocketPool,
+		Log: params.Log.WithFields(logrus.Fields{
+			"domain": "websocket",
 			"layer":  "handler",
 		}),
 	})

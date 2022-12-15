@@ -16,15 +16,18 @@ func (h *invoiceHandler) RejectPayment() echo.HandlerFunc {
 				Err: customerrors.ErrBadRequest,
 			})
 		}
+
 		req := struct {
 			Message string `json:"message" validate:"required"`
 		}{}
+
 		err = c.Bind(&req)
 		if err != nil {
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: customerrors.ErrBadRequest,
 			})
 		}
+
 		err = h.validator.StructCtx(c.Request().Context(), req)
 		if err != nil {
 			errStr := h.validator.TranslateValidatorError(err)
@@ -33,12 +36,15 @@ func (h *invoiceHandler) RejectPayment() echo.HandlerFunc {
 				Detail: errStr,
 			})
 		}
-		err = h.service.RejectPayment(c.Request().Context(), invoiceID, req.Message)
+
+		message, err := h.service.RejectPayment(c.Request().Context(), invoiceID, req.Message)
 		if err != nil {
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: err,
 			})
 		}
+
+		h.websocketPool.Message <- message
 
 		return httputils.WriteResponse(c, httputils.SuccessResponseParams{
 			Code: 200,
