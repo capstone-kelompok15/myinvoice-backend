@@ -28,13 +28,13 @@ func (h *authHandler) CustomerLogin() echo.HandlerFunc {
 
 		accessToken, err := h.service.CustomerLogin(c.Request().Context(), &req)
 		if err != nil {
-			if err == customerrors.ErrUnauthorized {
+			if err == customerrors.ErrEmailPasswordIncorrect {
 				return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 					Err: err,
 				})
 			}
 
-			h.log.Warningln("[CustomerEmailVerification] Error while calling the service function")
+			h.log.Warningln("[CustomerEmailVerification] Error while calling the service function:", err.Error())
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: customerrors.ErrInternalServer,
 			})

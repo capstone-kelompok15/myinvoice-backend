@@ -18,8 +18,8 @@ func (s *authService) CustomerLogin(ctx context.Context, req *dto.CustomerLoginR
 
 	customerContext, err := s.repo.AuthorizeCustomerLogin(ctx, req)
 	if err != nil {
-		if err == customerrors.ErrUnauthorized {
-			return nil, customerrors.ErrUnauthorized
+		if err == customerrors.ErrEmailPasswordIncorrect {
+			return nil, customerrors.ErrEmailPasswordIncorrect
 		}
 		s.log.Warningln("[CustomerLogin] Error while authorize customer login:", err.Error())
 		return nil, err

@@ -57,6 +57,7 @@ type GetInvoiceDetailsByIDResponse struct {
 	MerchantName        string             `json:"merchant_name" db:"merchant_name"`
 	CustomerID          int                `json:"customer_id" db:"customer_id"`
 	CustomerName        string             `json:"customer_name" db:"customer_name"`
+	CustomerEmail       string             `json:"customer_email" db:"customer_email"`
 	CustomerAddress     *string            `json:"customer_address" db:"customer_address"`
 	ApprovalDocumentURL *string            `json:"approval_document_url" db:"approval_document_url"`
 	PaymentStatusID     int                `json:"payment_status_id" db:"payment_status_id"`

@@ -28,7 +28,7 @@ func (r *authRepository) AuthorizeCustomerLogin(ctx context.Context, req *dto.Cu
 	err = r.db.Get(&customerContext, loginSQL, args...)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, customerrors.ErrUnauthorized
+			return nil, customerrors.ErrEmailPasswordIncorrect
 		}
 		r.log.Warningln("[AuthorizeCustomerLogin] Error while getting customer ID", err.Error())
 		return nil, err

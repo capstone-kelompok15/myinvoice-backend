@@ -49,7 +49,7 @@ func InitWebService(params *WebServiceParams) error {
 			params.Log.Warningln("[ERROR] while close database connection:", err.Error())
 			return err
 		}
-		params.Log.Warningln("[INFO] Database connection closed gracefully:", err.Error())
+		params.Log.Warningln("[INFO] Database connection closed gracefully:")
 		return nil
 	}()
 
