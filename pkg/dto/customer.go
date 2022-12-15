@@ -27,7 +27,7 @@ type GetAllCustomerRespond struct {
 	FullName          string  `json:"full_name" db:"full_name"`
 	Email             string  `json:"email" db:"email"`
 	DisplayProfileURL *string `json:"display_profile_url" db:"display_profile_url"`
-	Address           string  `json:"address" db:"address"`
+	Address           *string `json:"address" db:"address"`
 	CreatedAt         string  `json:"created_at" db:"created_at"`
 	UpdatedAt         string  `json:"updated_at" db:"updated_at"`
 }
