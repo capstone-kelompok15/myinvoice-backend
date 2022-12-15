@@ -20,4 +20,5 @@ type InvoiceRepository interface {
 	GetReport(ctx context.Context, params *dto.ReportParams) (*dto.ReportResponse, error)
 	UpdateMessage(ctx context.Context, invoiceID int, message string) error
 	UpdateMerchantBankID(ctx context.Context, invoiceID int, merchantBankID int) error
+	GetPaymentStatusList(ctx context.Context) (*[]dto.PaymentStatus, error)
 }
