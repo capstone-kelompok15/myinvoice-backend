@@ -16,4 +16,6 @@ type NotificationRepository interface {
 	CreateNotificationMerchant(ctx context.Context, req *dto.CreateNotification) error
 	MarkNotifCustomerAsRead(ctx context.Context, NotifID int, CustomerID int) error
 	MarkNotifMerchantAsRead(ctx context.Context, NotifID int, MerchantID int) error
+	GetUnreadNotifCountMerchant(ctx context.Context, MerchantID int) (int, error)
+	GetUnreadNotifCountCustomer(ctx context.Context, CustomerID int) (int, error)
 }

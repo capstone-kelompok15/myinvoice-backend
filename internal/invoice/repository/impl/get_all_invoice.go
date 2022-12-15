@@ -57,10 +57,6 @@ func (r *invoiceRepository) GetAllInvoice(ctx context.Context, req *dto.GetAllIn
 	countInvoicesSQL, args1, err := getAllInvoiceBuilder.
 		Select("COUNT(i.id)").
 		From("invoices AS i").
-		InnerJoin("invoice_details AS id ON id.invoice_id = i.id").
-		InnerJoin("payment_statuses AS ps ON ps.id = i.payment_status_id").
-		InnerJoin("customer_details AS cd ON cd.customer_id = i.customer_id").
-		LeftJoin("payment_types AS pt ON pt.id = i.payment_type_id").
 		GroupBy("i.id").
 		ToSql()
 	if err != nil {

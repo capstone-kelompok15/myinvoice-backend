@@ -14,4 +14,5 @@ type CustomerService interface {
 	GetAllNotificationCustomer(ctx context.Context, customerID int, req *dto.NotificationRequest) (*[]dto.NotificationRespond, error)
 	MarkNotifCustomerAsRead(ctx context.Context, NotifID int, CustomerID int) error
 	GetSummary(ctx context.Context, customerID int) (*dto.CustomerSummary, error)
+	GetUnreadNotifCount(ctx context.Context, CustomerID int) (int, error)
 }

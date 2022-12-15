@@ -1,15 +1,26 @@
 package handler
 
 import (
+	"log"
+
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
+	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/authutils"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/httputils"
 	"github.com/labstack/echo/v4"
 )
 
-func (h *authHandler) CustomerLogin() echo.HandlerFunc {
+func (h *merchantHandler) UpdateMerchantProfile() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var req dto.CustomerLoginRequest
+		adminCtx := authutils.AdminContextFromRequestContext(c)
+		if adminCtx == nil {
+			h.log.Warningln("[UpdateMerchantProfile] Couldn't extract user account from context")
+			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
+				Err: customerrors.ErrInternalServer,
+			})
+		}
+
+		var req dto.UpdateMerchantProfileRequest
 		err := c.Bind(&req)
 		if err != nil {
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
@@ -26,22 +37,16 @@ func (h *authHandler) CustomerLogin() echo.HandlerFunc {
 			})
 		}
 
-		accessToken, err := h.service.CustomerLogin(c.Request().Context(), &req)
+		err = h.service.UpdateMerchantProfile(c.Request().Context(), &adminCtx.ID, &req)
 		if err != nil {
-			if err == customerrors.ErrEmailPasswordIncorrect {
-				return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
-					Err: err,
-				})
-			}
-
-			h.log.Warningln("[CustomerEmailVerification] Error while calling the service function:", err.Error())
+			log.Println("[UpdateMerchantProfile] Couldn't update profile")
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
-				Err: customerrors.ErrInternalServer,
+				Err: err,
 			})
 		}
 
 		return httputils.WriteResponse(c, httputils.SuccessResponseParams{
-			Data: accessToken,
+			Data: "Update Merchant Success!",
 		})
 	}
 }

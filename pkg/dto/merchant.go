@@ -69,6 +69,7 @@ type GetMerchantBankRequest struct {
 }
 
 type GetMerchantBankResponse struct {
+	ID         int    `json:"id" db:"id"`
 	BankName   string `json:"bank_name" db:"bank_name"`
 	BankCode   string `json:"bank_code" db:"bank_code"`
 	OnBehalfOf string `json:"on_behalf_of" db:"on_behalf_of"`
@@ -85,4 +86,10 @@ type UpdateMerchantBankDataRequest struct {
 	MerchantBankData
 	MerchantBankID int `param:"merchant_bank_id" validate:"required"`
 	MerchantID     int
+}
+type UpdateMerchantProfileRequest struct {
+	Username            string `json:"username" validate:"required"`
+	MerchantName        string `json:"merchant_name" validate:"required"`
+	MerchantPhoneNumber string `json:"merchant_phone_number" validate:"required"`
+	MerchantAddress     string `json:"merchant_address" validate:"required"`
 }

@@ -444,7 +444,7 @@ paths:
     get:
       tags:
         - Customer
-      summary: "[In Progress] Get unread notification count"
+      summary: "Get unread notification count"
 
       responses:
         "200":
@@ -935,7 +935,7 @@ paths:
     get:
       tags:
         - Merchant
-      summary: "[In Progress] Get unread notification count"
+      summary: "Get unread notification count"
 
       responses:
         "200":
@@ -1199,7 +1199,7 @@ paths:
         - merchantBearerAuth: []
       tags:
         - Merchant
-      summary: "[In Progress] Update merchant profile"
+      summary: "Update merchant profile"
       requestBody:
         description: payload
         content:

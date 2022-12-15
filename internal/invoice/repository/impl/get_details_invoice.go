@@ -32,6 +32,7 @@ func (r *invoiceRepository) GetDetailInvoiceByID(ctx context.Context, req *dto.G
 		From("invoices AS i").
 		InnerJoin("invoice_details AS id ON id.invoice_id = i.id").
 		InnerJoin("payment_statuses AS ps ON ps.id = i.payment_status_id").
+		InnerJoin("customers AS c ON c.id = i.customer_id").
 		InnerJoin("customer_details AS cd ON cd.customer_id = i.customer_id").
 		InnerJoin("merchants AS m ON m.id = i.merchant_id").
 		LeftJoin("payment_types AS pt ON pt.id = i.payment_type_id").
