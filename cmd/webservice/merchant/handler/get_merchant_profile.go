@@ -18,7 +18,7 @@ func (h *merchantHandler) GetMerchantProfile() echo.HandlerFunc {
 			})
 		}
 
-		data, err := h.service.GetMerchantProfile(c.Request().Context(), adminCtx.ID)
+		data, err := h.service.GetMerchantProfile(c.Request().Context(), adminCtx.MerchantID)
 		if err != nil {
 			h.log.Warningln("[GetMerchantProfile] Error while calling the service:", err.Error())
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
