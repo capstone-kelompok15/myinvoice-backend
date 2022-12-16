@@ -51,14 +51,13 @@ func (h *authHandler) RegisterMerchant() echo.HandlerFunc {
 
 		err = h.service.MerchantRegistration(c.Request().Context(), &req)
 		if err != nil {
-			if err == customerrors.ErrAccountDuplicated {
-				return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
-					Err: customerrors.ErrAccountDuplicated,
-				})
+			if err != customerrors.ErrAccountDuplicated ||
+				err != customerrors.ErrMerchantNameDuplicated ||
+				err != customerrors.ErrUsernameDuplicated {
+				h.log.Warningln("[RegisterMerchant] Error while calling the service function")
 			}
-			h.log.Warningln("[RegisterCustomer] Error while calling the service function")
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
-				Err: customerrors.ErrInternalServer,
+				Err: err,
 			})
 		}
 

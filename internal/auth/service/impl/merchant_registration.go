@@ -29,7 +29,9 @@ func (s *authService) MerchantRegistration(ctx context.Context, req *dto.Merchan
 
 		err = s.repo.MerchantRegistration(ctx, req)
 		if err != nil {
-			s.log.Warningln("[CustomerRegistration] Error while calling the repo function", err.Error())
+			if err == customerrors.ErrMerchantNameDuplicated || err == customerrors.ErrUsernameDuplicated {
+				s.log.Warningln("[CustomerRegistration] Error while calling the repo function", err.Error())
+			}
 			return err
 		}
 	}

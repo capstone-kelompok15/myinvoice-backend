@@ -33,7 +33,7 @@ func (r *authRepository) MerchantRegistration(ctx context.Context, req *dto.Merc
 	if err != nil {
 		if errCode, ok := err.(*mysql.MySQLError); ok {
 			if errCode.Number == 1062 {
-				return customerrors.ErrUniqueRecord
+				return customerrors.ErrMerchantNameDuplicated
 			}
 		}
 		r.log.Warningln("[AdminRegistration] Error while insert merchant:", err.Error())
@@ -100,7 +100,7 @@ func (r *authRepository) MerchantRegistration(ctx context.Context, req *dto.Merc
 	if err != nil {
 		if errCode, ok := err.(*mysql.MySQLError); ok {
 			if errCode.Number == 1062 {
-				return customerrors.ErrMerchantNameDuplicated
+				return customerrors.ErrUsernameDuplicated
 			}
 		}
 		r.log.Warningln("[AdminRegistration] Error while insert merchant admin:", err.Error())

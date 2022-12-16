@@ -17,6 +17,7 @@ var (
 	ErrAccountDuplicated      = errors.New("email or username has already exists")
 	ErrUniqueRecord           = errors.New("record duplicated, must be unique")
 	ErrMerchantNameDuplicated = errors.New("merchant name duplicated, must be unique")
+	ErrUsernameDuplicated     = errors.New("username duplicated, must be unique")
 	ErrEmailPasswordIncorrect = errors.New("email or password is incorrect")
 )
 
@@ -30,6 +31,7 @@ var errMap map[error]dto.ErrorResponse = map[error]dto.ErrorResponse{
 	ErrAccountDuplicated:      {HTTPErrorCode: http.StatusBadRequest, Message: ErrAccountDuplicated.Error()},
 	ErrUniqueRecord:           {HTTPErrorCode: http.StatusBadRequest, Message: ErrUniqueRecord.Error()},
 	ErrMerchantNameDuplicated: {HTTPErrorCode: http.StatusBadRequest, Message: ErrMerchantNameDuplicated.Error()},
+	ErrUsernameDuplicated:     {HTTPErrorCode: http.StatusBadRequest, Message: ErrUsernameDuplicated.Error()},
 	ErrEmailPasswordIncorrect: {HTTPErrorCode: http.StatusUnauthorized, Message: ErrEmailPasswordIncorrect.Error()},
 }
 

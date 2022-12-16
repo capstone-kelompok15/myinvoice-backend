@@ -16,6 +16,7 @@ func (r *authRepository) LoginAdmin(ctx context.Context, req *dto.AdminLoginRequ
 		InnerJoin("merchants as m ON m.id = a.merchant_id").
 		Where(squirrel.Eq{"a.email": req.Email}).
 		Where(squirrel.Eq{"a.admin_password": req.Password}).
+		Where(squirrel.Eq{"a.is_verified": true}).
 		ToSql()
 	if err != nil {
 		r.log.Warningln("[LoginAdmin] Error while creating sql from squirrel", err.Error())
