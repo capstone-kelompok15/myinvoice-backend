@@ -61,6 +61,7 @@ func InitWebService(params *WebServiceParams) error {
 
 	// Echo Web Server
 	e := echo.New()
+	e.Use(middleware.Static("/assets"))
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     whiteListAllowOrigin,
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
