@@ -8,6 +8,7 @@ import (
 
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
+	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/emailutils"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/randomutils"
 )
 
@@ -27,15 +28,19 @@ func (s *authService) AdminResetPasswordRequest(ctx context.Context, email strin
 
 	code := randomutils.GenerateNRandomString(128)
 	frontEndCallback := fmt.Sprintf("%s?code=%s&email=%s", s.config.FrontEndURL, code, email)
-
+	body, err := emailutils.ParseTemplate(emailutils.EmailResetPasswordReq, struct{ Link string }{Link: frontEndCallback})
+	if err != nil {
+		s.log.Warningln("email error : ", err.Error())
+		return err
+	}
 	mg := s.mailgun.NewMessage(
 		s.config.Mailgun.SenderEmail,
 		"myInvoice - Your Reset Password Request",
 		// TODO: Need to change to the html template
-		frontEndCallback,
+		body,
 		email,
 	)
-
+	mg.SetHtml(body)
 	_, _, err = s.mailgun.Send(ctx, mg)
 	if err != nil {
 		s.log.Warningln("[CustomerResetPasswordRequest] Error while send the email:", err.Error())

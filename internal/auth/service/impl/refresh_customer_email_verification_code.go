@@ -8,6 +8,7 @@ import (
 	"time"
 
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
+	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/emailutils"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/randomutils"
 )
 
@@ -28,14 +29,18 @@ func (s *authService) RefreshEmailVerificationCode(ctx context.Context, email st
 	code := randomutils.GenerateNRandomString(4)
 	code = strings.ToUpper(code)
 	s.redis.Set(ctx, fmt.Sprintf("customer-regis:%s", email), code, 5*time.Minute)
-
+	body, err := emailutils.ParseTemplate(emailutils.EmailVerificationCustomer, struct{ Code string }{Code: code})
+	if err != nil {
+		s.log.Warningln("email error : ", err.Error())
+		return err
+	}
 	mg := s.mailgun.NewMessage(
 		s.config.Mailgun.SenderEmail,
 		"myInvoice - Your New Email Verification Code",
-		// TODO: Need to change to the html template
-		code,
+		body,
 		email,
 	)
+	mg.SetHtml(body)
 
 	_, _, err = s.mailgun.Send(ctx, mg)
 	if err != nil {

@@ -5,6 +5,14 @@ import (
 	"html/template"
 )
 
+var (
+	EmailResetPasswordReq      = "assets/email-reset-password-req.html"
+	EmailVerificationCustomer  = "assets/email-verification-customer.html"
+	EmailVerificationMerchant  = "assets/email-verification-merchant.html"
+	EmailNotifNewInvoice       = "assets/email-notif-new-invoice.html"
+	EmailNotifResetPassSuccess = "assets/email-notif-reset-password-success.html"
+)
+
 func ParseTemplate(templateFileName string, data interface{}) (string, error) {
 	t, err := template.ParseFiles(templateFileName)
 	if err != nil {
