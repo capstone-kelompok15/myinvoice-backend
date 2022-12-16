@@ -56,7 +56,7 @@ func (s *invoiceService) UploadPayment(ctx context.Context, customerID int, invo
 	content := fmt.Sprintf("Halo %s, ada yang bayar invoice nich, check url ini dong %s untuk invoice id %d", merchantBrief.Username, *imageURL, invoiceID)
 	mg := s.mailgun.NewMessage(
 		s.config.Mailgun.SenderEmail,
-		"myInvoice - You Have New Invoice",
+		"myInvoice - You Have New Payment",
 		// TODO: Need to change to the html template
 		content,
 		merchantBrief.Email,

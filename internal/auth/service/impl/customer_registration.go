@@ -9,6 +9,7 @@ import (
 
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
+	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/emailutils"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/passwordutils"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/randomutils"
 )
@@ -36,15 +37,19 @@ func (s *authService) CustomerRegistration(ctx context.Context, params *dto.Cust
 
 	code := randomutils.GenerateNRandomString(4)
 	code = strings.ToUpper(code)
-
+	// DONE
+	body, err := emailutils.ParseTemplate(emailutils.EmailVerificationCustomer, struct{ Code string }{Code: code})
+	if err != nil {
+		s.log.Warningln("email error : ", err.Error())
+		return err
+	}
 	mg := s.mailgun.NewMessage(
 		s.config.Mailgun.SenderEmail,
 		"myInvoice - Your Email Verification Code",
-		// TODO: Need to change to the html template
-		code,
+		body,
 		params.Email,
 	)
-
+	mg.SetHtml(body)
 	_, _, err = s.mailgun.Send(ctx, mg)
 	if err != nil {
 		s.log.Warningln("[CustomerRegistration] Error while send the email:", err.Error())

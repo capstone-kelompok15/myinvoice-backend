@@ -6,6 +6,7 @@ import (
 
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
+	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/emailutils"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/passwordutils"
 	"github.com/go-redis/redis/v8"
 )
@@ -40,14 +41,19 @@ func (s *authService) ResetPassword(ctx context.Context, req *dto.CustomerResetP
 		s.log.Warningln("[CustomerResetPasswordRequest] Error while update the password:", err.Error())
 		return err
 	}
-
+	body, err := emailutils.ParseTemplate(emailutils.EmailResetPasswordReq, struct{}{})
+	if err != nil {
+		s.log.Warningln("email error : ", err.Error())
+		return err
+	}
 	mg := s.mailgun.NewMessage(
 		s.config.Mailgun.SenderEmail,
 		"myInvoice - Your Password Was Reset",
 		// TODO: Need to change to the html template
-		"password was reset",
+		body,
 		req.Email,
 	)
+	mg.SetHtml(body)
 
 	_, _, err = s.mailgun.Send(ctx, mg)
 	if err != nil {

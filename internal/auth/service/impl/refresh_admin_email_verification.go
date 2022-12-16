@@ -9,6 +9,7 @@ import (
 
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
+	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/emailutils"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/randomutils"
 )
 
@@ -32,15 +33,18 @@ func (s *authService) RefreshAdminEmailVerificationCode(ctx context.Context, ema
 
 	// TODO: Update the callback to the front end callback
 	hyperLink := fmt.Sprintf("%s?code=%s&email=%s", "Callback", code, email)
-
+	body, err := emailutils.ParseTemplate(emailutils.EmailVerificationMerchant, struct{ Link string }{Link: hyperLink})
+	if err != nil {
+		s.log.Warningln("email error : ", err.Error())
+		return err
+	}
 	mg := s.mailgun.NewMessage(
 		s.config.Mailgun.SenderEmail,
 		"myInvoice - Your New Email Verification Code",
-		// TODO: Need to change to the html template
-		code,
+		body,
 		hyperLink,
 	)
-
+	mg.SetHtml(body)
 	_, _, err = s.mailgun.Send(ctx, mg)
 	if err != nil {
 		s.log.Warningln("[CustomerRegistration] Error while send the email:", err.Error())
