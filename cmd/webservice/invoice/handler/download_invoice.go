@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"os"
+	"path"
 	"time"
 
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
@@ -11,6 +12,8 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/httputils"
 	"github.com/labstack/echo/v4"
 )
+
+var HTMlTemplatePath = path.Join("assets")
 
 func (h *invoiceHandler) DownloadInvoice() echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -41,7 +44,7 @@ func (h *invoiceHandler) DownloadInvoice() echo.HandlerFunc {
 			})
 		}
 
-		filename, err := h.service.GeneratePDF(c.Request().Context(), &req, h.config.HTMlTemplatePath)
+		filename, err := h.service.GeneratePDF(c.Request().Context(), &req, HTMlTemplatePath)
 		if err != nil {
 			if err != customerrors.ErrRecordNotFound {
 				h.log.Warningln("[DownloadInvoice] error while calling the service:", err.Error())

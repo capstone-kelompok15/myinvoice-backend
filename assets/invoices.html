@@ -7,7 +7,7 @@
 
     <style>
       body {
-        padding: 70px;
+        padding: 50px;
         font-family: "Poppins";
         font-style: normal;
         font-weight: 700;
@@ -24,10 +24,11 @@
       }
 
       table > * {
-        font-size: 25px;
+        font-size: 18px;
       }
 
-      td {
+      td,
+      th {
         padding-left: 20px;
       }
 
@@ -39,6 +40,7 @@
       .merchant-informations {
         border-bottom: 1px solid;
         padding: 20px 0% 20px 2%;
+        font-size: 500;
       }
 
       .personal-informations {
@@ -48,16 +50,20 @@
       }
 
       h1 {
-        font-size: 50px;
+        font-size: 35px;
       }
 
       p {
-        font-size: 28px;
+        font-size: 18px;
       }
 
       .item-row {
         padding: 9px;
         border-bottom: 1px solid#173468;
+      }
+
+      table tbody {
+        border: 1px solid black;
       }
     </style>
   </head>
@@ -66,7 +72,7 @@
       <tr>
         <td class="merchant-informations">{{EvaluateValue .MerchantName}}</td>
         <td rowspan="2">
-          <h1 style="text-align: right">INVOICE</h1>
+          <h1 style="text-align: right">INVOICES</h1>
         </td>
       </tr>
       <tr>
@@ -98,34 +104,34 @@
       </tr>
     </table>
 
-    <table>
+    <table style="border-collapse: collapse; margin-bottom: 80px">
       <tr style="background-color: #173468; color: white">
-        <th style="padding: 10px 0px 10px 0px; width: 50%; text-align: left">Item Description</th>
-        <th style="padding: 10px 0px 10px 0px; width: 10%">Qty</th>
-        <th style="padding: 10px 0px 10px 0px; width: 20%">Price</th>
-        <th style="padding: 10px 0px 10px 0px; width: 20%">Total</th>
+        <th style="padding: 20px 0px 20px 20px; width: 50%; text-align: left">Item Description</th>
+        <th style="padding: 20px 0px 20px 0px; width: 10%">Qty</th>
+        <th style="padding: 20px 0px 20px 0px; width: 20%">Price</th>
+        <th style="padding: 20px 0px 20px 0px; width: 20%">Total</th>
       </tr>
       {{range $index, $elem := .InvoiceDetail}}
       <tr class="item-row">
-        <td style="text-align: left">{{EvaluateValue $elem.Product}}</td>
-        <td style="text-align: center">{{EvaluateValue $elem.Quantity}}</td>
-        <td style="text-align: center">Rp{{EvaluateValue $elem.Price}}</td>
-        <td style="text-align: center">Rp{{SubTotalValue $elem.Quantity $elem.Price}}</td>
+        <td style="padding: 20px 0px 20px 20px; text-align: left">{{EvaluateValue $elem.Product}}</td>
+        <td style="padding: 20px 0px 20px 20px; text-align: center">{{EvaluateValue $elem.Quantity}}</td>
+        <td style="padding: 20px 0px 20px 20px; text-align: center">Rp{{ReadableIdr $elem.Price}}</td>
+        <td style="padding: 20px 0px 20px 20px; text-align: center">Rp{{SubTotalValue $elem.Quantity $elem.Price}}</td>
       </tr>
       {{end}}
       <tr>
         <td></td>
         <td></td>
-        <td style="text-align: center">Total:</td>
-        <td style="text-align: center">Rp{{EvaluateValue .TotalPrice}}</td>
+        <td style="background-color: #173468; color: white; text-align: center; padding: 20px 0px 20px 0px">Total:</td>
+        <td style="background-color: #173468; color: white; text-align: center; padding: 20px 0px 20px 0px">Rp{{ReadableIdr .TotalPrice}}</td>
       </tr>
     </table>
 
-    <h1 style="margin-bottom: 0px; padding-bottom: 0px" style="margin-top: 0px; padding-top: 0px">Notes</h1>
-    <p style="margin-bottom: 0px; padding-bottom: 0px" style="margin-top: 0px; padding-top: 0px">{{EvaluateValue .Note}}</p>
+    <h1 style="margin-bottom: 0px; padding-bottom: 0px">Notes</h1>
+    <p style="margin-bottom: 0px; padding-bottom: 0px">{{EvaluateValue .Note}}</p>
 
-    <h1 style="margin-bottom: 0px; padding-bottom: 0px" style="margin-top: 0px; padding-top: 0px">Message</h1>
-    <p style="margin-bottom: 0px; padding-bottom: 0px" style="margin-top: 0px; padding-top: 0px">{{EvaluateValue .Message}}</p>
+    <h1 style="margin-bottom: 0px; padding-bottom: 0px">Message</h1>
+    <p style="margin-bottom: 0px; padding-bottom: 0px">{{EvaluateValue .Message}}</p>
 
     <h1 style="margin-bottom: 10px; padding-bottom: 0px">Terms and Conditions</h1>
     <p style="margin-top: 0px; padding-top: 0px">Please make the payment before the due date</p>

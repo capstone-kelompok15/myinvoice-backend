@@ -298,7 +298,6 @@ func InitWebService(params *WebServiceParams) error {
 		Service:       invoiceService,
 		Middleware:    middleware,
 		WebsocketPool: websocketPool,
-		Config:        params.Config,
 		Log: params.Log.WithFields(logrus.Fields{
 			"domain": "invoice",
 			"layer":  "handler",

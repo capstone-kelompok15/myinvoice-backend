@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"reflect"
+	"strconv"
 	"strings"
 	"text/template"
 
@@ -56,13 +57,36 @@ func SubTotalValue(quantity interface{}, price interface{}) interface{} {
 
 	intQty := evaluatedQtyValue.(int)
 	intPrice := evaluatedPriceValue.(int64)
+	subTotal := int64(intQty) * intPrice
+	subTotalValue := ReadableIdr(strconv.FormatInt(int64(subTotal), 10))
 
-	return int64(intQty) * intPrice
+	return subTotalValue
 }
 
 func InvoiceString(quantity interface{}) interface{} {
 	evaluatedValue := EvaluateValue(quantity)
 	return fmt.Sprintf("%06v", evaluatedValue)
+}
+
+func ReadableIdr(value interface{}) interface{} {
+	str := fmt.Sprintf("%v", value)
+	strLen := len(str)
+
+	idr := ""
+
+	for strLen >= 3 {
+		idr = str[strLen-3:strLen] + idr
+		strLen -= 3
+		if strLen != 0 {
+			idr = "." + idr
+		}
+	}
+
+	if strLen < 3 {
+		idr = str[:strLen] + idr
+	}
+
+	return idr
 }
 
 func CreatePDFFromHTMLFile(templatePath, resFileName string, data interface{}) error {
@@ -80,6 +104,7 @@ func CreatePDFFromHTMLFile(templatePath, resFileName string, data interface{}) e
 		"ReadableDate":  ReadableDate,
 		"InvoiceString": InvoiceString,
 		"SubTotalValue": SubTotalValue,
+		"ReadableIdr":   ReadableIdr,
 	})
 
 	templ, err = templ.ParseFiles(templatePath)
@@ -111,7 +136,7 @@ func CreatePDFFromHTMLFile(templatePath, resFileName string, data interface{}) e
 	page.PageOptions.EnableLocalFileAccess.Set(true)
 
 	pdfg.AddPage(page)
-	pdfg.Orientation.Set(wkhtmltopdf.OrientationLandscape)
+	pdfg.Orientation.Set(wkhtmltopdf.OrientationPortrait)
 	pdfg.Dpi.Set(300)
 	pdfg.PageSize.Set(wkhtmltopdf.PageSizeA4)
 	err = pdfg.Create()
