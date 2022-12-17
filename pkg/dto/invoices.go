@@ -55,6 +55,7 @@ type GetInvoiceDetailsByIDResponse struct {
 	InvoiceID           int                `json:"invoice_id" db:"invoice_id"`
 	MerchantID          int                `json:"merchant_id" db:"merchant_id"`
 	MerchantName        string             `json:"merchant_name" db:"merchant_name"`
+	MerchantAddress     *string            `json:"merchant_address" db:"merchant_address"`
 	CustomerID          int                `json:"customer_id" db:"customer_id"`
 	CustomerName        string             `json:"customer_name" db:"customer_name"`
 	CustomerEmail       string             `json:"customer_email" db:"customer_email"`

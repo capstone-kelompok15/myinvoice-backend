@@ -42,4 +42,5 @@ func InitInvoiceRouter(params *InvoiceRouterParams) {
 	invoiceV1Group.PUT("/:invoice_id/payment_method", invoiceHandler.UpdatePaymentMethod(), params.Middleware.CustomerMustAuthorized())
 	invoiceV1Group.GET("/reports", invoiceHandler.GetReport(), params.Middleware.CustomerMustAuthorized())
 	invoiceV1Group.GET("/statuses", invoiceHandler.GetPaymentStatusList())
+	invoiceV1Group.GET("/:invoice_id/download", invoiceHandler.DownloadInvoice(), params.Middleware.CustomerMustAuthorized())
 }

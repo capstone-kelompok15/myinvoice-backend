@@ -1573,6 +1573,29 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
+  /invoices/{invoice_id}/download:
+    get:
+      security:
+        - customerBearerAuth: []
+      tags:
+        - Invoice
+      summary: "Download PDF specific invoice"
+      parameters:
+        - name: invoice_id
+          in: path
+          description: id invoice
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Generate and download success"
+          content:
+            application/pdf:
+              schema:
+                type: string
   /invoices/{invoice_id}/payments/upload:
     patch:
       security:
