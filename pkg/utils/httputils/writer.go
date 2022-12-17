@@ -37,3 +37,7 @@ func WriteErrorResponse(c echo.Context, params ErrorResponseParams) error {
 		Data: nil,
 	})
 }
+
+func ServeFile(e echo.Context, param dto.ServeFileResponseParam) error {
+	return e.Attachment(param.FileLocation, param.AttachmentName)
+}

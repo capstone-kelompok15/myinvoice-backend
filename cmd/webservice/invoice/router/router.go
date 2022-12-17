@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/apiversioning"
 	"github.com/capstone-kelompok15/myinvoice-backend/cmd/webservice/invoice/handler"
+	"github.com/capstone-kelompok15/myinvoice-backend/config"
 	"github.com/capstone-kelompok15/myinvoice-backend/internal/invoice/service"
 	custommiddleware "github.com/capstone-kelompok15/myinvoice-backend/pkg/middleware/service"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/validatorutils"
@@ -18,6 +19,7 @@ type InvoiceRouterParams struct {
 	Service       service.InvoiceService
 	Middleware    custommiddleware.Middleware
 	WebsocketPool *websocketutils.Pool
+	Config        *config.Config
 }
 
 func InitInvoiceRouter(params *InvoiceRouterParams) {
@@ -26,6 +28,7 @@ func InitInvoiceRouter(params *InvoiceRouterParams) {
 		Log:           params.Log,
 		Validator:     params.Validator,
 		WebsocketPool: params.WebsocketPool,
+		Config:        params.Config,
 	})
 
 	invoiceV1Group := params.E.Group(apiversioning.APIVersionOne + "/invoices")
@@ -42,4 +45,5 @@ func InitInvoiceRouter(params *InvoiceRouterParams) {
 	invoiceV1Group.PUT("/:invoice_id/payment_method", invoiceHandler.UpdatePaymentMethod(), params.Middleware.CustomerMustAuthorized())
 	invoiceV1Group.GET("/reports", invoiceHandler.GetReport(), params.Middleware.CustomerMustAuthorized())
 	invoiceV1Group.GET("/statuses", invoiceHandler.GetPaymentStatusList())
+	invoiceV1Group.GET("/download/:invoice_id", invoiceHandler.DownloadInvoice(), params.Middleware.CustomerMustAuthorized())
 }

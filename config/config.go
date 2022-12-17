@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"os"
+	"path"
 
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/validatorutils"
 	"github.com/joho/godotenv"
@@ -18,6 +19,7 @@ type Config struct {
 	CustomerToken
 	FrontEndURL              string `validate:"required,url"`
 	DefaultProfilePictureURL string `validate:"required,url"`
+	HTMlTemplatePath         string
 }
 
 var config *Config
@@ -67,6 +69,7 @@ func initConfig() error {
 		},
 		FrontEndURL:              os.Getenv("FRONTEND_URL"),
 		DefaultProfilePictureURL: os.Getenv("DEFAULT_PROFILE_PICTURE_URL"),
+		HTMlTemplatePath:         path.Join("html"),
 	}
 
 	validator, err := validatorutils.New()

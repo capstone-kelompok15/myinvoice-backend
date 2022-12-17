@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/capstone-kelompok15/myinvoice-backend/config"
 	"github.com/capstone-kelompok15/myinvoice-backend/internal/invoice/service"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/validatorutils"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/websocketutils"
@@ -12,6 +13,7 @@ type invoiceHandler struct {
 	log           *logrus.Entry
 	validator     *validatorutils.Validator
 	websocketPool *websocketutils.Pool
+	config        *config.Config
 }
 
 type InvoiceHandlerParams struct {
@@ -19,6 +21,7 @@ type InvoiceHandlerParams struct {
 	Log           *logrus.Entry
 	Validator     *validatorutils.Validator
 	WebsocketPool *websocketutils.Pool
+	Config        *config.Config
 }
 
 func NewInvoiceHandler(params *InvoiceHandlerParams) *invoiceHandler {
@@ -27,5 +30,6 @@ func NewInvoiceHandler(params *InvoiceHandlerParams) *invoiceHandler {
 		log:           params.Log,
 		validator:     params.Validator,
 		websocketPool: params.WebsocketPool,
+		config:        params.Config,
 	}
 }
