@@ -20,8 +20,9 @@ FROM alpine:3.16.0
 
 WORKDIR /app
 
-EXPOSE 8080
-
+COPY ./assets/ ./assets/
 COPY --from=build /app/main /app/main
+
+EXPOSE 8080
 
 CMD ["./main"]
