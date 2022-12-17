@@ -43,6 +43,12 @@ func (m *middleware) CustomerMustAuthorized() echo.MiddlewareFunc {
 
 			accessToken := splitted[1]
 			splittedToken := strings.Split(accessToken, ".")
+			if len(splittedToken) != 3 {
+				return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
+					Err:    customerrors.ErrBadRequest,
+					Detail: []string{"Token format is not valid"},
+				})
+			}
 			encodedHeader, encodedPayload, encodedSignature := splittedToken[0], splittedToken[1], splittedToken[2]
 
 			validate := validateCustomerToken(m.config.SecretKey, encodedHeader, encodedPayload, encodedSignature)
