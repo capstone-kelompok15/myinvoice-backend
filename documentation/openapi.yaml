@@ -1018,6 +1018,8 @@ paths:
         - merchantBearerAuth: []
   /merchants/banks/{merchant_bank_id}:
     put:
+      security:
+        - merchantBearerAuth: []
       tags:
         - Merchant
       summary: "Update merchant bank"
@@ -1076,6 +1078,8 @@ paths:
                 $ref: "#/components/schemas/inline_response_500"
   /merchants/banks:
     post:
+      security:
+        - merchantBearerAuth: []
       tags:
         - Merchant
       summary: "Create new merchant bank"
@@ -2338,6 +2342,8 @@ paths:
 
   /invoices/{id}/payment_method:
     put:
+      security:
+        - customerBearerAuth: []
       tags:
         - Invoice
       summary: "Update payment method"
