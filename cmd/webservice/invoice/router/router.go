@@ -43,4 +43,6 @@ func InitInvoiceRouter(params *InvoiceRouterParams) {
 	invoiceV1Group.GET("/reports", invoiceHandler.GetReport(), params.Middleware.CustomerMustAuthorized())
 	invoiceV1Group.GET("/statuses", invoiceHandler.GetPaymentStatusList())
 	invoiceV1Group.GET("/:invoice_id/download", invoiceHandler.DownloadInvoice(), params.Middleware.CustomerMustAuthorized())
+	invoiceV1Group.DELETE("/:invoice_id/:invoice_detail_id", invoiceHandler.DeleteInvoice(), params.Middleware.CustomerMustAuthorized())
+	invoiceV1Group.DELETE("/:invoice_id", invoiceHandler.DeleteInvoice(), params.Middleware.CustomerMustAuthorized())
 }

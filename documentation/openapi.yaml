@@ -1609,6 +1609,120 @@ paths:
             application/pdf:
               schema:
                 type: string
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /invoices/{invoice_id}/{invoice_detail_id}:
+    delete:
+      security:
+        - customerBearerAuth: []
+      tags:
+        - Invoice
+      summary: "Delete Invoice by Invoice ID"
+      parameters:
+        - name: invoice_id
+          in: path
+          description: id invoice
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+        - name: invoice_detail_id
+          in: path
+          description: id invoice
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Delete Success"
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: object
+                    default: null
+                  data:
+                    type: string
+                    default: "Invoice Deleted!"
+        "404":
+          description: "Invoice not found"
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        default: record not found
+                  data:
+                    type: object
+                    default: null
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /invoices/{invoice_id}:
+    delete:
+      security:
+        - customerBearerAuth: []
+      tags:
+        - Invoice
+      summary: "Delete Invoice by Invoice ID"
+      parameters:
+        - name: invoice_id
+          in: path
+          description: id invoice
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Delete Success"
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: object
+                    default: null
+                  data:
+                    type: string
+                    default: "Invoice Deleted!"
+        "404":
+          description: "Invoice not found"
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        default: record not found
+                  data:
+                    type: object
+                    default: null
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
   /invoices/{invoice_id}/payments/upload:
     patch:
       security:
