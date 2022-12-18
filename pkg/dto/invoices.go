@@ -127,3 +127,9 @@ type ReportResponse struct {
 	Reports []ReportDate `json:"reports"`
 	ReportTransaction
 }
+
+type DeleteInvoice struct {
+	InvoiceID       int `param:"invoice_id"`
+	InvoiceDetailID int `param:"invoice_detail_id"`
+	CustomerID      int
+}

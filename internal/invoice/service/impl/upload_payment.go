@@ -13,7 +13,7 @@ import (
 )
 
 func (s *invoiceService) UploadPayment(ctx context.Context, customerID int, invoiceID int, filePath string) (*websocketutils.Message, error) {
-	err := s.repo.ValidateInvoiceID(ctx, customerID, invoiceID)
+	err := s.repo.ValidateInvoiceID(ctx, customerID, invoiceID, nil)
 	if err != nil {
 		if err != customerrors.ErrRecordNotFound {
 			s.log.Warningln("[UploadPayment] Failed on running validate repository:", err.Error())

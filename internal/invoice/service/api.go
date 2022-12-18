@@ -20,4 +20,5 @@ type InvoiceService interface {
 	UpdatePaymentMethod(ctx context.Context, invoiceID int, merchantBankID int) error
 	GetPaymentStatusList(ctx context.Context) (*[]dto.PaymentStatus, error)
 	GeneratePDF(ctx context.Context, req *dto.GetDetailsInvoicesRequest, downloadBase string) (*string, error)
+	DeleteInvoice(ctx context.Context, req *dto.DeleteInvoice) error
 }

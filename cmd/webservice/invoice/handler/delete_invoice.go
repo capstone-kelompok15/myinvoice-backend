@@ -1,11 +1,6 @@
 package handler
 
 import (
-	"fmt"
-	"os"
-	"path"
-	"time"
-
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/authutils"
@@ -13,11 +8,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var HTMlTemplatePath = path.Join("assets")
-
-func (h *invoiceHandler) DownloadInvoice() echo.HandlerFunc {
+func (h *invoiceHandler) DeleteInvoice() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var req dto.GetDetailsInvoicesRequest
+		var req dto.DeleteInvoice
 		customerCtx := authutils.CustomerFromRequestContext(c)
 		if customerCtx == nil {
 			h.log.Warningln("[CustomerGetDetailInvoiceByID] Couldn't extract user account from context")
@@ -43,22 +36,18 @@ func (h *invoiceHandler) DownloadInvoice() echo.HandlerFunc {
 			})
 		}
 
-		filename, err := h.service.GeneratePDF(c.Request().Context(), &req, HTMlTemplatePath)
+		err = h.service.DeleteInvoice(c.Request().Context(), &req)
 		if err != nil {
 			if err != customerrors.ErrRecordNotFound {
-				h.log.Warningln("[DownloadInvoice] error while calling the service:", err.Error())
+				h.log.Warningln("[DeleteInvoice] Error on running the service:", err.Error())
 			}
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
-				Err: customerrors.ErrInternalServer,
+				Err: err,
 			})
 		}
-		defer os.Remove(*filename)
 
-		date := time.Now().String()
-
-		return httputils.ServeFile(c, dto.ServeFileResponseParam{
-			FileLocation:   *filename,
-			AttachmentName: fmt.Sprintf("Laporan Pembayaran %s.pdf", date),
+		return httputils.WriteResponse(c, httputils.SuccessResponseParams{
+			Data: "Invoice Deleted!",
 		})
 	}
 }
