@@ -222,8 +222,7 @@ func InitWebService(params *WebServiceParams) error {
 	})
 
 	bankService := bankservice.NewBankService(&bankservice.BankServiceParams{
-		Repo:   bankRepository,
-		Config: params.Config,
+		Repo: bankRepository,
 		Log: params.Log.WithFields(logrus.Fields{
 			"domain": "bank",
 			"layer":  "service",

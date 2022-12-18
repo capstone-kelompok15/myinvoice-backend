@@ -14,7 +14,7 @@ func (s *bankService) GetAllBank(ctx context.Context) (*[]dto.BankResponse, erro
 		if err != customerrors.ErrRecordNotFound {
 			s.log.Warningln("[GetAllBank] Error while get all bank repo", err.Error())
 		}
-		return nil, customerrors.ErrRecordNotFound
+		return nil, err
 	}
 
 	return bankResponse, nil
