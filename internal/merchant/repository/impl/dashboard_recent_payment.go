@@ -23,7 +23,7 @@ func (r *merchantRepository) GetDashboardRecentPayments(ctx context.Context, mer
 		GroupBy("id.invoice_id").
 		Limit(7).
 		Where(squirrel.Eq{"i.merchant_id": merchantID}).
-		OrderBy("i.due_at desc").
+		OrderBy("i.updated_at desc").
 		ToSql()
 	if err != nil {
 		return nil, err

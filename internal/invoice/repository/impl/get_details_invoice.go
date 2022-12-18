@@ -3,6 +3,7 @@ package impl
 import (
 	"context"
 	"database/sql"
+	"log"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
@@ -38,8 +39,7 @@ func (r *invoiceRepository) GetDetailInvoiceByID(ctx context.Context, req *dto.G
 		InnerJoin("merchants AS m ON m.id = i.merchant_id").
 		LeftJoin("payment_types AS pt ON pt.id = i.payment_type_id").
 		Where(squirrel.Eq{"i.id": req.InvoiceID}).
-		GroupBy("id.invoice_id").
-		OrderBy("created_at DESC").
+		GroupBy("i.id").
 		ToSql()
 	if err != nil {
 		r.log.Warningln("[GetAllInvoice] Failed on build get all invoice SQL:", err.Error())
@@ -59,15 +59,8 @@ func (r *invoiceRepository) GetDetailInvoiceByID(ctx context.Context, req *dto.G
 		return nil, err
 	}
 
-	prepInvoiceDetail, err := r.db.PreparexContext(ctx, getInvoiceDetailsSQL)
-	if err != nil {
-		r.log.Warningln("[GetAllInvoice] Failed on prepared detail invoice statement:", err.Error())
-		return nil, err
-	}
-	defer prepInvoiceDetail.Close()
-
 	invoices := dto.GetInvoiceDetailsByIDResponse{}
-
+	log.Println(getAllInvoiceSQL, args)
 	err = r.db.GetContext(ctx, &invoices, getAllInvoiceSQL, args...)
 	if err != nil {
 		if err == sql.ErrNoRows {

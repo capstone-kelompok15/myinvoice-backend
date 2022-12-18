@@ -19,7 +19,6 @@ func (r *customerRepository) GetAllCustomer(ctx context.Context, req *dto.GetAll
 		Where(squirrel.NotEq{"cs.is_verified": false}).
 		Where(squirrel.Like{"cd.full_name": "%" + req.Name + "%"}).
 		Where(squirrel.Like{"c.email": "%" + req.Email + "%"}).
-		OrderBy("c.id DESC").
 		Offset(startIndex).Limit(req.Limit).
 		ToSql()
 	if err != nil {

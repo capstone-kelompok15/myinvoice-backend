@@ -49,7 +49,7 @@ func (h *invoiceHandler) DownloadInvoice() echo.HandlerFunc {
 				h.log.Warningln("[DownloadInvoice] error while calling the service:", err.Error())
 			}
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
-				Err: customerrors.ErrInternalServer,
+				Err: err,
 			})
 		}
 		defer os.Remove(*filename)

@@ -45,7 +45,7 @@ func (r *invoiceRepository) GetAllInvoice(ctx context.Context, req *dto.GetAllIn
 		InnerJoin("merchants AS m ON m.id = i.merchant_id").
 		LeftJoin("payment_types AS pt ON pt.id = i.payment_type_id").
 		GroupBy("id.invoice_id").
-		OrderBy("i.due_at DESC").
+		OrderBy("i.updated_at DESC").
 		Limit(uint64(req.PaginationFilter.Limit)).
 		Offset(uint64(req.PaginationFilter.Offset)).
 		ToSql()
