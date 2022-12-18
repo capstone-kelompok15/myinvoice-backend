@@ -1083,6 +1083,19 @@ paths:
       tags:
         - Merchant
       summary: "Create new merchant bank"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bank_id:
+                  type: integer
+                on_behalf_of:
+                  type: string
+                bank_number:
+                  type: string
+
       responses:
         "201":
           description: Success to create new bank
