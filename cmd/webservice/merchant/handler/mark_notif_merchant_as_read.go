@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log"
 	"strconv"
 
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
@@ -14,14 +13,14 @@ func (h *merchantHandler) MarkNotifMerchantAsRead() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		adminCtx := authutils.AdminContextFromRequestContext(c)
 		if adminCtx == nil {
-			log.Println("[MarkNotifMerchantAsRead] Couldn't extract user account from context")
+			h.log.Warningln("[MarkNotifMerchantAsRead] Couldn't extract user account from context")
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: customerrors.ErrInternalServer,
 			})
 		}
+
 		NotifID, _ := strconv.Atoi(c.Param("id"))
 		if NotifID == 0 {
-
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: customerrors.ErrBadRequest,
 			})
@@ -29,7 +28,7 @@ func (h *merchantHandler) MarkNotifMerchantAsRead() echo.HandlerFunc {
 
 		err := h.service.MarkNotifMerchantAsRead(c.Request().Context(), NotifID, adminCtx.ID)
 		if err != nil {
-			log.Println("[MarkNotifMerchantAsRead] Couldn't Mark Notif Customer As Read")
+			h.log.Warningln("[MarkNotifMerchantAsRead] Couldn't Mark Notif Customer As Read:", err.Error())
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: err,
 			})

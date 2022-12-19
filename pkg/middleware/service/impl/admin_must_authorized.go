@@ -45,7 +45,7 @@ func (m *middleware) AdminMustAuthorized() echo.MiddlewareFunc {
 				})
 			}
 
-			c.Set(dto.AccountCTXKey, user)
+			c.Set(dto.AdminCTXKey, user)
 
 			return next(c)
 		}

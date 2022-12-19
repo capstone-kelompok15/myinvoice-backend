@@ -21,21 +21,14 @@ func (h *merchantHandler) UpdateMerchantProfilePicture() echo.HandlerFunc {
 		}
 
 		profilePicture, err := c.FormFile("profile_picture")
-		if profilePicture == nil {
+		if err != nil || profilePicture == nil {
+			h.log.Warningln("[UpdateMerchantProfilePicture] error while getting the form file:", err.Error())
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: customerrors.ErrBadRequest,
 			})
 		}
 
-		if err != nil {
-			h.log.Warningln("[UpdateMerchantProfilePicture] error while getting the form file:", err.Error())
-			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
-				Err: err,
-			})
-		}
-
-		var profilePictureFileName *string
-		profilePictureFileName, err = httputils.HandleFileForm(profilePicture)
+		profilePictureFileName, err := httputils.HandleFileForm(profilePicture)
 		if err != nil {
 			h.log.Warningln("[UpdateMerchantProfilePicture] error while creating the file:", err.Error())
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{

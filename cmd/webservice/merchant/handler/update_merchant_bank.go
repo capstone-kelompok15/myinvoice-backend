@@ -13,11 +13,9 @@ func (h *merchantHandler) UpdateMerchantBank() echo.HandlerFunc {
 		var req dto.UpdateMerchantBankDataRequest
 		err := c.Bind(&req)
 		if err != nil {
-			if err != nil {
-				return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
-					Err: customerrors.ErrBadRequest,
-				})
-			}
+			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
+				Err: customerrors.ErrBadRequest,
+			})
 		}
 
 		err = h.validator.StructCtx(c.Request().Context(), req)

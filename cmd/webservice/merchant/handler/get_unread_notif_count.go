@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"log"
-
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/authutils"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/httputils"
@@ -21,7 +19,7 @@ func (h *merchantHandler) GetUnreadNotifCount() echo.HandlerFunc {
 
 		count, err := h.service.GetUnreadNotifCount(c.Request().Context(), adminCtx.ID)
 		if err != nil {
-			log.Println("[GetUnreadNotifCount] Couldn't get unread notification count customer")
+			h.log.Warningln("[GetUnreadNotifCount] Couldn't get unread notification count customer:", err.Error())
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: err,
 			})

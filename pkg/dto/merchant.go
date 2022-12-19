@@ -65,7 +65,7 @@ type AdminResetPassword struct {
 }
 
 type GetMerchantBankRequest struct {
-	MerchantID int `param:"merchant_id"`
+	MerchantID int `param:"merchant_id" validate:"required"`
 }
 
 type GetMerchantBankResponse struct {

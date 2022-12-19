@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"log"
-
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/authutils"
@@ -39,7 +37,7 @@ func (h *merchantHandler) UpdateMerchantProfile() echo.HandlerFunc {
 
 		err = h.service.UpdateMerchantProfile(c.Request().Context(), &adminCtx.ID, &req)
 		if err != nil {
-			log.Println("[UpdateMerchantProfile] Couldn't update profile")
+			h.log.Warningln("[UpdateMerchantProfile] Couldn't update profile:", err.Error())
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: err,
 			})

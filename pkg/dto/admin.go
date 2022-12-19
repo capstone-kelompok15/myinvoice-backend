@@ -3,7 +3,7 @@ package dto
 import "time"
 
 const (
-	AccountCTXKey = "ACCOUNT-CTX-KEY"
+	AdminCTXKey = "ADMIN-CTX-KEY"
 )
 
 type AdminLoginRequest struct {
