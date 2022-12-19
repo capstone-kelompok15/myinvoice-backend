@@ -3,7 +3,6 @@ package impl
 import (
 	"context"
 	"database/sql"
-	"log"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
@@ -60,7 +59,7 @@ func (r *invoiceRepository) GetDetailInvoiceByID(ctx context.Context, req *dto.G
 	}
 
 	invoices := dto.GetInvoiceDetailsByIDResponse{}
-	log.Println(getAllInvoiceSQL, args)
+
 	err = r.db.GetContext(ctx, &invoices, getAllInvoiceSQL, args...)
 	if err != nil {
 		if err == sql.ErrNoRows {

@@ -22,8 +22,8 @@ func (r *merchantRepository) GetMerchantProfile(ctx context.Context, merchantID 
 		).
 		From("admins AS a").
 		InnerJoin("merchants AS m ON a.merchant_id = m.id").
-		InnerJoin("merchant_details AS md ON a.id = md.merchant_id").
-		Where(squirrel.Eq{"a.id": merchantID}).
+		InnerJoin("merchant_details AS md ON a.merchant_id = md.merchant_id").
+		Where(squirrel.Eq{"a.merchant_id": merchantID}).
 		ToSql()
 	if err != nil {
 		r.log.Warningln("[GetMerchantProfile] Error on creating squirrel builder", err.Error())
