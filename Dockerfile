@@ -18,6 +18,11 @@ RUN go build -o /app/main
 # Execute Stage
 FROM alpine:3.16.0
 
+RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get install -y xvfb libfontconfig wkhtmltopdf
+
+RUN apt-get install -y ca-certificates
+
 WORKDIR /app
 
 COPY ./assets/ ./assets/
