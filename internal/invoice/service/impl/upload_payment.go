@@ -7,6 +7,7 @@ import (
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 	cloudinary "github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/cloudinaryutils"
+	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/emailutils"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/notifications"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/paymentstatusutils"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/websocketutils"
@@ -53,14 +54,21 @@ func (s *invoiceService) UploadPayment(ctx context.Context, customerID int, invo
 		return nil, err
 	}
 
-	content := fmt.Sprintf("Halo %s, ada yang bayar invoice nich, check url ini dong %s untuk invoice id %d", merchantBrief.Username, *imageURL, invoiceID)
+	customerName, _, err := s.repo.GetCustomerByID(ctx, customerID)
+
+	content := fmt.Sprintf("%s has paid the invoice with id %d", *customerName, invoiceID)
+	body, err := emailutils.ParseTemplate(emailutils.EmailNotifCustomerHasPaid, struct {
+		Image   string
+		Content string
+	}{Image: *imageURL, Content: content})
+
 	mg := s.mailgun.NewMessage(
 		s.config.Mailgun.SenderEmail,
 		"myInvoice - You Have New Payment",
-		// TODO: Need to change to the html template
-		content,
+		body,
 		merchantBrief.Email,
 	)
+	mg.SetHtml(body)
 
 	_, _, err = s.mailgun.Send(ctx, mg)
 	if err != nil {

@@ -11,6 +11,7 @@ var (
 	EmailVerificationMerchant  = "assets/email-verification-merchant.html"
 	EmailNotifNewInvoice       = "assets/email-notif-new-invoice.html"
 	EmailNotifResetPassSuccess = "assets/email-notif-reset-password-success.html"
+	EmailNotifCustomerHasPaid  = "assets/email-notif-customer-has-paid.html"
 )
 
 func ParseTemplate(templateFileName string, data interface{}) (string, error) {
