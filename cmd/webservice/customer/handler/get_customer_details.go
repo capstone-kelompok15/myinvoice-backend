@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"log"
-
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/authutils"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/httputils"
@@ -13,7 +11,7 @@ func (h *customerHandler) GetCustomerDetails() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		customerCtx := authutils.CustomerFromRequestContext(c)
 		if customerCtx == nil {
-			log.Println("[GetCustomerDetails] Couldn't extract user account from context")
+			h.log.Warningln("[GetCustomerDetails] Couldn't extract user account from context")
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: customerrors.ErrInternalServer,
 			})
@@ -21,7 +19,7 @@ func (h *customerHandler) GetCustomerDetails() echo.HandlerFunc {
 
 		customerDetails, err := h.service.GetCustomerDetails(c.Request().Context(), customerCtx)
 		if err != nil {
-			log.Println("[GetCustomerDetails] Couldn't get customer details")
+			h.log.Warningln("[GetCustomerDetails] Couldn't get customer details")
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: err,
 			})
