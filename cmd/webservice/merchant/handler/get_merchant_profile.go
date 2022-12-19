@@ -9,7 +9,6 @@ import (
 
 func (h *merchantHandler) GetMerchantProfile() echo.HandlerFunc {
 	return func(c echo.Context) error {
-
 		adminCtx := authutils.AdminContextFromRequestContext(c)
 		if adminCtx == nil {
 			h.log.Warningln("[UpdateMerchantBank] Couldn't extract user account from context")

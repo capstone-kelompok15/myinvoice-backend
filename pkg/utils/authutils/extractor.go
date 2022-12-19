@@ -7,7 +7,7 @@ import (
 )
 
 func AdminContextFromRequestContext(ec echo.Context) *dto.AdminContext {
-	extractedAccount, ok := ec.Get(dto.AccountCTXKey).(*dto.AdminContext)
+	extractedAccount, ok := ec.Get(dto.AdminCTXKey).(*dto.AdminContext)
 	if !ok {
 		return nil
 	}

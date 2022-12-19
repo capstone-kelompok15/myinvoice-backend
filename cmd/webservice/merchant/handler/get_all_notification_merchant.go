@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"log"
-
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/authutils"
@@ -39,7 +37,7 @@ func (h *merchantHandler) GetAllNotificationMerchant() echo.HandlerFunc {
 
 		notifications, err := h.service.GetAllNotificationMerchant(c.Request().Context(), adminCtx.ID, &req)
 		if err != nil {
-			log.Println("[GetAllNotificationMerchant] Couldn't get all notification merchant")
+			h.log.Warningln("[GetAllNotificationMerchant] Couldn't get all notification merchant")
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: err,
 			})
