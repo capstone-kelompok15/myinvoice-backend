@@ -1,7 +1,7 @@
 # Build Stage
-FROM golang:1.18-alpine as build
+FROM golang:1.18-bullseye as build
 
-RUN apk update && apk upgrade
+RUN apt-get update -y && apt-get upgrade -y
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ COPY . /app/
 RUN go build -o /app/main
 
 # Execute Stage
-FROM alpine:3.16.0
+FROM ubuntu:20.04
 
 RUN apt-get update -y && apt-get upgrade -y
 RUN apt-get install -y xvfb libfontconfig wkhtmltopdf
