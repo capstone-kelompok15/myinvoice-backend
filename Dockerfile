@@ -16,12 +16,15 @@ COPY . /app/
 RUN go build -o /app/main
 
 # Execute Stage
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 RUN apt-get update -y && apt-get upgrade -y
-RUN apt-get install -y xvfb libfontconfig wkhtmltopdf
-
+RUN apt-get install -y libfontconfig wkhtmltopdf
 RUN apt-get install -y ca-certificates
+
+ENV TZ=Asia/Makassar
+RUN apt-get install -y tzdata
+RUN cp /usr/share/zoneinfo/$TZ /etc/localtime
 
 WORKDIR /app
 
