@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"log"
-
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/httputils"
@@ -30,7 +28,7 @@ func (h *customerHandler) GetAllCustomer() echo.HandlerFunc {
 
 		customers, err := h.service.GetAllCustomer(c.Request().Context(), &req)
 		if err != nil {
-			log.Println("[GetAllCustomers] Couldn't get all customer")
+			h.log.Warningln("[GetAllCustomers] Couldn't get all customer")
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
 				Err: err,
 			})
