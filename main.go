@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	config, err := config.GetConfig()
+	config, err := config.GetConfig("./.env")
 	if err != nil {
 		log.Fatal(err)
 	}

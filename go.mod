@@ -36,6 +36,7 @@ require (
 require (
 	github.com/Masterminds/squirrel v1.5.3
 	github.com/cloudinary/cloudinary-go/v2 v2.2.0
+	github.com/go-playground/assert/v2 v2.2.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
