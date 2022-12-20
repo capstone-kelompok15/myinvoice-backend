@@ -14,7 +14,8 @@ func (s *merchantService) GetAllNotificationMerchant(ctx context.Context, mercha
 		s.log.Warningln("[GetAllNotificationMerchant] Error while getting all notification :", err.Error())
 		return nil, err
 	}
-	var respond []dto.NotificationRespond
+
+	respond := []dto.NotificationRespond{}
 
 	for i := 0; i < len(*notifications); i++ {
 		respond = append(respond, dto.NotificationRespond{

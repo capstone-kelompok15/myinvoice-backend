@@ -22,8 +22,8 @@ type Config struct {
 
 var config *Config
 
-func initConfig() error {
-	err := godotenv.Load()
+func initConfig(path string) error {
+	err := godotenv.Load(path)
 	if err != nil {
 		log.Println("[INFO] The .env file doesn't exist")
 		log.Println("[INFO] Program will load environment variable value")
@@ -90,9 +90,9 @@ func initConfig() error {
 	return nil
 }
 
-func GetConfig() (*Config, error) {
+func GetConfig(path string) (*Config, error) {
 	if config == nil {
-		err := initConfig()
+		err := initConfig(path)
 		if err != nil {
 			return nil, err
 		}

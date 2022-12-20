@@ -12,7 +12,6 @@ func (s *merchantService) GetMerchantProfile(ctx context.Context, merchantID int
 	if err != nil {
 		if err != customerrors.ErrRecordNotFound {
 			s.log.Warningln("[GetMerchantProfile] Failed on running the repository:", err.Error())
-
 		}
 		return nil, err
 	}
