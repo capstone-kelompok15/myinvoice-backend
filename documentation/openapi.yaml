@@ -20,11 +20,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_200"
-  /auth/login/admin:
+  /auth/login/merchant:
     post:
       tags:
-        - Auth Admin
-      summary: "Login admin"
+        - Auth Merchant
+      summary: "Login merchant"
       requestBody:
         content:
           application/json:
@@ -95,7 +95,7 @@ paths:
   /auth/register/merchant:
     post:
       tags:
-        - Auth Admin
+        - Auth Merchant
       summary: Register admin
       requestBody:
         content:
@@ -152,11 +152,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /auth/admin/refresh:
+  /auth/merchant/refresh:
     post:
       tags:
-        - Auth Admin
-      summary: "Refresh token for admin"
+        - Auth Merchant
+      summary: "Refresh token for merchant"
       requestBody:
         content:
           application/json:
@@ -182,11 +182,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /auth/verification/admin:
+  /auth/verification/merchant:
     post:
       tags:
-        - Auth Admin
-      summary: "Admin Email Verification"
+        - Auth Merchant
+      summary: "Merchant Email Verification"
       requestBody:
         content:
           application/json:
@@ -278,10 +278,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /auth/verification/admin/refresh:
+  /auth/verification/merchant/refresh:
     post:
       tags:
-        - Auth Admin
+        - Auth Merchant
       summary: Refresh Email Verification Code
       requestBody:
         content:
@@ -320,11 +320,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /auth/reset/password/admin/request:
+  /auth/reset/password/merchant/request:
     post:
       tags:
-        - Auth Admin
-      summary: Admin Reset Password (Request Forgot password By Email)
+        - Auth Merchant
+      summary: Merchant Reset Password (Request Forgot password By Email)
       requestBody:
         content:
           application/json:
@@ -380,11 +380,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/inline_response_500"
-  /auth/reset/password/admin:
+  /auth/reset/password/merchant:
     post:
       tags:
-        - Auth Admin
-      summary: Admin Reset Password
+        - Auth Merchant
+      summary: merchant Reset Password
       requestBody:
         content:
           application/json:
