@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+      - name: Create env for testing purpose
+        run: echo "${{ secrets.ENV_TESTING }}" > .env
       - name: Running the test
         run: go test ./... --cover
   build-push-docker:
