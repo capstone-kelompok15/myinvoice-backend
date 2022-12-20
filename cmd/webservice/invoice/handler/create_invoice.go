@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"time"
+
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/dto"
 	customerrors "github.com/capstone-kelompok15/myinvoice-backend/pkg/errors"
 	"github.com/capstone-kelompok15/myinvoice-backend/pkg/utils/authutils"
@@ -28,20 +30,43 @@ func (h *invoiceHandler) CreateInvoice() echo.HandlerFunc {
 			})
 		}
 
+		dueAt, err := dateutils.StringToDate(req.DueAtRequest)
+		if err != nil {
+			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
+				Err: customerrors.ErrInternalServer,
+			})
+		}
+		req.DueAt = *dueAt
+
+		if dueAt.Before(time.Now().AddDate(0, 0, -1)) {
+			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
+				Err: customerrors.ErrBadRequest,
+				Detail: []string{
+					"Due At value can be smaller than today",
+				},
+			})
+		}
+
+		var isErr bool
 		var nestedErrs []error
 		for _, invoiceDetail := range req.Items {
 			err = h.validator.StructCtx(c.Request().Context(), invoiceDetail)
+			if err != nil {
+				isErr = true
+			}
 			nestedErrs = append(nestedErrs, err)
 		}
 
-		if nestedErrs[0] != nil {
+		if isErr {
 			var nestedDetails []map[string]interface{}
 			for index, nestedErr := range nestedErrs {
-				errStr := h.validator.TranslateValidatorError(nestedErr)
-				nestedDetails = append(nestedDetails, map[string]interface{}{
-					"invoice_index": index,
-					"error_detail":  errStr,
-				})
+				if nestedErr != nil {
+					errStr := h.validator.TranslateValidatorError(nestedErr)
+					nestedDetails = append(nestedDetails, map[string]interface{}{
+						"invoice_index": index,
+						"error_detail":  errStr,
+					})
+				}
 			}
 
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
@@ -57,15 +82,6 @@ func (h *invoiceHandler) CreateInvoice() echo.HandlerFunc {
 				Err: customerrors.ErrInternalServer,
 			})
 		}
-
-		dueAt, err := dateutils.StringToDate(req.DueAtRequest)
-		if err != nil {
-			h.log.Warningln("[CreateInvoice] Error on converting the string to date")
-			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{
-				Err: customerrors.ErrInternalServer,
-			})
-		}
-		req.DueAt = *dueAt
 
 		err = h.service.CreateInvoice(c.Request().Context(), adminCtx.MerchantID, &req)
 		if err != nil {
