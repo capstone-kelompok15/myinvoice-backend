@@ -11,8 +11,8 @@ type CreateInvoiceRequest struct {
 }
 
 type CreateInvoiceDetailRequest struct {
-	Quantity int    `json:"quantity" validate:"required"`
-	Price    int    `json:"price" validate:"required"`
+	Quantity int    `json:"quantity" validate:"required,min=0"`
+	Price    int    `json:"price" validate:"required,min=0"`
 	Product  string `json:"product" validate:"required"`
 }
 
