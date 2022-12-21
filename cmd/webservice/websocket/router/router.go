@@ -27,5 +27,5 @@ func InitWebSocketRouter(params *WebSocketRouterParams) {
 
 	websocketV1Group := params.E.Group(apiversioning.APIVersionOne + "/ws")
 	websocketV1Group.GET("/customers", websocketHandler.WebSocketClientCustomers(), params.Middleware.CustomerMustAuthorized())
-	websocketV1Group.GET("/merchants", websocketHandler.WebSocketClientCustomers(), params.Middleware.AdminMustAuthorized())
+	websocketV1Group.GET("/merchants", websocketHandler.WebSocketClientAdmin(), params.Middleware.AdminMustAuthorized())
 }
