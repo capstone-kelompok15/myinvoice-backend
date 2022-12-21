@@ -41,7 +41,7 @@ func (s *authService) MerchantRegistration(ctx context.Context, req *dto.Merchan
 	code = strings.ToUpper(code)
 
 	// TODO: Update the callback to the front end callback
-	hyperLink := fmt.Sprintf("%s?code=%s&email=%s", s.config.FrontEndURL, code, req.Email)
+	hyperLink := fmt.Sprintf("%s/verification?code=%s&email=%s", s.config.FrontEndURL, code, req.Email)
 	body, err := emailutils.ParseTemplate(emailutils.EmailVerificationMerchant, struct{ Link string }{Link: hyperLink})
 	if err != nil {
 		s.log.Warningln("email error : ", err.Error())
