@@ -11,7 +11,7 @@ import (
 
 func (h *authHandler) RefreshEmailVerificationCode() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var req dto.CustomerRefreshEmailVerificationcode
+		var req dto.CustomerRefreshEmailVerificationCode
 		err := c.Bind(&req)
 		if err != nil {
 			return httputils.WriteErrorResponse(c, httputils.ErrorResponseParams{

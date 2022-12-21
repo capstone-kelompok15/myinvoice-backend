@@ -7,8 +7,8 @@ const (
 )
 
 type AdminLoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
 
 type AdminContext struct {
@@ -44,5 +44,5 @@ type AdminRefreshEmailVerificationCode struct {
 }
 
 type AdminResetPasswordRequest struct {
-	Email string `json:"email"`
+	Email string `json:"email" validate:"required,email"`
 }

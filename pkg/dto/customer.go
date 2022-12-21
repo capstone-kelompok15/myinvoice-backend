@@ -37,7 +37,7 @@ type CustomerEmailVerification struct {
 	Code  string `json:"code" validate:"required,min=4,max=4"`
 }
 
-type CustomerRefreshEmailVerificationcode struct {
+type CustomerRefreshEmailVerificationCode struct {
 	Email string `json:"email" validate:"required,email"`
 }
 
@@ -58,13 +58,13 @@ type CustomerAccessToken struct {
 }
 
 type CustomerResetPasswordRequest struct {
-	Email string `json:"email"`
+	Email string `json:"email" validate:"required,email"`
 }
 
 type CustomerResetPassword struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Code     string `json:"code"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=8"`
+	Code     string `json:"code" validate:"required"`
 }
 
 type CustomerDetails struct {
